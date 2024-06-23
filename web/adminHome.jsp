@@ -89,6 +89,7 @@
             e.printStackTrace();
         }
     %>
+    
     <div class="container">
         <div class="title">Admin Dashboard</div>
         <div class="content">
@@ -105,7 +106,7 @@
                 <a href="manageBooks.jsp">Manage Books</a>
             </div>
             <div class="button">
-                <a href="manageReturns.jsp">Manage Returned Books</a>
+                <a href="issueBook.jsp">Issue Books</a>
             </div>
             <div class="button">
                 <a href="handleFines.jsp">Handle Fines/Penalties</a>
@@ -114,7 +115,7 @@
                 <a href="generateReports.jsp">Generate Book Reports</a>
             </div>
             <div class="button">
-                <a href="logout.jsp">Logout</a>
+                <a href="logOutServlet">Logout</a>
             </div>
         </div>
     </div>

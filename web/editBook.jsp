@@ -64,10 +64,10 @@
                         <span class="details">Quantity</span>
                         <input type="text" name="quantity" value="<%= request.getAttribute("quantity") %>" required>
                     </div>
-                    <div class="input-box">
+<!--                    <div class="input-box">
                         <span class="details">ISBN</span>
                         <input type="text" name="isbn" value="<%= request.getAttribute("isbn") %>" required>
-                    </div>
+                    </div>-->
                     <div class="input-box">
                         <span class="details">Publisher</span>
                         <input type="text" name="publisher" value="<%= request.getAttribute("publisher") %>" required>
@@ -79,7 +79,7 @@
                     <div class="input-box">
                         <span class="details">Active</span>
                         <input type="hidden" id="activeHidden" name="active" value="<%= request.getAttribute("active") %>">
-                        <input type="checkbox" id="activeCheckbox" onclick="handleCheckbox()" <%= "1".equals(request.getAttribute("active")) ? "checked" : "" %>>
+                        <input type="checkbox" id="activeCheckbox" onclick="handleCheckbox()" <%= "1".equals(request.getAttribute("active").toString()) ? "checked" : "" %>>
                     </div>
                 </div>
                 <div class="button">

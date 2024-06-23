@@ -104,7 +104,6 @@
             var address = document.getElementById("address").value;
             var password = document.getElementById("password").value;
             var cpassword = document.getElementById("cpassword").value;
-            var letters = /^[A-Za-z]{6,20}$/;
             if(first_name == ""){
                 alert("Enter First name");
                 return false;

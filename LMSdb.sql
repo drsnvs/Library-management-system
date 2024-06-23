@@ -77,7 +77,7 @@ CREATE TABLE `liabrarymanagenentsystem`.`record_table` (
   `record_id` INT(4) NOT NULL AUTO_INCREMENT,
   `book_id` INT(4) NOT NULL,
   `rent_id` INT(4) NOT NULL,
-  `fine_id` INT(4) NOT NULL,
+  `fine_id` INT(4) ,
   `id` INT(4) NOT NULL,
   PRIMARY KEY (`record_id`));
 
