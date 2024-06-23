@@ -1,0 +1,114 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class loginServlet extends HttpServlet {
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            HttpSession session = request.getSession();
+            
+            if(!session.getId().equals(session.getAttribute("key"))){
+                response.sendRedirect("index.jsp");
+            }
+            String adminEmail = request.getParameter("adminEmail");
+            String adminPassword = request.getParameter("adminPassword");
+            String userEmail = request.getParameter("userEmail");
+            String userPassword = request.getParameter("userPassword");
+
+            try {
+                // Database connection
+                Class.forName("com.mysql.jdbc.Driver");
+                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
+                    // Check admin login
+                    if (adminEmail != null && adminPassword != null) {
+                        PreparedStatement psa = con.prepareStatement("SELECT * FROM data_table JOIN role_table ON data_table.role_id = role_table.role_id WHERE email_id = ? AND password = ?");
+                        psa.setString(1, adminEmail);
+                        psa.setString(2, adminPassword);
+                        ResultSet rsa = psa.executeQuery();
+                        if (rsa.next()) {
+                            if (rsa.getInt("role_id") == 1) { // Admin role
+                                session.setAttribute("user_id", rsa.getString("id")); // Set user_id in session
+                                session.setAttribute("role_id", rsa.getString("role_id")); // Set role_id in session
+                                session.setAttribute("user_type", "admin"); // Set user_type in session
+                                RequestDispatcher rd = request.getRequestDispatcher("adminHome.jsp");
+                                rd.forward(request, response);
+                            } else {
+                                out.println("<script>alert('Incorrect credentials');</script>");
+                                RequestDispatcher rd = request.getRequestDispatcher("adminLogin.jsp");
+                                rd.include(request, response);
+                            }
+                        } else {
+                            out.println("<script>alert('Incorrect credentials');</script>");
+                            RequestDispatcher rd = request.getRequestDispatcher("adminLogin.jsp");
+                            rd.include(request, response);
+                        }
+                    }
+
+                    // Check user login
+                    if (userEmail != null && userPassword != null) {
+                        PreparedStatement psu = con.prepareStatement("SELECT * FROM data_table JOIN role_table ON data_table.role_id = role_table.role_id WHERE email_id = ? AND password = ?");
+                        psu.setString(1, userEmail);
+                        psu.setString(2, userPassword);
+                        ResultSet rsu = psu.executeQuery();
+                        if (rsu.next()) {
+                            if (rsu.getInt("role_id") == 2) { // User role
+                                session.setAttribute("user_id", rsu.getString("id")); // Set user_id in session
+                                session.setAttribute("role_id", rsu.getString("role_id")); // Set role_id in session
+                                session.setAttribute("user_type", "user"); // Set user_type in session
+                                RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
+                                rd.forward(request, response);
+                            } else {
+                                out.println("<script>alert('Incorrect credentials');</script>");
+                                RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
+                                rd.include(request, response);
+                            }
+                        } else {
+                            out.println("<script>alert('Incorrect credentials');</script>");
+                            RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
+                            rd.include(request, response);
+                        }
+                    }
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace(out);
+            }
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }
+
+}
