@@ -12,6 +12,11 @@
     <title>Issue Book</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        function showAlert(message) {
+            alert(message);
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -27,16 +32,29 @@
                         <span class="details">Book ID</span>
                         <input type="text" name="book_id" placeholder="Enter Book ID" required>
                     </div>
-<!--                    <div class="input-box">
-                        <span class="details">Date Due</span>
-                        <input type="date" name="date_due" required>
-                    </div>-->
+                    <div class="input-box">
+                        <span class="details">Issue Date</span>
+                        <input type="date" name="issue_date" >
+                    </div>
                 </div>
                 <div class="button">
                     <input type="submit" value="Issue Book">
                 </div>
+                <div class="button">
+                    <a href="adminHome.jsp"><input type="button" value="Home"></a>
+                </div>
             </form>
         </div>
     </div>
+    <% 
+    String message = request.getParameter("message");
+    if (message != null) { 
+    %>
+        <script>
+            showAlert("<%= message %>");
+        </script>
+    <% 
+    } 
+    %>
 </body>
 </html>

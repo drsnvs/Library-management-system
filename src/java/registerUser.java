@@ -64,7 +64,7 @@ public class registerUser extends HttpServlet {
                     ps.setString(5, firstName);
                     ps.setString(6, lastName);
                     ps.setString(7, address);
-                    ps.setInt(8, 2);
+                    ps.setInt(8, 0);
                     ps.setInt(9, 1);
                     ps.setInt(10, createdBy);
                     ps.setDate(11, date);

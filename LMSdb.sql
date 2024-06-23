@@ -53,8 +53,8 @@ CREATE TABLE `liabrarymanagenentsystem`.`book_rent_table` (
   `active` INT(1) NOT NULL,
   `createdBy` INT(4) NOT NULL,
   `createdOn` DATE NOT NULL,
-  `modifiedBy` INT(4) NOT NULL,
-  `modifiedOn` DATE NOT NULL,
+  `modifiedBy` INT(4) ,
+  `modifiedOn` DATE ,
   PRIMARY KEY (`rent_id`));
 
 
@@ -67,8 +67,8 @@ CREATE TABLE `liabrarymanagenentsystem`.`book_fine_table` (
   `active` INT(1) NOT NULL,
   `createdBy` INT(4) NOT NULL,
   `createdOn` DATE NOT NULL,
-  `modifiedBy` INT NOT NULL,
-  `modifiedOn` DATE NOT NULL,
+  `modifiedBy` INT ,
+  `modifiedOn` DATE ,
   PRIMARY KEY (`fine_id`));
 
 
@@ -80,6 +80,16 @@ CREATE TABLE `liabrarymanagenentsystem`.`record_table` (
   `fine_id` INT(4) ,
   `id` INT(4) NOT NULL,
   PRIMARY KEY (`record_id`));
+  ALTER TABLE `liabrarymanagenentsystem`.`record_table` 
+ADD COLUMN `date_out` DATE NOT NULL AFTER `id`,
+ADD COLUMN `date_due` DATE NOT NULL AFTER `date_out`,
+ADD COLUMN `createdBy` INT NOT NULL AFTER `date_due`,
+ADD COLUMN `createdOn` DATE NOT NULL AFTER `createdBy`,
+ADD COLUMN `modifiedBy` INT NULL AFTER `createdOn`,
+ADD COLUMN `modifiedOn` DATE NULL AFTER `modifiedBy`;
+
+ALTER TABLE `liabrarymanagenentsystem`.`record_table` 
+DROP COLUMN `rent_id`;
 
 
 INSERT INTO `liabrarymanagenentsystem`.`role_table` (`role_name`) VALUES ('admin');

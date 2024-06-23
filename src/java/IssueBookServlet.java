@@ -7,15 +7,14 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
-
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,122 +35,109 @@ public class IssueBookServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final long serialVersionUID = 1L;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         try (PrintWriter out = response.getWriter()) {
-            // Retrieve book_id and user_id from request parameters
-            int bookId = Integer.parseInt(request.getParameter("book_id"));
-            int userId = Integer.parseInt(request.getParameter("user_id"));
-
-            // Check if user can allocate another book
-            if (!canAllocateMoreBooks(userId)) {
-                out.println("<p>User already has maximum allocated books!</p>");
-                return;
-            }
-
-            // Calculate due date (14 days from today)
-            LocalDate today = LocalDate.now();
-            LocalDate dueDate = today.plusDays(14);
-
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet IssueBookServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
             try {
-                // Establish database connection
+                HttpSession session = request.getSession();
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                // Insert into book_rent_table
-                String insertRentQuery = "INSERT INTO book_rent_table (book_id, id, date_out, date_due, active, createdBy, createdOn) VALUES (?, ?, ?, ?, 1, ?, ?)";
-                PreparedStatement psRent = con.prepareStatement(insertRentQuery);
-                psRent.setInt(1, bookId);
-                psRent.setInt(2, userId);
-                psRent.setDate(3, Date.valueOf(today));
-                psRent.setDate(4, Date.valueOf(dueDate));
-                psRent.setInt(5, getUserIdFromSession(request.getSession())); // Assuming session stores user ID
-                psRent.setDate(6, Date.valueOf(today));
 
-                int rowsInsertedRent = psRent.executeUpdate();
+                int user_id = Integer.parseInt(request.getParameter("user_id").toString());
+                int book_id = Integer.parseInt(request.getParameter("book_id"));
 
-                // Update allocated_books count in data_table
-                if (rowsInsertedRent > 0) {
-                    updateAllocatedBooks(userId, con); // Update allocated books count
-
-                    // Insert into record_table
-                    String insertRecordQuery = "INSERT INTO record_table (book_id, rent_id, id) VALUES (?, ?, ?)";
-                    PreparedStatement psRecord = con.prepareStatement(insertRecordQuery);
-                    psRecord.setInt(1, bookId);
-                    psRecord.setInt(2, userId);
-                    psRecord.setInt(3, getUserIdFromSession(request.getSession())); // Assuming session stores user ID
-
-                    int rowsInsertedRecord = psRecord.executeUpdate();
-
-                    if (rowsInsertedRecord > 0) {
-                        // Book issued and record inserted successfully
-                        out.println("<p>Book issued successfully!</p>");
-                    } else {
-                        // Issue failed to record
-                        out.println("<p>Failed to record issuance!</p>");
+                // Check if user exists
+                String checkUserQuery = "SELECT active, allocated_book FROM data_table WHERE id = ?";
+                PreparedStatement checkUserPs = con.prepareStatement(checkUserQuery);
+                checkUserPs.setInt(1, user_id);
+                ResultSet rsUser = checkUserPs.executeQuery();
+                if (rsUser.next()) {
+                    boolean isActive = rsUser.getBoolean("active");
+                    int allocatedBooks = rsUser.getInt("allocated_book");
+                    if (!isActive) {
+                        response.sendRedirect("login.jsp");
+                        return;
+                    }
+                    if (allocatedBooks >= 2) {
+                        response.sendRedirect("issueBook.jsp?message=Maximum book limit reached!");
+                        return;
                     }
                 } else {
-                    // Issue failed
-                    out.println("<p>Failed to issue book!</p>");
+                    response.sendRedirect("issueBook.jsp?message=User not found!");
+                    return;
                 }
 
-                con.close();
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-                out.println("<p>Database error: " + e.getMessage() + "</p>");
-            }
-        }
-    }
-
-
-
-
-    // Check if user can allocate more books (assuming max 2 books)
-    private boolean canAllocateMoreBooks(int userId) {
-        int currentAllocatedBooks = getCurrentAllocatedBooks(userId);
-        return currentAllocatedBooks < 2;
-    }
-
-    // Method to retrieve current allocated books count for a user
-    private int getCurrentAllocatedBooks(int userId) {
-        int allocatedBooks = 0;
-
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem",
-                "root", "")) {
-            String query = "SELECT allocated_book FROM data_table WHERE id = ?";
-            try (PreparedStatement ps = con.prepareStatement(query)) {
-                ps.setInt(1, userId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        allocatedBooks = rs.getInt("allocated_book");
+                // Check if book exists
+                String checkBookQuery = "SELECT COUNT(*) FROM book_table WHERE book_id = ?";
+                PreparedStatement checkBookPs = con.prepareStatement(checkBookQuery);
+                checkBookPs.setInt(1, book_id);
+                ResultSet rsBook = checkBookPs.executeQuery();
+                if (rsBook.next()) {
+                    int bookCount = rsBook.getInt(1);
+                    if (bookCount == 0) {
+                        response.sendRedirect("issueBook.jsp?message=Book not found!");
+                        return;
                     }
                 }
+
+                LocalDate today = LocalDate.now();
+                Date date_out = Date.valueOf(request.getParameter("issue_date").isEmpty() ? today : LocalDate.parse(request.getParameter("issue_date")));
+                Date date_due = Date.valueOf(today.plusDays(14));
+                int createdBy = Integer.parseInt(session.getAttribute("user_id").toString());
+                Date createdOn = Date.valueOf(today);
+
+                // Insert into book_rent_table
+                String rentQuery = "INSERT INTO book_rent_table (book_id, id, date_out, date_due, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement rentPs = con.prepareStatement(rentQuery);
+                rentPs.setInt(1, book_id);
+                rentPs.setInt(2, user_id);
+                rentPs.setDate(3, date_out);
+                rentPs.setDate(4, date_due);
+                rentPs.setInt(5, 1);
+                rentPs.setInt(6, createdBy);
+                rentPs.setDate(7, createdOn);
+                int result = rentPs.executeUpdate();
+
+                // Update data_table to increment allocated books count
+                if (result > 0) {
+                    String updateQuery = "UPDATE data_table SET allocated_book = allocated_book + 1 WHERE id = ?";
+                    PreparedStatement updatePs = con.prepareStatement(updateQuery);
+                    updatePs.setInt(1, user_id);
+                    updatePs.executeUpdate();
+
+                    // Insert into record_table
+                    String recordQuery = "INSERT INTO record_table (book_id, id, date_out, date_due, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?)";
+                    PreparedStatement recordPs = con.prepareStatement(recordQuery);
+                    recordPs.setInt(1, book_id);
+                    recordPs.setInt(2, user_id);
+                    recordPs.setDate(3, date_out);
+                    recordPs.setDate(4, date_due);
+                    recordPs.setInt(5, createdBy);
+                    recordPs.setDate(6, createdOn);
+                    recordPs.executeUpdate();
+
+                    response.sendRedirect("issueBook.jsp?message=Book issued successfully!");
+                } else {
+                    response.sendRedirect("issueBook.jsp?message=Book issue failed!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("issueBook.jsp?message=An error occurred!");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            
+            
+            out.println("<h1>Servlet IssueBookServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-
-        return allocatedBooks;
-    }
-
-    // Method to update allocated books count for a user
-    private void updateAllocatedBooks(int userId, Connection con) {
-        String query = "UPDATE data_table SET allocated_book = allocated_book + 1 WHERE id = ?";
-        try (PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, userId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Method to get user ID from session (assuming session stores user ID)
-    private int getUserIdFromSession(HttpSession session) {
-        return (int) session.getAttribute("user_id");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
