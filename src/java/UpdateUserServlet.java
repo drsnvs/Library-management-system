@@ -27,6 +27,8 @@ public class UpdateUserServlet extends HttpServlet {
             String email = request.getParameter("email_id");
             String mobileNo = request.getParameter("mobile_no");
             String address = request.getParameter("address");
+            String active = request.getParameter("active");
+            
             long millis = System.currentTimeMillis();
             java.sql.Date date = new java.sql.Date(millis);
             HttpSession session = request.getSession();
@@ -36,7 +38,7 @@ public class UpdateUserServlet extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             int modifiedBy = Integer.parseInt((String) session.getAttribute("user_id"));
-            String updateQuery = "UPDATE data_table SET first_name=?, last_name=?, email_id=?, mobile_no=?, address=?, modifiedBy=?, modifiedOn=? WHERE id=?";
+            String updateQuery = "UPDATE data_table SET first_name=?, last_name=?, email_id=?, mobile_no=?, address=?, active=?, modifiedBy=?, modifiedOn=? WHERE id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, firstName);
             ps.setString(2, lastName);
@@ -44,9 +46,10 @@ public class UpdateUserServlet extends HttpServlet {
             ps.setString(4, mobileNo);
             ps.setString(5, address);
             
-            ps.setInt(6, modifiedBy);
-            ps.setDate(7, date);
-            ps.setInt(8, id);
+            ps.setInt(6, Integer.parseInt(active));
+            ps.setInt(7, modifiedBy);
+            ps.setDate(8, date);
+            ps.setInt(9, id);
 
             int result = ps.executeUpdate();
             if (result > 0) {

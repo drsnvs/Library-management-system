@@ -71,11 +71,17 @@ public class loginServlet extends HttpServlet {
                         ResultSet rsu = psu.executeQuery();
                         if (rsu.next()) {
                             if (rsu.getInt("role_id") == 2) { // User role
-                                session.setAttribute("user_id", rsu.getString("id")); // Set user_id in session
-                                session.setAttribute("role_id", rsu.getString("role_id")); // Set role_id in session
-                                session.setAttribute("user_type", "user"); // Set user_type in session
-                                RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
-                                rd.forward(request, response);
+                                if(rsu.getInt("active") == 1){
+                                    session.setAttribute("user_id", rsu.getString("id")); // Set user_id in session
+                                    session.setAttribute("role_id", rsu.getString("role_id")); // Set role_id in session
+                                    session.setAttribute("user_type", "user"); // Set user_type in session
+                                    RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
+                                    rd.forward(request, response);
+                                }else{
+                                    out.println("<script>alert('You are blocked');</script>");
+                                    RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
+                                    rd.include(request, response);
+                                }
                             } else {
                                 out.println("<script>alert('Incorrect credentials');</script>");
                                 RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");

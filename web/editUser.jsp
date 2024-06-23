@@ -55,6 +55,17 @@
                         <span class="details">Address</span>
                         <input type="text" name="address" value="<%= request.getAttribute("address") %>" required>
                     </div>
+<!--                    <div class="input-box">
+                        <span class="details">Active</span>
+                        <input type="text" name="address" value="<%= request.getAttribute("active") %>" required>
+                    </div>-->
+                    <div class="input-box">
+                        <span class="details">Active</span>
+                        <input type="hidden" name="active" value="0">
+                        <input type="checkbox" name="active" value="1" <%= "1".equals(request.getAttribute("active").toString()) ? "checked" : "" %>>
+                    </div>
+
+
                 </div>
                 <div class="button">
                     <input type="submit" value="Save Changes">
