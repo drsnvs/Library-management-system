@@ -76,7 +76,7 @@ public class IssueBookServlet extends HttpServlet {
                 }
 
                 // Check if book exists
-                String checkBookQuery = "SELECT COUNT(*) FROM book_table WHERE book_id = ?";
+                String checkBookQuery = "SELECT COUNT(*) FROM book_table WHERE book_id = ? and quantity > 0";
                 PreparedStatement checkBookPs = con.prepareStatement(checkBookQuery);
                 checkBookPs.setInt(1, book_id);
                 ResultSet rsBook = checkBookPs.executeQuery();
@@ -87,6 +87,8 @@ public class IssueBookServlet extends HttpServlet {
                         return;
                     }
                 }
+                
+                
 
                 LocalDate today = LocalDate.now();
                 Date date_out;
@@ -119,6 +121,13 @@ public class IssueBookServlet extends HttpServlet {
 
                 // Update data_table to increment allocated books count
                 if (result > 0) {
+                    
+                    String updateQuantityQuery = "UPDATE book_table SET quantity = quantity - 1 WHERE book_id = ?";
+                    PreparedStatement updatePss = con.prepareStatement(updateQuantityQuery);
+                    updatePss.setInt(1, book_id);
+                    updatePss.executeUpdate();
+                    
+                    
                     String updateQuery = "UPDATE data_table SET allocated_book = allocated_book + 1 WHERE id = ?";
                     PreparedStatement updatePs = con.prepareStatement(updateQuery);
                     updatePs.setInt(1, user_id);

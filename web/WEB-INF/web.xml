@@ -48,6 +48,10 @@
         <servlet-name>UpdateIssuedBookServlet</servlet-name>
         <servlet-class>UpdateIssuedBookServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReturnBookServlet</servlet-name>
+        <servlet-class>ReturnBookServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>UpdateIssuedBookServlet</servlet-name>
         <url-pattern>/UpdateIssuedBookServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReturnBookServlet</servlet-name>
+        <url-pattern>/ReturnBookServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
