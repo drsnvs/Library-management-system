@@ -78,7 +78,7 @@ public class loginServlet extends HttpServlet {
                                     RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
                                     rd.forward(request, response);
                                 }else{
-                                    out.println("<script>alert('You are blocked');</script>");
+                                    out.println("<script>alert('You are blocked contact admin !!');</script>");
                                     RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
                                     rd.include(request, response);
                                 }

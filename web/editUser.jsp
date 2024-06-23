@@ -15,6 +15,18 @@
     <title>Edit User</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        function handleCheckbox() {
+            var checkbox = document.getElementById("activeCheckbox");
+            var hiddenInput = document.getElementById("activeHidden");
+
+            if (checkbox.checked) {
+                hiddenInput.value = "1";
+            } else {
+                hiddenInput.value = "0";
+            }
+        }
+    </script>
 </head>
 <body>
     <%
@@ -26,6 +38,7 @@
             e.printStackTrace();
         }
     %>
+    
     <div class="container">
         <div class="title">Edit User</div>
         <div class="content">
@@ -61,14 +74,17 @@
                     </div>-->
                     <div class="input-box">
                         <span class="details">Active</span>
-                        <input type="hidden" name="active" value="0">
-                        <input type="checkbox" name="active" value="1" <%= "1".equals(request.getAttribute("active").toString()) ? "checked" : "" %>>
+                        <input type="hidden" id="activeHidden" name="active" value="<%= request.getAttribute("active") %>">
+                        <input type="checkbox" id="activeCheckbox" onclick="handleCheckbox()" <%= "1".equals(request.getAttribute("active")) ? "checked" : "" %>>
                     </div>
 
 
                 </div>
                 <div class="button">
                     <input type="submit" value="Save Changes">
+                </div>
+                <div class="button">
+                    <a href="adminHome.jsp"><input type="button" value="Home"></a>
                 </div>
             </form>
             

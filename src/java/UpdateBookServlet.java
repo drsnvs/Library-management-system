@@ -28,7 +28,7 @@ public class UpdateBookServlet extends HttpServlet {
             String authorName = request.getParameter("author_name");
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            String isbn = request.getParameter("isbn");
+            String active = request.getParameter("active");
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("edition_year"));
             long millis = System.currentTimeMillis();
@@ -40,13 +40,13 @@ public class UpdateBookServlet extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
-            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, price=?, quantity=?, ISBN=?, publisher=?, edition_year=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
+            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, price=?, quantity=?, active=?, publisher=?, edition_year=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
             ps.setDouble(3, price);
             ps.setInt(4, quantity);
-            ps.setString(5, isbn);
+            ps.setInt(5, Integer.parseInt(active));
             ps.setString(6, publisher);
             ps.setInt(7, editionYear);
             ps.setInt(8, modifiedBy);
