@@ -109,10 +109,10 @@
                 <a href="issueBook.jsp">Issue Books</a>
             </div>
             <div class="button">
-                <a href="handleFines.jsp">Handle Fines/Penalties</a>
+                <a href="generateReports.jsp">Return Book</a>
             </div>
             <div class="button">
-                <a href="generateReports.jsp">Generate Book Reports</a>
+                <a href="manageIssuedBooks.jsp">Handle Fines/Penalties</a>
             </div>
             <div class="button">
                 <a href="logOutServlet">Logout</a>

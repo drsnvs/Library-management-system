@@ -1,6 +1,6 @@
 <%-- 
-    Document   : manageBooks
-    Created on : 21 Jun, 2024, 10:47:27 AM
+    Document   : manageIssuedBooks
+    Created on : 23 Jun, 2024, 3:04:44 PM
     Author     : DARSHAN
 --%>
 
@@ -11,8 +11,8 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Manage Books</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Manage Issued Books</title>
+    <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -62,22 +62,6 @@
             background-color: #f2f2f2;
         }
 
-        action form {
-            display: inline-block;
-            margin-right: 5px; /* Adjust spacing between forms */
-        }
-
-        input[type="submit"] {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
         .actions {
             display: flex;
             justify-content: space-between;
@@ -117,16 +101,18 @@
         }
     %>
     <div class="container">
-        <div class="title">Manage Books</div>
+        <div class="title">Manage Issued Books</div>
         <div class="content">
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
+                        <th>Issue ID</th>
+                        <th>Book ID</th>
+                        <th>User ID</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+<!--                        <th>Return Date</th>-->
+                        <!--<th>Fine</th>-->
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -136,29 +122,29 @@
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                             Statement stmt = con.createStatement();
-                            ResultSet rs = stmt.executeQuery("SELECT book_id, book_title, author_name, price, quantity FROM book_table");
+                            String query = "SELECT * FROM book_rent_table";
+                            ResultSet rs = stmt.executeQuery(query);
 
                             while (rs.next()) {
-                                int bookId = rs.getInt("book_id");
-                                String bookTitle = rs.getString("book_title");
-                                String authorName = rs.getString("author_name");
-                                double price = rs.getDouble("price");
-                                int quantity = rs.getInt("quantity");
                     %>
                     <tr>
-                        <td><%= bookId %></td>
-                        <td><%= bookTitle %></td>
-                        <td><%= authorName %></td>
-                        <td><%= price %></td>
-                        <td><%= quantity %></td>
-                        <td>
-                            <form action="ManageBooksServlet" method="post" style="display:inline;">
-                                <input type="hidden" name="book_id" value="<%= bookId %>">
-                                <input type="submit" name="action" value="Edit">
+                        <td><%= rs.getInt("rent_id") %></td>
+                        <td><%= rs.getInt("book_id") %></td>
+                        <td><%= rs.getInt("id") %></td>
+                        <td><%= rs.getDate("date_out") %></td>
+                        <td><%= rs.getDate("date_due") %></td>
+                        
+                        
+                        <td class="actions">
+                            <form action="ManageIssuedBooksServlet" method="post">
+                                <input type="hidden" name="action" value="Edit">
+                                <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
+                                <button type="submit">Edit</button>
                             </form>
-                            <form action="ManageBooksServlet" method="post" style="display:inline;">
-                                <input type="hidden" name="book_id" value="<%= bookId %>">
-                                <input type="submit" name="action" value="Delete">
+                            <form action="ManageIssuedBooksServlet" method="post">
+                                <input type="hidden" name="action" value="Delete">
+                                <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
+                                <button type="submit">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -171,22 +157,16 @@
                     %>
                 </tbody>
             </table>
-            
-                
         </div>
     </div>
     <div class="actions">
         <button onclick="location.href='adminHome.jsp'">Go to Home</button>
     </div>
-    <% 
-    String message = request.getParameter("message");
-    if (message != null) { 
-    %>
-        <script>
-            showAlert("<%= message %>");
-        </script>
-    <% 
-    } 
+    <%
+        String message = request.getParameter("message");
+        if (message != null) {
+            out.println("<script>showAlert('" + message + "');</script>");
+        }
     %>
 </body>
 </html>

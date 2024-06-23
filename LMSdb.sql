@@ -90,6 +90,8 @@ ADD COLUMN `modifiedOn` DATE NULL AFTER `modifiedBy`;
 
 ALTER TABLE `liabrarymanagenentsystem`.`record_table` 
 DROP COLUMN `rent_id`;
+ALTER TABLE `liabrarymanagenentsystem`.`book_rent_table` 
+ADD COLUMN `return_date` DATE NULL AFTER `date_due`;
 
 
 INSERT INTO `liabrarymanagenentsystem`.`role_table` (`role_name`) VALUES ('admin');

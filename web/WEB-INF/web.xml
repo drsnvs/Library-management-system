@@ -40,6 +40,14 @@
         <servlet-name>IssueBookServlet</servlet-name>
         <servlet-class>IssueBookServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageIssuedBooksServlet</servlet-name>
+        <servlet-class>ManageIssuedBooksServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateIssuedBookServlet</servlet-name>
+        <servlet-class>UpdateIssuedBookServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>IssueBookServlet</servlet-name>
         <url-pattern>/IssueBookServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageIssuedBooksServlet</servlet-name>
+        <url-pattern>/ManageIssuedBooksServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateIssuedBookServlet</servlet-name>
+        <url-pattern>/UpdateIssuedBookServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

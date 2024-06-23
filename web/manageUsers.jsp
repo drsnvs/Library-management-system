@@ -20,6 +20,9 @@
                 background-color: #f4f4f4;
                 margin: 0;
                 padding: 0;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh; /* Ensure the page takes up at least the viewport height */
             }
 
             .container {
@@ -29,6 +32,8 @@
                 padding: 20px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                 margin-top: 50px;
+                flex: 1;
+                overflow: auto;
             }
 
             .title {
@@ -57,8 +62,9 @@
                 background-color: #f2f2f2;
             }
 
-            form {
+            action form {
                 display: inline-block;
+                margin-right: 5px; /* Adjust spacing between forms */
             }
 
             input[type="submit"] {
@@ -70,6 +76,27 @@
             }
 
             input[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+            .actions {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .actions form {
+                display: inline-block;
+                margin-right: 5px; /* Adjust spacing between forms */
+            }
+
+            .actions button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+            .actions button:hover {
                 background-color: #0056b3;
             }
 
@@ -144,10 +171,11 @@
                         
                     </tbody>
                 </table>
-                <div class="button">
-                    <a href="adminHome.jsp"><input type="button" value="Home"></a>
-                </div>
+                
             </div>
+        </div>
+        <div class="actions">
+            <button onclick="location.href='adminHome.jsp'">Go to Home</button>
         </div>
         <% 
         String message = request.getParameter("message");

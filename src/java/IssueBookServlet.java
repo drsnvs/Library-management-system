@@ -89,8 +89,19 @@ public class IssueBookServlet extends HttpServlet {
                 }
 
                 LocalDate today = LocalDate.now();
-                Date date_out = Date.valueOf(request.getParameter("issue_date").isEmpty() ? today : LocalDate.parse(request.getParameter("issue_date")));
-                Date date_due = Date.valueOf(today.plusDays(14));
+                Date date_out;
+                Date date_due;
+
+                if (request.getParameter("issue_date").isEmpty()) {
+                    date_out = Date.valueOf(today);
+                    date_due = Date.valueOf(today.plusDays(14));
+                } else {
+                    LocalDate issueDate = LocalDate.parse(request.getParameter("issue_date"));
+                    date_out = Date.valueOf(issueDate);
+                    date_due = Date.valueOf(date_out.toLocalDate().plusDays(14));
+                }
+
+//                date_due = Date.valueOf(today.plusDays(14));
                 int createdBy = Integer.parseInt(session.getAttribute("user_id").toString());
                 Date createdOn = Date.valueOf(today);
 
