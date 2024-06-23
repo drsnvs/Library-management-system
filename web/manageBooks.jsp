@@ -144,6 +144,10 @@
                     %>
                 </tbody>
             </table>
+            <div class="button">
+                <a href="adminHome.jsp"><input type="button" value="Home"></a>
+            </div>
+                
         </div>
     </div>
     <% 

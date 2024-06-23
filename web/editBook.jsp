@@ -68,6 +68,9 @@
                 <div class="button">
                     <input type="submit" value="Save Changes">
                 </div>
+                <div class="button">
+                    <a href="adminHome.jsp"><input type="button" value="Home"></a>
+                </div>
             </form>
         </div>
     </div>
