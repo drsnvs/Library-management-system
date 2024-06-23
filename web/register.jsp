@@ -24,38 +24,38 @@
         <div class="container">
             <div class="title">Registration</div>
             <div class="content">
-                <form action="registerUser" method="POST">
+                <form action="registerUser" onsubmit="return validation()" method="POST">
                     <div class="user-details">
                         <div class="input-box">
                             <span class="details">First Name</span>
-                            <input type="text" name="first_name" id="first_name" placeholder="Enter your First name" required>
+                            <input type="text" name="first_name" id="first_name" placeholder="Enter your First name" >
                         </div>
                         <div class="input-box">
                             <span class="details">Last Name</span>
-                            <input type="text" name="last_name" id="last_name" placeholder="Enter your Last name" required>
+                            <input type="text" name="last_name" id="last_name" placeholder="Enter your Last name" >
                         </div>
                         <div class="input-box">
                             <span class="details">Mobile Number</span>
-                            <input type="number" name="mobile_no" step="1" id="mobile_no" placeholder="Enter your Mobile Number" required>
+                            <input type="number" name="mobile_no" id="mobile_no" placeholder="Enter your Mobile Number" >
                         </div>
                         <div class="input-box">
                             <span class="details">Email</span>
-                            <input type="email" name="email_id" id="email_id" placeholder="Enter your email" required>
+                            <input type="email" name="email_id" id="email_id" placeholder="Enter your email" >
                         </div>
                         <div class="input-box">
                             <span class="details">Address</span>
-                            <input type="text" name="address" maxlength="255" placeholder="Enter your address" required>
+                            <input type="text" name="address" id="address" maxlength="255" placeholder="Enter your address" >
                         </div>
                         <div class="input-box">
                             <span class="details">Password</span>
-                            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                            <input type="password" name="password" id="password" placeholder="Enter your password" >
                         </div>
                         <div class="input-box">
                             <span class="details">Confirm Password</span>
-                            <input type="password" name="cpassword" id="cpassword" placeholder="Confirm your password" required>
+                            <input type="password" name="cpassword" id="cpassword" placeholder="Confirm your password" >
                         </div>
                     </div>
-                    <div class="gender-details">
+<!--                    <div class="gender-details">
                         <input type="radio" name="gender" id="dot-1" value="Male">
                         <input type="radio" name="gender" id="dot-2" value="Female">
                         <input type="radio" name="gender" id="dot-3" value="Prefer not to say">
@@ -74,7 +74,7 @@
                                 <span class="gender">Prefer not to say</span>
                             </label>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="button">
                         <input type="submit" value="Register">
                     </div>
@@ -95,5 +95,71 @@
         <% 
         } 
         %>
+        <script>
+        function validation(){
+            var first_name = document.getElementById("first_name").value;
+            var last_name = document.getElementById("last_name").value;
+            var mobile_no = document.getElementById("mobile_no").value;
+            var email_id = document.getElementById("email_id").value;
+            var address = document.getElementById("address").value;
+            var password = document.getElementById("password").value;
+            var cpassword = document.getElementById("cpassword").value;
+            var letters = /^[A-Za-z]{6,20}$/;
+            if(first_name == ""){
+                alert("Enter First name");
+                return false;
+            }
+            if(last_name == ""){
+                alert("Enter Last name");
+                return false;
+            }
+            if(mobile_no == ""){
+                alert("Enter Mobile no");
+                return false;
+            }
+            if (!/^[0-9]{10}$/.test(mobile_no)) {
+                alert("Enter valid mobile number");
+                return false;
+            }
+            if(mobile_no.length != 10){
+                alert("Mobile no is must in 10 numbers");
+                return false;
+            }
+//            if(email_id == ""){
+//                alert("Enter Email id");
+//                return false;
+//            }
+            if (!email_id.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+                alert("Enter valid email address");
+                return false;
+            }else if(email_id === "" | email_id === null){
+                alert("Enter email address");
+                return false;
+            }
+            if(address == ""){
+                alert("Enter Address");
+                return false;
+            }
+            if(password == ""){
+                alert("Enter Password");
+                return false;
+            }
+            if(cpassword == ""){
+                alert("Enter Confirm Password");
+                return false;
+            }
+            
+            if(password.length<6){
+                    alert("Password should be more than 6");
+                    return false;
+                }
+            
+            if (password !== cpassword) {
+                alert("Password and Confirm Password do not match");
+                return false;
+            }
+        }
+    </script>
     </body>
+    
 </html>
