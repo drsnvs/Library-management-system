@@ -32,7 +32,7 @@ public class AddBookServlet extends HttpServlet {
             String authorName = request.getParameter("author");
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            String isbn = request.getParameter("isbn");
+//            String isbn = request.getParameter("isbn");
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("year"));
 
@@ -41,16 +41,17 @@ public class AddBookServlet extends HttpServlet {
             
             int createdBy = Integer.parseInt((String) session.getAttribute("user_id"));
             
-            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, ISBN, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, CURDATE())";
+            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, CURDATE())";
+//            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, ISBN, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, CURDATE())";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
             ps.setDouble(3, price);
             ps.setInt(4, quantity);
-            ps.setString(5, isbn);
-            ps.setString(6, publisher);
-            ps.setInt(7, editionYear);
-            ps.setInt(8,createdBy);
+//            ps.setString(5, isbn);
+            ps.setString(5, publisher);
+            ps.setInt(6, editionYear);
+            ps.setInt(7,createdBy);
             int result = ps.executeUpdate();
             con.close();
 

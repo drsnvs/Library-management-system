@@ -49,10 +49,10 @@
                         <span class="details">Quantity</span>
                         <input type="number" name="quantity" placeholder="Enter quantity" required>
                     </div>
-                    <div class="input-box">
+<!--                    <div class="input-box">
                         <span class="details">ISBN</span>
                         <input type="text" name="isbn" placeholder="Enter book ISBN" required>
-                    </div>
+                    </div>-->
                     <div class="input-box">
                         <span class="details">Publisher</span>
                         <input type="text" name="publisher" placeholder="Enter book publisher" required>

@@ -22,6 +22,7 @@ public class UpdateBookServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
+            HttpSession session = request.getSession();
             int bookId = Integer.parseInt(request.getParameter("id"));
             String bookTitle = request.getParameter("book_title");
             String authorName = request.getParameter("author_name");
@@ -30,14 +31,16 @@ public class UpdateBookServlet extends HttpServlet {
             String isbn = request.getParameter("isbn");
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("edition_year"));
-            HttpSession session = request.getSession();
+            long millis = System.currentTimeMillis();
+            int modifiedBy = Integer.parseInt((String) session.getAttribute("user_id"));
+            java.sql.Date date = new java.sql.Date(millis);
             if(!session.getId().equals(session.getAttribute("key"))){
                 response.sendRedirect("index.jsp");
             }
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
-            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, price=?, quantity=?, ISBN=?, publisher=?, edition_year=? WHERE book_id=?";
+            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, price=?, quantity=?, ISBN=?, publisher=?, edition_year=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
@@ -46,7 +49,10 @@ public class UpdateBookServlet extends HttpServlet {
             ps.setString(5, isbn);
             ps.setString(6, publisher);
             ps.setInt(7, editionYear);
-            ps.setInt(8, bookId);
+            ps.setInt(8, modifiedBy);
+            ps.setDate(9, date);
+            
+            ps.setInt(10, bookId);
 
             int result = ps.executeUpdate();
             if (result > 0) {
