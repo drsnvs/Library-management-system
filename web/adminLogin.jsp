@@ -38,6 +38,9 @@
                 <span class="details">Password</span>
                 <input type="password" name="adminPassword" id="password" placeholder="Enter your password" required>
               </div>
+            <div class="input-box">
+                <a href="userLogin.jsp"><span class="details">Click Here for User Login?</span></a>
+            </div>
 <!--              <div class="input-box">
                 <span class="details">Confirm Password</span>
                 <input type="text" name="cpassword" id="cpassword" placeholder="Confirm your password" required>

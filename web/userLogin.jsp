@@ -42,10 +42,13 @@
                 <span class="details">Confirm Password</span>
                 <input type="text" name="cpassword" id="cpassword" placeholder="Confirm your password" required>
               </div>-->
+                <div class="input-box">
+                    <a href="adminLogin.jsp"><span class="details">Click Here for Admin Login?</span></a>
+                </div>
             </div>
             
             <div class="button">
-              <input type="submit" value="Register">
+              <input type="submit" value="Login">
             </div>
           </form>
         </div>
