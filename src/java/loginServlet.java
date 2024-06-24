@@ -75,7 +75,7 @@ public class loginServlet extends HttpServlet {
                                     session.setAttribute("user_id", rsu.getString("id")); // Set user_id in session
                                     session.setAttribute("role_id", rsu.getString("role_id")); // Set role_id in session
                                     session.setAttribute("user_type", "user"); // Set user_type in session
-                                    RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
+                                    RequestDispatcher rd = request.getRequestDispatcher("userDashboard.jsp");
                                     rd.forward(request, response);
                                 }else{
                                     out.println("<script>alert('You are blocked contact admin !!');</script>");
@@ -97,6 +97,8 @@ public class loginServlet extends HttpServlet {
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace(out);
             }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
