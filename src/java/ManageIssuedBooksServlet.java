@@ -69,6 +69,7 @@ public class ManageIssuedBooksServlet extends HttpServlet {
                     request.setAttribute("date_out", rs.getDate("date_out"));
                     request.setAttribute("date_due", rs.getDate("date_due"));
                     request.setAttribute("return_date", rs.getDate("return_date"));
+                    request.setAttribute("active", rs.getInt("active"));
 //                    request.setAttribute("fine", rs.getDouble("fine"));
                     request.getRequestDispatcher("editIssuedBook.jsp").forward(request, response);
                 } else {

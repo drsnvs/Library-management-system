@@ -132,7 +132,7 @@
                         <td><%= rs.getInt("book_id") %></td>
                         <td><%= rs.getInt("id") %></td>
                         <td><%= rs.getDate("date_out") %></td>
-                        <td><%= rs.getDate("date_due") %></td>
+                        <td><%= rs.getDate("return_date") %></td>
                         
                         
                         <td class="actions">

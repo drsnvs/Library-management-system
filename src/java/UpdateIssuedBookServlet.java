@@ -7,8 +7,10 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,15 +46,20 @@ public class UpdateIssuedBookServlet extends HttpServlet {
         String issueDateParam = request.getParameter("date_out");
         String dueDateParam = request.getParameter("date_due");
         String returnDateParam = request.getParameter("return_date");
+        String activeParam = request.getParameter("active");
 
         // Convert parameters to appropriate types
         int rentId = rentIdParam != null ? Integer.parseInt(rentIdParam) : 0; // Default value or handle accordingly
         int bookId = bookIdParam != null ? Integer.parseInt(bookIdParam) : 0; // Default value or handle accordingly
         int userId = userIdParam != null ? Integer.parseInt(userIdParam) : 0; // Default value or handle accordingly
-        java.sql.Date issueDate = issueDateParam != null ? java.sql.Date.valueOf(issueDateParam) : null; // Handle null case
-        java.sql.Date dueDate = dueDateParam != null ? java.sql.Date.valueOf(dueDateParam) : null; // Handle null case
-        java.sql.Date returnDate = returnDateParam != null && !returnDateParam.isEmpty() ? java.sql.Date.valueOf(returnDateParam) : null; // Handle null case
-        
+        int active = activeParam != null ? Integer.parseInt(activeParam) : 0; // Default value or handle accordingly
+        Date issueDate = issueDateParam != null ? Date.valueOf(issueDateParam) : null; // Handle null case
+        Date dueDate = dueDateParam != null ? Date.valueOf(dueDateParam) : null; // Handle null case
+        Date returnDate = returnDateParam.equals(null) ? Date.valueOf(returnDateParam) : null; // Handle null case
+        int modifiedBy = Integer.parseInt(session.getAttribute("user_id").toString());
+        LocalDate today = LocalDate.now();
+        Date modifiedOn = Date.valueOf(today);
+                
 
         // Check session validity
         if (!session.getId().equals(session.getAttribute("key"))) {
@@ -63,17 +70,44 @@ public class UpdateIssuedBookServlet extends HttpServlet {
         // Establish database connection
         Class.forName("com.mysql.jdbc.Driver");
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-
+        PreparedStatement ps;
         // Prepare and execute update query
-        String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, return_date=? WHERE rent_id=?";
+        if(!returnDateParam.equals(null)){
+            String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, return_date=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
 
-        PreparedStatement ps = con.prepareStatement(updateQuery);
-        ps.setInt(1, bookId);
-        ps.setInt(2, userId);
-        ps.setDate(3, issueDate);
-        ps.setDate(4, dueDate);
-        ps.setDate(5, returnDate);
-        ps.setInt(6, rentId);
+            ps = con.prepareStatement(updateQuery);
+            ps.setInt(1, bookId);
+            ps.setInt(2, userId);
+            ps.setDate(3, issueDate);
+            ps.setDate(4, dueDate);
+            ps.setDate(5, returnDate);
+            ps.setInt(6, modifiedBy);
+            ps.setDate(7, modifiedOn);
+            ps.setInt(8, rentId);
+        }else{
+            String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
+
+            ps = con.prepareStatement(updateQuery);
+            ps.setInt(1, bookId);
+            ps.setInt(2, userId);
+            ps.setDate(3, issueDate);
+            ps.setDate(4, dueDate);
+            ps.setInt(5, modifiedBy);
+            ps.setDate(6, modifiedOn);
+            ps.setInt(7, rentId);
+        }
+//        String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, return_date=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
+//
+//        PreparedStatement ps = con.prepareStatement(updateQuery);
+//        ps.setInt(1, bookId);
+//        ps.setInt(2, userId);
+//        ps.setDate(3, issueDate);
+//        ps.setDate(4, dueDate);
+//        ps.setDate(5, returnDate);
+//        ps.setInt(6, modifiedBy);
+//        ps.setDate(7, modifiedOn);
+//        ps.setInt(8, rentId);
+        
 
         int result = ps.executeUpdate();
         if (result > 0) {
