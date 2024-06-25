@@ -14,6 +14,9 @@ CREATE TABLE `liabrarymanagenentsystem`.`data_table` (
   `modifiedOn` DATE,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_id_UNIQUE` (`email_id` ASC) );
+  
+ALTER TABLE `liabrarymanagenentsystem`.`data_table` 
+ADD COLUMN `enrollment_no` VARCHAR(9) NOT NULL AFTER `allocated_book`;
 
 ALTER TABLE `liabrarymanagenentsystem`.`data_table` 
 ADD COLUMN `last_name` VARCHAR(45) NOT NULL AFTER `first_name`,
