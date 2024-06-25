@@ -124,8 +124,8 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Enrollment No</th>
                             <th>First Name</th>
-                            <th>Last Name</th>
                             <th>Email</th>
                             <th>Actions</th>
                         </tr>
@@ -136,18 +136,19 @@
                                 Class.forName("com.mysql.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                                 Statement stmt = con.createStatement();
-                                ResultSet rs = stmt.executeQuery("SELECT id, first_name, last_name, email_id, mobile_no FROM data_table");
+                                ResultSet rs = stmt.executeQuery("SELECT id, first_name, enrollment_no, email_id, mobile_no FROM data_table");
 
                                 while (rs.next()) {
                                     int id = rs.getInt("id");
+                                    String enrollment_no = rs.getString("enrollment_no");
                                     String firstName = rs.getString("first_name");
-                                    String lastName = rs.getString("last_name");
+//                                    String lastName = rs.getString("last_name");
                                     String email = rs.getString("email_id");
                         %>
                         <tr>
                             <td><%= id %></td>
+                            <td><%= enrollment_no %></td>
                             <td><%= firstName %></td>
-                            <td><%= lastName %></td>
                             <td><%= email %></td>
                             <td>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
@@ -156,6 +157,8 @@
                                 </form>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<%= id %>">
+                                    <input type="hidden" name="email_id" value="<%= email %>">
+                                    <input type="hidden" name="enrollment_no" value="<%= enrollment_no %>">
                                     <input type="submit" name="action" value="Delete">
                                 </form>
                             </td>

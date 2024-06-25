@@ -26,6 +26,9 @@
                 hiddenInput.value = "0";
             }
         }
+        function showAlert(message) {
+            alert(message);
+        }
     </script>
     <style>
         .input-box input[type="checkbox"] {
@@ -65,10 +68,10 @@
                         <span class="details">Last Name</span>
                         <input type="text" name="last_name" id="last_name" value="<%= request.getAttribute("last_name") %>" required>
                     </div>
-<!--                    <div class="input-box">
+                    <div class="input-box">
                         <span class="details">Email</span>
                         <input type="email" name="email_id" id="email_id" value="<%= request.getAttribute("email_id") %>" required>
-                    </div>-->
+                    </div>
                     <div class="input-box">
                         <span class="details">Mobile Number</span>
                         <input type="text" name="mobile_no" id="mobile_no" value="<%= request.getAttribute("mobile_no") != null ? request.getAttribute("mobile_no") : "" %>" required>
@@ -77,6 +80,10 @@
                     <div class="input-box">
                         <span class="details">Address</span>
                         <input type="text" name="address" id="address" value="<%= request.getAttribute("address") %>" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Enrollment Number</span>
+                        <input type="text" name="e_no" id="e_no" value="<%= request.getAttribute("enrollment_no") %>" required>
                     </div>
                     <div class="input-box">
                         <span class="details">Password</span>
@@ -124,6 +131,7 @@
             var email_id = document.getElementById("email_id").value;
             var address = document.getElementById("address").value;
             var password = document.getElementById("password").value;
+            var e_no = document.getElementById("e_no").value;
             if(first_name === ""){
                 alert("Enter First name");
                 return false;
@@ -144,10 +152,18 @@
                 alert("Mobile no is must in 10 numbers");
                 return false;
             }
-//            if(email_id == ""){
-//                alert("Enter Email id");
-//                return false;
-//            }
+            if(email_id == ""){
+                alert("Enter Email id");
+                return false;
+            }
+            if(e_no.length != 9){
+                alert("Enrollment no is must in 9 numbers");
+                return false;
+            }
+            if(e_no == ""){
+                alert("Enter Enrollment Number");
+                return false;
+            }
             if (!email_id.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
                 alert("Enter valid email address");
                 return false;
@@ -166,12 +182,22 @@
             
             
             if(password.length<6){
-                    alert("Password should be more than 6");
-                    return false;
-                }
+                alert("Password should be more than 6");
+                return false;
+            }
             
             
         }
     </script>
+    <% 
+        String message = request.getParameter("message");
+        if (message != null) { 
+        %>
+            <script>
+                showAlert("<%= message %>");
+            </script>
+        <% 
+        } 
+    %>
 </body>
 </html>

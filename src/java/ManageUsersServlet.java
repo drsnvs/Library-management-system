@@ -37,6 +37,8 @@ public class ManageUsersServlet extends HttpServlet {
                     response.sendRedirect("manageUsers.jsp?message=User deletion failed!");
                 }
             } else if ("Edit".equals(action)) {
+                
+                
                 // Fetch user details and forward to edit page
                 String fetchQuery = "SELECT * FROM data_table WHERE id=?";
                 PreparedStatement ps = con.prepareStatement(fetchQuery);
@@ -52,6 +54,7 @@ public class ManageUsersServlet extends HttpServlet {
                     request.setAttribute("mobile_no", rs.getString("mobile_no"));
                     request.setAttribute("address", rs.getString("address"));
                     request.setAttribute("active", rs.getString("active"));
+                    request.setAttribute("enrollment_no", rs.getString("enrollment_no"));
                     request.setAttribute("password", rs.getString("password"));
                     RequestDispatcher rd = request.getRequestDispatcher("editUser.jsp");
                     rd.forward(request, response);

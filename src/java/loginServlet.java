@@ -80,6 +80,7 @@ public class loginServlet extends HttpServlet {
                                     session.setAttribute("first_name", rsu.getString("first_name"));
                                     session.setAttribute("last_name", rsu.getString("last_name"));
                                     session.setAttribute("address", rsu.getString("address"));
+                                    session.setAttribute("enrollment_no", rsu.getString("enrollment_no"));
                                     session.setAttribute("user_type", "user"); // Set user_type in session
                                     RequestDispatcher rd = request.getRequestDispatcher("userDashboard.jsp");
                                     rd.forward(request, response);

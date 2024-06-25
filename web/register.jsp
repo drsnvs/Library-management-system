@@ -43,6 +43,10 @@
                             <input type="email" name="email_id" id="email_id" placeholder="Enter your email" >
                         </div>
                         <div class="input-box">
+                            <span class="details">Enrollment NO</span>
+                            <input type="number" name="e_no" id="e_no" placeholder="Enter your Enrollment number" >
+                        </div>
+                        <div class="input-box">
                             <span class="details">Address</span>
                             <input type="text" name="address" id="address" maxlength="255" placeholder="Enter your address" >
                         </div>
@@ -104,6 +108,7 @@
             var address = document.getElementById("address").value;
             var password = document.getElementById("password").value;
             var cpassword = document.getElementById("cpassword").value;
+            var e_no = document.getElementById("e_no").value;
             if(first_name == ""){
                 alert("Enter First name");
                 return false;
@@ -116,12 +121,20 @@
                 alert("Enter Mobile no");
                 return false;
             }
+            if(e_no == ""){
+                alert("Enter Enrollment no");
+                return false;
+            }
             if (!/^[0-9]{10}$/.test(mobile_no)) {
                 alert("Enter valid mobile number");
                 return false;
             }
             if(mobile_no.length != 10){
                 alert("Mobile no is must in 10 numbers");
+                return false;
+            }
+            if(e_no.length != 9){
+                alert("Enrollment no is must be 9 numbers");
                 return false;
             }
 //            if(email_id == ""){

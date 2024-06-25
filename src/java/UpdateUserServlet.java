@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,29 +29,57 @@ public class UpdateUserServlet extends HttpServlet {
             String mobileNo = request.getParameter("mobile_no");
             String address = request.getParameter("address");
             String active = request.getParameter("active");
+            String enrollment_no = request.getParameter("e_no");
             
             long millis = System.currentTimeMillis();
             java.sql.Date date = new java.sql.Date(millis);
             HttpSession session = request.getSession();
-            if(!session.getId().equals(session.getAttribute("key"))){
+            if (!session.getId().equals(session.getAttribute("key"))) {
                 response.sendRedirect("index.jsp");
+                return;
             }
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             int modifiedBy = Integer.parseInt((String) session.getAttribute("user_id"));
-            String updateQuery = "UPDATE data_table SET first_name=?, last_name=?, email_id=?, mobile_no=?, address=?, active=?, modifiedBy=?, modifiedOn=? WHERE id=?";
+            
+            // Check for existing email_id
+            String checkEmailQuery = "SELECT * FROM data_table WHERE email_id = ? AND id != ?";
+            PreparedStatement checkEmailStmt = con.prepareStatement(checkEmailQuery);
+            checkEmailStmt.setString(1, email);
+            checkEmailStmt.setInt(2, id);
+            ResultSet rsEmail = checkEmailStmt.executeQuery();
+            
+            if (rsEmail.next()) {
+                response.sendRedirect("manageUsers.jsp?message=Email already exists!");
+                return;
+            }
+            
+            // Check for existing enrollment_no
+            String checkEnrollmentQuery = "SELECT * FROM data_table WHERE enrollment_no = ? AND id != ?";
+            PreparedStatement checkEnrollmentStmt = con.prepareStatement(checkEnrollmentQuery);
+            checkEnrollmentStmt.setString(1, enrollment_no);
+            checkEnrollmentStmt.setInt(2, id);
+            ResultSet rsEnrollment = checkEnrollmentStmt.executeQuery();
+            
+            if (rsEnrollment.next()) {
+                response.sendRedirect("manageUsers.jsp?message=Enrollment number already exists!");
+                return;
+            }
+            
+            // Update user information
+            String updateQuery = "UPDATE data_table SET first_name=?, last_name=?, email_id=?, mobile_no=?, address=?, active=?, modifiedBy=?, modifiedOn=?, enrollment_no=? WHERE id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, firstName);
             ps.setString(2, lastName);
             ps.setString(3, email);
             ps.setString(4, mobileNo);
             ps.setString(5, address);
-            
             ps.setInt(6, Integer.parseInt(active));
             ps.setInt(7, modifiedBy);
             ps.setDate(8, date);
-            ps.setInt(9, id);
-
+            ps.setString(9, enrollment_no);
+            ps.setInt(10, id);
+            
             int result = ps.executeUpdate();
             if (result > 0) {
                 response.sendRedirect("manageUsers.jsp?message=User updated successfully!");

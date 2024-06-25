@@ -168,6 +168,10 @@
                 <input type="hidden" name="id" value="<%= session.getAttribute("user_id") %>">
                 <div class="user-details">
                     <div class="input-box">
+                        <span class="details">Enrollment Number</span>
+                        <input type="text" name="enrollment_no" id="enrollment_no" value="<%= session.getAttribute("enrollment_no") %>" >
+                    </div>
+                    <div class="input-box">
                         <span class="details">Email ID</span>
                         <input type="email" name="email_id" id="email_id" value="<%= session.getAttribute("email_id") %>" >
                     </div>
@@ -222,6 +226,7 @@
             var email_id = document.getElementById("email_id").value;
             var address = document.getElementById("address").value;
             var password = document.getElementById("password").value;
+            var enrollment_no = document.getElementById("enrollment_no").value;
             if(first_name === ""){
                 alert("Enter First name");
                 return false;
@@ -234,12 +239,20 @@
                 alert("Enter Mobile no");
                 return false;
             }
+            if(enrollment_no === ""){
+                alert("Enter Enrollment no");
+                return false;
+            }
             if (!/^[0-9]{10}$/.test(mobile_no)) {
                 alert("Enter valid mobile number");
                 return false;
             }
             if(mobile_no.length !== 10){
                 alert("Mobile no must be 10 digits");
+                return false;
+            }
+            if(enrollment_no.length !== 9){
+                alert("Mobile no must be 9 digits");
                 return false;
             }
 

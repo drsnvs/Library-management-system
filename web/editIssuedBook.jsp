@@ -85,8 +85,8 @@
         <form action="UpdateIssuedBookServlet" onsubmit="return validation()" method="post">
             <input type="hidden" name="rent_id" value="<%= request.getAttribute("rent_id") %>">
             
-            <label for="book_id">Book ID</label>
-            <input type="text" id="book_id" name="book_id" value="<%= request.getAttribute("book_id") %>" required>
+            <!--<label for="book_id">Book ID</label>-->
+            <input type="hidden" id="book_id" name="book_id" value="<%= request.getAttribute("book_id") %>" >
 
             <label for="user_id">User ID</label>
             <input type="text" id="user_id" name="user_id" value="<%= request.getAttribute("user_id") %>" required>

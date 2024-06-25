@@ -35,6 +35,7 @@ public class registerUser extends HttpServlet {
                 String password = request.getParameter("password");
                 String confirmPassword = request.getParameter("cpassword");
                 String address = request.getParameter("address");
+                String e_no = request.getParameter("e_no");
 //                String gender = request.getParameter("gender");
 
                 if (!password.equals(confirmPassword)) {
@@ -43,9 +44,10 @@ public class registerUser extends HttpServlet {
                 }
 
                 // Check if user already exists
-                String checkUserQuery = "SELECT * FROM data_table WHERE email_id = ?";
+                String checkUserQuery = "SELECT * FROM data_table WHERE email_id = ? or enrollment_no = ?";
                 PreparedStatement checkUserStmt = con.prepareStatement(checkUserQuery);
                 checkUserStmt.setString(1, email);
+                checkUserStmt.setString(2, e_no);
                 ResultSet rs = checkUserStmt.executeQuery();
                 
                 int createdBy = Integer.parseInt((String) session.getAttribute("user_id"));
@@ -59,19 +61,20 @@ public class registerUser extends HttpServlet {
                     long millis = System.currentTimeMillis();
                     java.sql.Date date = new java.sql.Date(millis);
 
-                    String query = "INSERT INTO data_table (role_id, email_id, password, mobile_no, first_name, last_name, address, allocated_book, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    String query = "INSERT INTO data_table (role_id, email_id, enrollment_no, password, mobile_no, first_name, last_name, address, allocated_book, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement ps = con.prepareStatement(query);
                     ps.setInt(1, 2); // Replace with actual role_id if applicable
                     ps.setString(2, email);
-                    ps.setString(3, password);
-                    ps.setString(4, mobileNo);
-                    ps.setString(5, firstName);
-                    ps.setString(6, lastName);
-                    ps.setString(7, address);
-                    ps.setInt(8, 0);
-                    ps.setInt(9, 1);
-                    ps.setInt(10, createdBy);
-                    ps.setDate(11, date);
+                    ps.setString(3, e_no);
+                    ps.setString(4, password);
+                    ps.setString(5, mobileNo);
+                    ps.setString(6, firstName);
+                    ps.setString(7, lastName);
+                    ps.setString(8, address);
+                    ps.setInt(9, 0);
+                    ps.setInt(10, 1);
+                    ps.setInt(11, createdBy);
+                    ps.setDate(12, date);
 
                     int result = ps.executeUpdate();
                     if (result > 0) {
