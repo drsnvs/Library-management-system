@@ -55,6 +55,7 @@ public class ManageBooksServlet extends HttpServlet {
                     request.setAttribute("author_name", rs.getString("author_name"));
                     request.setAttribute("price", rs.getDouble("price"));
                     request.setAttribute("quantity", rs.getInt("quantity"));
+                    request.setAttribute("isbn", rs.getString("isbn"));
                     request.setAttribute("active", rs.getInt("active"));
                     request.setAttribute("publisher", rs.getString("publisher"));
                     request.setAttribute("edition_year", rs.getInt("edition_year"));

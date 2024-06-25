@@ -7,8 +7,11 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,26 +35,42 @@ public class AddBookServlet extends HttpServlet {
             String authorName = request.getParameter("author");
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-//            String isbn = request.getParameter("isbn");
+            String isbn = request.getParameter("isbn");
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("year"));
-
+            LocalDate today = LocalDate.now();
+            Date createdOn = Date.valueOf(today);
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             
             int createdBy = Integer.parseInt((String) session.getAttribute("user_id"));
-            
-            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, CURDATE())";
-//            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, ISBN, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, CURDATE())";
+            String checkQuery = "SELECT COUNT(*) FROM book_table WHERE isbn = ?";
+            PreparedStatement checkPs = con.prepareStatement(checkQuery);
+            checkPs.setString(1, isbn);
+            ResultSet rs = checkPs.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            rs.close();
+            checkPs.close();
+
+            if (count > 0) {
+                // ISBN already exists
+                response.sendRedirect("addBook.jsp?message=ISBN already exists!");
+                return;
+            }
+            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, isbn , publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, ISBN, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?)";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
             ps.setDouble(3, price);
             ps.setInt(4, quantity);
-//            ps.setString(5, isbn);
-            ps.setString(5, publisher);
-            ps.setInt(6, editionYear);
-            ps.setInt(7,createdBy);
+            ps.setString(5, isbn);
+            ps.setString(6, publisher);
+            ps.setInt(7, editionYear);
+            ps.setInt(8,1);
+            ps.setInt(9,createdBy);
+            ps.setDate(10, createdOn);
             int result = ps.executeUpdate();
             con.close();
 

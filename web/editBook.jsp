@@ -27,6 +27,16 @@
             }
         }
     </script>
+    <style>
+        .input-box input[type="checkbox"] {
+            width: 20px; /* Adjust width as needed */
+            height: 20px; /* Adjust height as needed */
+            margin-right: 10px;
+        }
+        .input-box input[type="checkbox"] + label {
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <%
@@ -41,7 +51,7 @@
     <div class="container">
         <div class="title">Edit Book</div>
         <div class="content">
-            <form action="UpdateBookServlet" method="POST">
+            <form action="UpdateBookServlet" onsubmit="return validation()" method="POST">
                 <input type="hidden" name="id" value="<%= request.getAttribute("book_id") %>">
                 <div class="user-details">
 <!--                    <div class="input-box">
@@ -50,37 +60,38 @@
                     </div>-->
                     <div class="input-box">
                         <span class="details">Title</span>
-                        <input type="text" name="book_title" value="<%= request.getAttribute("book_title") %>" required>
+                        <input type="text" name="book_title" id="book_title" value="<%= request.getAttribute("book_title") %>" required>
                     </div>
                     <div class="input-box">
                         <span class="details">Author</span>
-                        <input type="text" name="author_name" value="<%= request.getAttribute("author_name") %>" required>
+                        <input type="text" name="author_name" id="author_name" value="<%= request.getAttribute("author_name") %>" required>
                     </div>
                     <div class="input-box">
                         <span class="details">Price</span>
-                        <input type="text" name="price" value="<%= request.getAttribute("price") %>" required>
+                        <input type="text" name="price" id="price" value="<%= request.getAttribute("price") %>">
                     </div>
                     <div class="input-box">
                         <span class="details">Quantity</span>
-                        <input type="text" name="quantity" value="<%= request.getAttribute("quantity") %>" required>
+                        <input type="text" name="quantity" id="quantity" value="<%= request.getAttribute("quantity") %>" required>
                     </div>
-<!--                    <div class="input-box">
+                    <div class="input-box">
                         <span class="details">ISBN</span>
-                        <input type="text" name="isbn" value="<%= request.getAttribute("isbn") %>" required>
-                    </div>-->
+                        <input type="text" name="isbn" id="isbn" value="<%= request.getAttribute("isbn") %>" required>
+                    </div>
                     <div class="input-box">
                         <span class="details">Publisher</span>
-                        <input type="text" name="publisher" value="<%= request.getAttribute("publisher") %>" required>
+                        <input type="text" name="publisher" id="publisher" value="<%= request.getAttribute("publisher") %>" required>
                     </div>
                     <div class="input-box">
                         <span class="details">Year</span>
-                        <input type="text" name="edition_year" value="<%= request.getAttribute("edition_year") != null ? request.getAttribute("edition_year") : "" %>" required>
+                        <input type="text" name="edition_year" id="edition_year" value="<%= request.getAttribute("edition_year") != null ? request.getAttribute("edition_year") : "" %>" required>
                     </div>
                     <div class="input-box">
                         <span class="details">Active</span>
                         <input type="hidden" id="activeHidden" name="active" value="<%= request.getAttribute("active") %>">
                         <input type="checkbox" id="activeCheckbox" onclick="handleCheckbox()" <%= "1".equals(request.getAttribute("active").toString()) ? "checked" : "" %>>
                     </div>
+                    
                 </div>
                 <div class="button">
                     <input type="submit" value="Save Changes">
@@ -91,5 +102,52 @@
             </form>
         </div>
     </div>
+    <script>
+        
+        function validation(){
+            var book_title = document.getElementById("book_title").value;
+            var author_name = document.getElementById("author_name").value;
+            var price = document.getElementById("price").value;
+            var quantity = document.getElementById("quantity").value;
+            var publisher = document.getElementById("publisher").value;
+            var edition_year = document.getElementById("edition_year").value;
+            var isbn = document.getElementById("isbn").value;
+            if(book_title === ""){
+                alert("Enter Book title");
+                return false;
+            }
+            if(author_name === ""){
+                alert("Enter Author name");
+                return false;
+            }
+            if(price === ""){
+                alert("Enter Price");
+                return false;
+            }
+            if(isbn === ""){
+                alert("Enter ISBN");
+                return false;
+            }
+            
+            if(isbn.length != 13){
+                alert("ISBN should be 13 ");
+                return false;
+            }
+            if(quantity === ""){
+                alert("Enter Quantity");
+                return false;
+            }
+            if(publisher === ""){
+                alert("Enter Publisher");
+                return false;
+            }
+            if(edition_year === ""){
+                alert("Enter Edition year");
+                return false;
+            }    
+            
+            return true;
+        }
+    </script>
 </body>
 </html>

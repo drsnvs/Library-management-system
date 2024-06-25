@@ -52,6 +52,7 @@ public class ManageUsersServlet extends HttpServlet {
                     request.setAttribute("mobile_no", rs.getString("mobile_no"));
                     request.setAttribute("address", rs.getString("address"));
                     request.setAttribute("active", rs.getString("active"));
+                    request.setAttribute("password", rs.getString("password"));
                     RequestDispatcher rd = request.getRequestDispatcher("editUser.jsp");
                     rd.forward(request, response);
                 } else {

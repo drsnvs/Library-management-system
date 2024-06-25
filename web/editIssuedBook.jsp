@@ -82,7 +82,7 @@
     
     <div class="container">
         <div class="title">Edit Issued Book</div>
-        <form action="UpdateIssuedBookServlet" method="post">
+        <form action="UpdateIssuedBookServlet" onsubmit="return validation()" method="post">
             <input type="hidden" name="rent_id" value="<%= request.getAttribute("rent_id") %>">
             
             <label for="book_id">Book ID</label>
@@ -111,5 +111,33 @@
             <a href="manageIssuedBooks.jsp"><input type="button" value="Back"></a>
         </form>
     </div>
+    <script>
+        
+        function validation(){
+            var book_id = document.getElementById("book_id").value;
+            var user_id = document.getElementById("user_id").value;
+            var date_out = document.getElementById("date_out").value;
+            var date_due = document.getElementById("date_due").value;
+            
+            if(book_id === ""){
+                alert("Enter Book id");
+                return false;
+            }
+            if(user_id === ""){
+                alert("Enter User id");
+                return false;
+            }
+            if(date_out === ""){
+                alert("Enter Issue date");
+                return false;
+            }
+            if(date_due === ""){
+                alert("Enter Due date");
+                return false;
+            }  
+            
+            return true;
+        }
+    </script>
 </body>
 </html>

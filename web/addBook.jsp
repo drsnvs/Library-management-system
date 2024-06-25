@@ -49,10 +49,10 @@
                         <span class="details">Quantity</span>
                         <input type="number" name="quantity" id="quantity" placeholder="Enter quantity" >
                     </div>
-<!--                    <div class="input-box">
+                    <div class="input-box">
                         <span class="details">ISBN</span>
-                        <input type="text" name="isbn" placeholder="Enter book ISBN" required>
-                    </div>-->
+                        <input type="text" name="isbn" id="isbn" placeholder="Enter book ISBN" >
+                    </div>
                     <div class="input-box">
                         <span class="details">Publisher</span>
                         <input type="text" name="publisher" id="publisher" placeholder="Enter book publisher" >
@@ -90,6 +90,7 @@
             var quantity = document.getElementById("quantity").value;
             var publisher = document.getElementById("publisher").value;
             var year = document.getElementById("year").value;
+            var isbn = document.getElementById("isbn").value;
             
             if(title === ""){
                 alert("Enter Title");
@@ -108,6 +109,17 @@
                 alert("Enter Quantity");
                 return false;
             }
+            
+            if(isbn === ""){
+                alert("Enter ISBN");
+                return false;
+            }
+            
+            if(isbn.length != 13){
+                alert("ISBN should be 13 ");
+                return false;
+            }
+            
             if(publisher === ""){
                 alert("Enter Publisher");
                 return false;

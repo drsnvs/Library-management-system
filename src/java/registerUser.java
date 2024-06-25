@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 
 public class registerUser extends HttpServlet {
 
@@ -71,6 +75,39 @@ public class registerUser extends HttpServlet {
 
                     int result = ps.executeUpdate();
                     if (result > 0) {
+                        String to = email; // change accordingly
+                        String from = "sarvaiyadarshan50@gmail.com"; // change accordingly
+                        String host = "smtp.gmail.com";
+
+                        // Get the session object
+                        Properties properties = System.getProperties();
+                        properties.put("mail.smtp.host", host);
+                        properties.put("mail.smtp.port", "587");
+                        properties.put("mail.smtp.auth", "true");
+                        properties.put("mail.smtp.starttls.enable", "true");
+
+                        Session ssn = Session.getInstance(properties, new javax.mail.Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication("sarvaiyadarshan50@gmail.com", "okinkpdodkwrheyj"); // change accordingly
+                            }
+                        });
+
+                        // compose the message
+                        try {
+                            MimeMessage message = new MimeMessage(ssn);
+                            message.setFrom(new InternetAddress(from));
+                            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                            message.setSubject("LMS Registration");
+                            message.setText("Hello, "+firstName+" "+lastName+". \nYou are successfully Rgistered in LMS\n\nRegistered Email id : "+email+"\nPassword : "+password+"\n\nThank you...\nHave a nice day !!!");
+                            
+
+                            // Send message
+                            Transport.send(message);
+                            System.out.println("User registered successfully!....");
+
+                        } catch (MessagingException mex) {
+                            mex.printStackTrace();
+                        }
                         response.sendRedirect("register.jsp?message=User registered successfully!");
                     } else {
                         response.sendRedirect("register.jsp?message=User registration failed!");

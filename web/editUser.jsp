@@ -27,6 +27,16 @@
             }
         }
     </script>
+    <style>
+        .input-box input[type="checkbox"] {
+            width: 20px; /* Adjust width as needed */
+            height: 20px; /* Adjust height as needed */
+            margin-right: 10px;
+        }
+        .input-box input[type="checkbox"] + label {
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <%
@@ -43,30 +53,38 @@
         <div class="title">Edit User</div>
         <div class="content">
             
-            <form action="UpdateUserServlet" method="POST">
+            <form action="UpdateUserServlet" onsubmit="return validation()" method="POST">
                 <input type="hidden" name="id" value="<%= request.getAttribute("id") %>">
                 <div class="user-details">
                     
                     <div class="input-box">
                         <span class="details">First Name</span>
-                        <input type="text" name="first_name" value="<%= request.getAttribute("first_name") %>" required>
+                        <input type="text" name="first_name" id="first_name" value="<%= request.getAttribute("first_name") %>" required>
                     </div>
                     <div class="input-box">
                         <span class="details">Last Name</span>
-                        <input type="text" name="last_name" value="<%= request.getAttribute("last_name") %>" required>
+                        <input type="text" name="last_name" id="last_name" value="<%= request.getAttribute("last_name") %>" required>
                     </div>
-                    <div class="input-box">
+<!--                    <div class="input-box">
                         <span class="details">Email</span>
-                        <input type="email" name="email_id" value="<%= request.getAttribute("email_id") %>" required>
-                    </div>
+                        <input type="email" name="email_id" id="email_id" value="<%= request.getAttribute("email_id") %>" required>
+                    </div>-->
                     <div class="input-box">
                         <span class="details">Mobile Number</span>
-                        <input type="text" name="mobile_no" value="<%= request.getAttribute("mobile_no") != null ? request.getAttribute("mobile_no") : "" %>" required>
+                        <input type="text" name="mobile_no" id="mobile_no" value="<%= request.getAttribute("mobile_no") != null ? request.getAttribute("mobile_no") : "" %>" required>
                     </div>
 
                     <div class="input-box">
                         <span class="details">Address</span>
-                        <input type="text" name="address" value="<%= request.getAttribute("address") %>" required>
+                        <input type="text" name="address" id="address" value="<%= request.getAttribute("address") %>" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Password</span>
+                        <input type="password" name="password" id="password" value="<%= request.getAttribute("password") %>" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="checkbox" id="show-password" onclick="myFunction()" name="show_password">
+                        <label for="show-password">Show Password</label>
                     </div>
 <!--                    <div class="input-box">
                         <span class="details">Active</span>
@@ -90,5 +108,70 @@
             
         </div>
     </div>
+    <script>
+        function myFunction() {
+          var x = document.getElementById("password");
+          if (x.type === "password") {
+            x.type = "text";
+          } else {
+            x.type = "password";
+          }
+        }
+        function validation(){
+            var first_name = document.getElementById("first_name").value;
+            var last_name = document.getElementById("last_name").value;
+            var mobile_no = document.getElementById("mobile_no").value;
+            var email_id = document.getElementById("email_id").value;
+            var address = document.getElementById("address").value;
+            var password = document.getElementById("password").value;
+            if(first_name === ""){
+                alert("Enter First name");
+                return false;
+            }
+            if(last_name === ""){
+                alert("Enter Last name");
+                return false;
+            }
+            if(mobile_no === ""){
+                alert("Enter Mobile no");
+                return false;
+            }
+            if (!/^[0-9]{10}$/.test(mobile_no)) {
+                alert("Enter valid mobile number");
+                return false;
+            }
+            if(mobile_no.length != 10){
+                alert("Mobile no is must in 10 numbers");
+                return false;
+            }
+//            if(email_id == ""){
+//                alert("Enter Email id");
+//                return false;
+//            }
+            if (!email_id.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+                alert("Enter valid email address");
+                return false;
+            }else if(email_id === "" | email_id === null){
+                alert("Enter email address");
+                return false;
+            }
+            if(address === ""){
+                alert("Enter Address");
+                return false;
+            }
+            if(password === ""){
+                alert("Enter Password");
+                return false;
+            }
+            
+            
+            if(password.length<6){
+                    alert("Password should be more than 6");
+                    return false;
+                }
+            
+            
+        }
+    </script>
 </body>
 </html>
