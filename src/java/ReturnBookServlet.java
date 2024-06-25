@@ -44,7 +44,7 @@ public class ReturnBookServlet extends HttpServlet {
             int book_id = Integer.parseInt(request.getParameter("book_id"));
 
             // Check if user has borrowed the book
-            String checkRentQuery = "SELECT * FROM book_rent_table WHERE book_id = ? AND id = ? AND (active <= 2 AND active >0)";
+            String checkRentQuery = "SELECT * FROM book_rent_table WHERE book_id = ? AND id = ? AND active = 1";
             PreparedStatement checkRentPs = con.prepareStatement(checkRentQuery);
             checkRentPs.setInt(1, book_id);
             checkRentPs.setInt(2, user_id);
@@ -54,7 +54,7 @@ public class ReturnBookServlet extends HttpServlet {
                 Date returnDate = Date.valueOf(today);
 
                 // Update book_rent_table to mark the book as returned
-                String updateRentQuery = "UPDATE book_rent_table SET active = active - 1, return_date = ? WHERE book_id = ? AND id = ?";
+                String updateRentQuery = "UPDATE book_rent_table SET active = 0, return_date = ? WHERE book_id = ? AND id = ?";
                 PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
                 updateRentPs.setDate(1, returnDate);
                 updateRentPs.setInt(2, book_id);
