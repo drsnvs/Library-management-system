@@ -77,7 +77,7 @@ public class loginServlet extends HttpServlet {
                                     session.setAttribute("email_id", rsu.getString("email_id"));
                                     session.setAttribute("password", rsu.getString("password"));
                                     session.setAttribute("mobile_no", rsu.getString("mobile_no"));
-                                    session.setAttribute("first_name", rsu.getString("first_name"));
+                                    session.setAttribute("first_name", rsu.getString("first_name")); 
                                     session.setAttribute("last_name", rsu.getString("last_name"));
                                     session.setAttribute("address", rsu.getString("address"));
                                     session.setAttribute("user_type", "user"); // Set user_type in session
