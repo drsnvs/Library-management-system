@@ -17,12 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 
 public class loginServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
             
@@ -33,7 +34,7 @@ public class loginServlet extends HttpServlet {
             String adminPassword = request.getParameter("adminPassword");
             String userEmail = request.getParameter("userEmail");
             String userPassword = request.getParameter("userPassword");
-
+            JSONObject jsonResponse = new JSONObject();
             try {
                 // Database connection
                 Class.forName("com.mysql.jdbc.Driver");
@@ -82,22 +83,30 @@ public class loginServlet extends HttpServlet {
                                     session.setAttribute("address", rsu.getString("address"));
                                     session.setAttribute("enrollment_no", rsu.getString("enrollment_no"));
                                     session.setAttribute("user_type", "user"); // Set user_type in session
-                                    RequestDispatcher rd = request.getRequestDispatcher("userDashboard.jsp");
-                                    rd.forward(request, response);
+                                    jsonResponse.put("status", "success");
+                                    jsonResponse.put("message", "Login successful. Redirecting...");
+//                                    RequestDispatcher rd = request.getRequestDispatcher("userDashboard.jsp");
+//                                    rd.forward(request, response);
                                 }else{
-                                    out.println("<script>alert('You are blocked contact admin !!');</script>");
-                                    RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
-                                    rd.include(request, response);
+//                                    out.println("<script>alert('You are blocked contact admin !!');</script>");
+                                    jsonResponse.put("status", "failure");
+                                    jsonResponse.put("message", "You are blocked contact admin !!");
+//                                    RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
+//                                    rd.include(request, response);
                                 }
                             } else {
-                                out.println("<script>alert('Incorrect credentials');</script>");
-                                RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
-                                rd.include(request, response);
+//                                out.println("<script>alert('Incorrect credentials');</script>");
+                                jsonResponse.put("status", "failure");
+                                jsonResponse.put("message", "Incorrect credentials");
+//                                RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
+//                                rd.include(request, response);
                             }
                         } else {
-                            out.println("<script>alert('Incorrect credentials');</script>");
-                            RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
-                            rd.include(request, response);
+//                            out.println("<script>alert('Incorrect credentials');</script>");
+                            jsonResponse.put("status", "failure");
+                            jsonResponse.put("message", "Incorrect credentials");
+//                            RequestDispatcher rd = request.getRequestDispatcher("userLogin.jsp");
+//                            rd.include(request, response);
                         }
                     }
                 }

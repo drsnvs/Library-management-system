@@ -24,6 +24,10 @@
             if (!session.getId().equals(session.getAttribute("key"))) {
                 response.sendRedirect("index.jsp");
             }
+            if (session != null) {
+    session.invalidate(); // Invalidate the session
+}
+response.sendRedirect("index.jsp");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -52,13 +52,14 @@ public class ReturnBookServlet extends HttpServlet {
             if (rsRent.next()) {
                 LocalDate today = LocalDate.now();
                 Date returnDate = Date.valueOf(today);
-
+                int rent_id = Integer.parseInt(rsRent.getString("rent_id"));
                 // Update book_rent_table to mark the book as returned
-                String updateRentQuery = "UPDATE book_rent_table SET active = 0, return_date = ? WHERE book_id = ? AND id = ?";
+                String updateRentQuery = "UPDATE book_rent_table SET active = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
                 PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
                 updateRentPs.setDate(1, returnDate);
                 updateRentPs.setInt(2, book_id);
                 updateRentPs.setInt(3, user_id);
+                updateRentPs.setInt(4, rent_id);
                 int result = updateRentPs.executeUpdate();
 
                 if (result > 0) {
