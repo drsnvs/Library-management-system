@@ -12,7 +12,6 @@
         <title>User Login</title>
         <link rel="stylesheet" href="css/style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <%
@@ -27,7 +26,7 @@
         <div class="container">
         <div class="title">User Login</div>
         <div class="content">
-          <form action="loginServlet" id="loginForm" method="POST">
+          <form action="loginServlet" method="POST">
             <div class="user-details">
               
               <div class="input-box">
@@ -52,33 +51,7 @@
               <input type="submit" value="Login">
             </div>
           </form>
-          <div id="message"></div>
         </div>
       </div>
-        <script>
-            $(document).ready(function() {
-                $('#loginForm').on('submit', function(event) {
-                    event.preventDefault(); // Prevent the form from submitting via the browser
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'loginServlet', // URL to the servlet
-                        data: $(this).serialize(), // Serialize form data
-                        success: function(response) {
-                            // Handle successful response
-                            $('#message').html('<p>' + response.message + '</p>');
-
-                            if (response.status === 'success') {
-                                window.location.href = 'userDashboard.jsp'; // Redirect on successful login
-                            }
-                        },
-                        error: function() {
-                            // Handle error response
-                            $('#message').html('<p>An error occurred. Please try again.</p>');
-                        }
-                    });
-                });
-            });
-        </script>
     </body>
 </html>
