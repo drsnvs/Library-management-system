@@ -61,6 +61,10 @@
                 <div class="user-details">
                     
                     <div class="input-box">
+                        <span class="details">Enrollment Number</span>
+                        <input type="text" name="e_no" id="e_no" value="<%= request.getAttribute("enrollment_no") %>" required>
+                    </div>
+                    <div class="input-box">
                         <span class="details">First Name</span>
                         <input type="text" name="first_name" id="first_name" value="<%= request.getAttribute("first_name") %>" required>
                     </div>
@@ -76,15 +80,15 @@
                         <span class="details">Mobile Number</span>
                         <input type="text" name="mobile_no" id="mobile_no" value="<%= request.getAttribute("mobile_no") != null ? request.getAttribute("mobile_no") : "" %>" required>
                     </div>
-
+                    <div class="input-box">
+                        <span class="details">Allocated Book</span>
+                        <input type="text" name="allocated_book" id="allocated_book" value="<%= request.getAttribute("allocated_book") %>" required>
+                    </div>
                     <div class="input-box">
                         <span class="details">Address</span>
-                        <input type="text" name="address" id="address" value="<%= request.getAttribute("address") %>" required>
+                        <input type="text" name="address" id="address" value="<%= request.getAttribute("address") %>" required >
                     </div>
-                    <div class="input-box">
-                        <span class="details">Enrollment Number</span>
-                        <input type="text" name="e_no" id="e_no" value="<%= request.getAttribute("enrollment_no") %>" required>
-                    </div>
+                    
                     <div class="input-box">
                         <span class="details">Password</span>
                         <input type="password" name="password" id="password" value="<%= request.getAttribute("password") %>" required>
@@ -132,6 +136,7 @@
             var address = document.getElementById("address").value;
             var password = document.getElementById("password").value;
             var e_no = document.getElementById("e_no").value;
+            var allocated_book = document.getElementById("allocated_book").value;
             if(first_name === ""){
                 alert("Enter First name");
                 return false;
@@ -152,8 +157,16 @@
                 alert("Mobile no is must in 10 numbers");
                 return false;
             }
-            if(email_id == ""){
+            if(email_id === ""){
                 alert("Enter Email id");
+                return false;
+            }
+            if(!(allocated_book >= 0 & allocated_book <=2)){
+                alert("Allocated book must must be between 0 and 2 ");
+                return false;
+            }
+            if(allocated_book === ""){
+                alert("Enter Allocated book");
                 return false;
             }
             if(e_no.length != 9){

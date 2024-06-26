@@ -56,6 +56,7 @@ public class ManageUsersServlet extends HttpServlet {
                     request.setAttribute("active", rs.getString("active"));
                     request.setAttribute("enrollment_no", rs.getString("enrollment_no"));
                     request.setAttribute("password", rs.getString("password"));
+                    request.setAttribute("allocated_book", rs.getString("allocated_book"));
                     RequestDispatcher rd = request.getRequestDispatcher("editUser.jsp");
                     rd.forward(request, response);
                 } else {

@@ -83,7 +83,7 @@
                         <input type="text" name="publisher" id="publisher" value="<%= request.getAttribute("publisher") %>" required>
                     </div>
                     <div class="input-box">
-                        <span class="details">Year</span>
+                        <span class="details">Edition year</span>
                         <input type="text" name="edition_year" id="edition_year" value="<%= request.getAttribute("edition_year") != null ? request.getAttribute("edition_year") : "" %>" required>
                     </div>
                     <div class="input-box">

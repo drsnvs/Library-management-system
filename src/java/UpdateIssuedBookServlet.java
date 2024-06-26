@@ -71,10 +71,11 @@ public class UpdateIssuedBookServlet extends HttpServlet {
         Class.forName("com.mysql.jdbc.Driver");
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
         PreparedStatement ps;
+        PreparedStatement pss;
         // Prepare and execute update query
         if(!returnDateParam.equals(null)){
             String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, return_date=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
-
+            
             ps = con.prepareStatement(updateQuery);
             ps.setInt(1, bookId);
             ps.setInt(2, userId);
@@ -84,6 +85,8 @@ public class UpdateIssuedBookServlet extends HttpServlet {
             ps.setInt(6, modifiedBy);
             ps.setDate(7, modifiedOn);
             ps.setInt(8, rentId);
+            
+            
         }else{
             String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
 
@@ -107,8 +110,21 @@ public class UpdateIssuedBookServlet extends HttpServlet {
 //        ps.setInt(6, modifiedBy);
 //        ps.setDate(7, modifiedOn);
 //        ps.setInt(8, rentId);
-        
 
+
+//        String update = "UPDATE record_table SET date_out=?, date_due=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
+//        pss = con.prepareStatement(update);
+//        pss.setDate(1,issueDate);
+//        pss.setDate(2,dueDate);
+//        pss.setInt(3,modifiedBy);
+//        pss.setDate(4,modifiedOn);
+//        pss.setInt(5,rentId);
+//        int resultQ = pss.executeUpdate();
+//        if (resultQ > 0) {
+//            response.sendRedirect("manageIssuedBooks.jsp?message=Issued book updated successfully!");
+//        } else {
+//            response.sendRedirect("manageIssuedBooks.jsp?message=Issued book update failed!");
+//        }
         int result = ps.executeUpdate();
         if (result > 0) {
             response.sendRedirect("manageIssuedBooks.jsp?message=Issued book updated successfully!");

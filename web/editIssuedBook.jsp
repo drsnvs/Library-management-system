@@ -98,7 +98,15 @@
             <input type="text" id="date_due" name="date_due" value="<%= request.getAttribute("date_due") %>" required>
 
             <label for="return_date">Return Date</label>
-            <input type="text" id="return_date" name="return_date" value="<%= request.getAttribute("return_date") %>">
+            
+            <input type="text" id="return_date" name="return_date" placeholder="YYYY-MM-DD" value="<% 
+                    Date returnDate = (Date) request.getAttribute("return_date");
+                    if (returnDate == null) {
+                        out.print("Not yet");
+                    } else {
+                        out.print(returnDate.toString());
+                    }
+                   %>" readonly >
             
             <label for="active">Book issued</label>
             <input type="text" id="active" name="active" value="<%= request.getAttribute("active") %>" required>
