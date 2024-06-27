@@ -110,8 +110,8 @@
                         <th>Book ID</th>
                         <th>User ID</th>
                         <th>Issue Date</th>
-                        <th>Due Date</th>
-<!--                        <th>Return Date</th>-->
+                        <!--<th>Due Date</th>-->
+                        <th>Return Date</th>
                         <!--<th>Fine</th>-->
                         <th>Actions</th>
                     </tr>
@@ -132,7 +132,14 @@
                         <td><%= rs.getInt("book_id") %></td>
                         <td><%= rs.getInt("id") %></td>
                         <td><%= rs.getDate("date_out") %></td>
-                        <td><%= rs.getDate("return_date") %></td>
+                        <td><% 
+                            java.sql.Date returnDate = (java.sql.Date) rs.getDate("return_date");
+                            if(returnDate == (null)){
+                                out.print("Not yet");
+                            }else{
+                                out.print(returnDate.toString());
+                            }
+                            %></td>
                         
                         
                         <td class="actions">

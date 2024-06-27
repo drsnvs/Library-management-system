@@ -59,6 +59,8 @@ CREATE TABLE `liabrarymanagenentsystem`.`book_rent_table` (
   `modifiedBy` INT(4) ,
   `modifiedOn` DATE ,
   PRIMARY KEY (`rent_id`));
+ALTER TABLE `liabrarymanagenentsystem`.`book_rent_table` 
+ADD COLUMN `book_allocated` INT(3) NOT NULL AFTER `return_date`;
 
 
 CREATE TABLE `liabrarymanagenentsystem`.`book_fine_table` (

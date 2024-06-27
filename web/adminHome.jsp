@@ -91,7 +91,7 @@
     %>
     
     <div class="container">
-        <div class="title">Admin Dashboard</div>
+        <div class="title">Admin Dashboard (<%= session.getAttribute("first_name") %>)</div>
         <div class="content">
             <div class="button">
                 <a href="register.jsp">Register User</a>
@@ -112,7 +112,10 @@
                 <a href="returnBook.jsp">Return Book</a>
             </div>
             <div class="button">
-                <a href="manageIssuedBooks.jsp">Handle Fines/Penalties</a>
+                <a href="manageIssuedBooks.jsp">Handle Issue Books</a>
+            </div>
+            <div class="button">
+                <a href="#">Records</a>
             </div>
             <div class="button">
                 <a href="logOutServlet">Logout</a>

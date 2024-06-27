@@ -36,7 +36,7 @@ public class registerUser extends HttpServlet {
                 String confirmPassword = request.getParameter("cpassword");
                 String address = request.getParameter("address");
                 String e_no = request.getParameter("e_no");
-//                String gender = request.getParameter("gender");
+                int role_id = Integer.parseInt(request.getParameter("role_id"));
 
                 if (!password.equals(confirmPassword)) {
                     response.sendRedirect("register.jsp?message=Passwords do not match!");
@@ -63,7 +63,7 @@ public class registerUser extends HttpServlet {
 
                     String query = "INSERT INTO data_table (role_id, email_id, enrollment_no, password, mobile_no, first_name, last_name, address, allocated_book, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement ps = con.prepareStatement(query);
-                    ps.setInt(1, 2); // Replace with actual role_id if applicable
+                    ps.setInt(1, role_id); // Replace with actual role_id if applicable
                     ps.setString(2, email);
                     ps.setString(3, e_no);
                     ps.setString(4, password);

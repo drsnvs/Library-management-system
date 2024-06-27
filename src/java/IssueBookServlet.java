@@ -108,15 +108,16 @@ public class IssueBookServlet extends HttpServlet {
                 Date createdOn = Date.valueOf(today);
 
                 // Insert into book_rent_table
-                String rentQuery = "INSERT INTO book_rent_table (book_id, id, date_out, date_due, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String rentQuery = "INSERT INTO book_rent_table (book_id, id, date_out, date_due, active, book_allocated, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement rentPs = con.prepareStatement(rentQuery);
                 rentPs.setInt(1, book_id);
                 rentPs.setInt(2, user_id);
                 rentPs.setDate(3, date_out);
                 rentPs.setDate(4, date_due);
                 rentPs.setInt(5, 1);
-                rentPs.setInt(6, createdBy);
-                rentPs.setDate(7, createdOn);
+                rentPs.setInt(6, 1);
+                rentPs.setInt(7, createdBy);
+                rentPs.setDate(8, createdOn);
                 int result = rentPs.executeUpdate();
 
                 // Update data_table to increment allocated books count
