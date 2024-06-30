@@ -30,6 +30,7 @@ public class UpdateUserServlet extends HttpServlet {
             String address = request.getParameter("address");
             String active = request.getParameter("active");
             String enrollment_no = request.getParameter("e_no");
+            String allocated_book = request.getParameter("allocated_book");
             
             long millis = System.currentTimeMillis();
             java.sql.Date date = new java.sql.Date(millis);
@@ -67,7 +68,7 @@ public class UpdateUserServlet extends HttpServlet {
             }
             
             // Update user information
-            String updateQuery = "UPDATE data_table SET first_name=?, last_name=?, email_id=?, mobile_no=?, address=?, active=?, modifiedBy=?, modifiedOn=?, enrollment_no=? WHERE id=?";
+            String updateQuery = "UPDATE data_table SET first_name=?, last_name=?, email_id=?, mobile_no=?, address=?, active=?, modifiedBy=?, modifiedOn=?, enrollment_no=?, allocated_book=? WHERE id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, firstName);
             ps.setString(2, lastName);
@@ -78,7 +79,8 @@ public class UpdateUserServlet extends HttpServlet {
             ps.setInt(7, modifiedBy);
             ps.setDate(8, date);
             ps.setString(9, enrollment_no);
-            ps.setInt(10, id);
+            ps.setInt(10, Integer.parseInt(allocated_book));
+            ps.setInt(11, id);
             
             int result = ps.executeUpdate();
             if (result > 0) {

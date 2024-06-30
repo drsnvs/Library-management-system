@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -47,8 +48,8 @@ public class CalculatePenaltyServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-
-            String query = "SELECT rent_id, date_due, return_date, id FROM book_rent_table JOIN data_table ON book_rent_table.id = data_table.id WHERE data_table.enrollment_no = ? AND book_rent_table.active = 1";
+            HttpSession session = request.getSession();
+            String query = "SELECT rent_id, date_due, return_date, book_rent_table.id FROM book_rent_table JOIN data_table ON book_rent_table.id = data_table.id WHERE data_table.enrollment_no = ? AND book_rent_table.active = 1";
             ps = con.prepareStatement(query);
             ps.setString(1, enrollment_no);
             rs = ps.executeQuery();
@@ -62,12 +63,13 @@ public class CalculatePenaltyServlet extends HttpServlet {
                 double fineAmount = daysLate > 0 ? daysLate * finePerDay : 0.0;
 
                 if (fineAmount > 0) {
-                    query = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
+                    query = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) " +
+                            "VALUES (?, ?, ?, 0, 1, ?, ?)";
                     ps = con.prepareStatement(query);
                     ps.setInt(1, rent_id);
-                    ps.setInt(2, rs.getInt("id"));
+                    ps.setInt(2, rs.getInt("id")); // Specify the table alias to avoid ambiguity
                     ps.setDouble(3, fineAmount);
-                    ps.setInt(4, 1); // Assuming the createdBy ID is 1
+                    ps.setInt(4, Integer.parseInt(session.getAttribute("user_id").toString())); // Assuming the createdBy ID is 1
                     ps.setDate(5, java.sql.Date.valueOf(LocalDate.now()));
                     ps.executeUpdate();
                 }

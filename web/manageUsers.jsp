@@ -123,10 +123,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Enrollment No</th>
                             <th>First Name</th>
                             <th>Email</th>
+                            <th>Allocate Books</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -136,20 +136,21 @@
                                 Class.forName("com.mysql.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                                 Statement stmt = con.createStatement();
-                                ResultSet rs = stmt.executeQuery("SELECT id, first_name, enrollment_no, email_id, mobile_no FROM data_table");
+                                ResultSet rs = stmt.executeQuery("SELECT allocated_book ,id, first_name, enrollment_no, email_id, mobile_no FROM data_table");
 
                                 while (rs.next()) {
                                     int id = rs.getInt("id");
+                                    String book_allocated = rs.getString("allocated_book");
                                     String enrollment_no = rs.getString("enrollment_no");
                                     String firstName = rs.getString("first_name");
 //                                    String lastName = rs.getString("last_name");
                                     String email = rs.getString("email_id");
                         %>
                         <tr>
-                            <td><%= id %></td>
                             <td><%= enrollment_no %></td>
                             <td><%= firstName %></td>
                             <td><%= email %></td>
+                            <td><%= book_allocated %></td>
                             <td>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<%= id %>">

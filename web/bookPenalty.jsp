@@ -71,9 +71,8 @@
                         Class.forName("com.mysql.jdbc.Driver");
                         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                         String query = "SELECT DISTINCT dt.enrollment_no FROM data_table dt " +
-                                       "JOIN book_fine_table bf ON dt.id = bf.id " +
                                        "JOIN book_rent_table brt ON dt.id = brt.id " +
-                                       "WHERE bf.paid = 0 AND (brt.return_date IS NULL OR brt.return_date > brt.date_due)";
+                                       "WHERE brt.active = 1 AND  brt.return_date > brt.date_due";
                         ps = con.prepareStatement(query);
                         rs = ps.executeQuery();
                         while (rs.next()) {
