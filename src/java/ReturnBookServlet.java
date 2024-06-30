@@ -55,13 +55,36 @@ public class ReturnBookServlet extends HttpServlet {
                 LocalDate today = LocalDate.now();
                 Date returnDate = Date.valueOf(today);
                 int rent_id = Integer.parseInt(rsRent.getString("rent_id"));
-                
+                Date dueDate = rsRent.getDate("date_due");
                 if (returnDate.after(rsRent.getDate("date_due"))) {
                     // Redirect to penalty payment page
                     message = "Pay Penalty for due date!";
 //                    response.sendRedirect("bookPenalty.jsp?message=Pay Penalty for due date!");
-                    RequestDispatcher rd = request.getRequestDispatcher("bookPenalty.jsp");
+//                    RequestDispatcher rd = request.getRequestDispatcher("bookPenalty.jsp");
+//                    rd.forward(request, response);
+//                    request.setAttribute("user_id", user_id);
+//                    request.setAttribute("book_id", book_id);
+//                    RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
+//                    rd.forward(request, response);
+                    long daysLate = (returnDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24);
+                    double fineAmount = daysLate * 10.0; // 1 per day
+                    request.setAttribute("message", message);
+                    request.setAttribute("fineAmount", fineAmount);
+                    // Insert penalty data into book_fine_table
+                    String insertFineQuery = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
+                    PreparedStatement insertFinePs = con.prepareStatement(insertFineQuery);
+                    insertFinePs.setInt(1, rent_id);
+                    insertFinePs.setInt(2, user_id);
+                    insertFinePs.setDouble(3, fineAmount);
+                    insertFinePs.setInt(4, Integer.parseInt(session.getAttribute("user_id").toString())); // assuming the user who creates the record is the one who pays the fine
+                    insertFinePs.setDate(5, returnDate);
+                    insertFinePs.executeUpdate();
+                    RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
                     rd.forward(request, response);
+                    return;
+                    // Redirect to penalty payment page
+//                    response.sendRedirect("bookPenalty.jsp?message=Pay Penalty for due date!&fine_amount=" + fineAmount);
+//                    return;
                 }else{
                     
                     

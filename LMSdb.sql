@@ -75,6 +75,8 @@ CREATE TABLE `liabrarymanagenentsystem`.`book_fine_table` (
   `modifiedBy` INT ,
   `modifiedOn` DATE ,
   PRIMARY KEY (`fine_id`));
+ALTER TABLE `liabrarymanagenentsystem`.`book_fine_table` 
+ADD COLUMN `book_id` INT(4) NULL AFTER `id`;
 
 
 

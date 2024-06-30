@@ -11,6 +11,39 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Pay Penalty</title>
         <style>
+<%
+    String message = request.getParameter("message");
+    double fineAmount = 0.0;
+    int user_id = 0;
+    int rent_id = 0;
+    
+    // Default message if null
+    if (message == null) {
+        message = "No message provided.";
+    }
+    
+    // Parse parameters with error handling
+    try {
+        fineAmount = Double.parseDouble(request.getParameter("fine_amount"));
+    } catch (NumberFormatException | NullPointerException e) {
+        fineAmount = 0.0;
+        message = "Fine amount is missing or invalid.";
+    }
+    
+    try {
+        user_id = Integer.parseInt(request.getParameter("user_id"));
+    } catch (NumberFormatException | NullPointerException e) {
+        user_id = 0;
+        message = "User ID is missing or invalid.";
+    }
+    
+    try {
+        rent_id = Integer.parseInt(request.getParameter("rent_id"));
+    } catch (NumberFormatException | NullPointerException e) {
+        rent_id = 0;
+        message = "Rent ID is missing or invalid.";
+    }
+%>
             body {
                 font-family: Arial, sans-serif;
                 background-color: #f2f2f2;
@@ -50,7 +83,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Pay Penalty</h1>
+            <p>Fine Amount: $<%= fineAmount %></p>
             <p>You have an overdue penalty. Please confirm to pay the penalty.</p>
             <form action="PayPenaltyServlet" method="post">
                 <input type="hidden" name="user_id" value="<%= request.getParameter("user_id") %>">
