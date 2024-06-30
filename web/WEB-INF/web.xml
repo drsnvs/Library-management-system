@@ -60,6 +60,10 @@
         <servlet-name>CalculatePenaltyServlet</servlet-name>
         <servlet-class>CalculatePenaltyServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PayPenaltyServlet</servlet-name>
+        <servlet-class>PayPenaltyServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
@@ -119,6 +123,10 @@
     <servlet-mapping>
         <servlet-name>CalculatePenaltyServlet</servlet-name>
         <url-pattern>/CalculatePenaltyServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PayPenaltyServlet</servlet-name>
+        <url-pattern>/PayPenaltyServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

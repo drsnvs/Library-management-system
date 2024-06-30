@@ -55,7 +55,7 @@ public class UpdateIssuedBookServlet extends HttpServlet {
         int active = activeParam != null ? Integer.parseInt(activeParam) : 0; // Default value or handle accordingly
         Date issueDate = issueDateParam != null ? Date.valueOf(issueDateParam) : null; // Handle null case
         Date dueDate = dueDateParam != null ? Date.valueOf(dueDateParam) : null; // Handle null case
-        Date returnDate = returnDateParam.equals(null) ? Date.valueOf(returnDateParam) : null; // Handle null case
+//        Date returnDate = returnDateParam == null ? Date.valueOf(returnDateParam) : null; // Handle null case
         int modifiedBy = Integer.parseInt(session.getAttribute("user_id").toString());
         LocalDate today = LocalDate.now();
         Date modifiedOn = Date.valueOf(today);
@@ -74,17 +74,17 @@ public class UpdateIssuedBookServlet extends HttpServlet {
         PreparedStatement pss;
         // Prepare and execute update query
         if(!returnDateParam.equals(null)){
-            String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, return_date=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
+            String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
             
             ps = con.prepareStatement(updateQuery);
             ps.setInt(1, bookId);
             ps.setInt(2, userId);
             ps.setDate(3, issueDate);
             ps.setDate(4, dueDate);
-            ps.setDate(5, returnDate);
-            ps.setInt(6, modifiedBy);
-            ps.setDate(7, modifiedOn);
-            ps.setInt(8, rentId);
+//            ps.setDate(5, returnDate);
+            ps.setInt(5, modifiedBy);
+            ps.setDate(6, modifiedOn);
+            ps.setInt(7, rentId);
             
             
         }else{

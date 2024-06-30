@@ -89,7 +89,7 @@
             <input type="hidden" id="book_id" name="book_id" value="<%= request.getAttribute("book_id") %>" >
 
             <label for="user_id">User ID</label>
-            <input type="text" id="user_id" name="user_id" value="<%= request.getAttribute("user_id") %>" required>
+            <input type="text" id="user_id" name="user_id" value="<%= request.getAttribute("user_id") %>" readonly>
 
             <label for="issue_date">Issue Date</label>
             <input type="text" id="date_out" name="date_out" value="<%= request.getAttribute("date_out") %>" required>
@@ -108,7 +108,7 @@
                    %>" readonly >
             
             <label for="active">Book issued</label>
-            <input type="text" id="active" name="active" value="<%= request.getAttribute("active") %>" required>
+            <input type="text" id="active" name="active" value="<%= request.getAttribute("active") %>" readonly>
             
             
 

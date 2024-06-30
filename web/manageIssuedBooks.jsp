@@ -107,12 +107,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Issue ID</th>
-                        <th>Book Title</th>
-                        <th>User ID</th>
+                        <th>Enrollment No</th>
                         <th>Issue Date</th>
-                        <!--<th>Due Date</th>-->
                         <th>Return Date</th>
+                        <th>Book Title</th>
+                        <!--<th>User ID</th>-->
+                        <!--<th>Due Date</th>-->
                         <!--<th>Fine</th>-->
                         <th>Actions</th>
                     </tr>
@@ -123,24 +123,26 @@
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                             Statement stmt = con.createStatement();
-                            String query = "SELECT * FROM book_rent_table,book_table where book_table.book_id = book_rent_table.book_id;";
+                            String query = "SELECT book_rent_table.*,book_table.*, data_table.* FROM book_rent_table JOIN book_table ON book_rent_table.book_id = book_table.book_id JOIN data_table ON book_rent_table.id = data_table.id";
                             ResultSet rs = stmt.executeQuery(query);
                             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                             while (rs.next()) {
                     %>
                     <tr>
-                        <td><%= rs.getInt("rent_id") %></td>
-                        <td><%= rs.getString("book_title") %></td>
-                        <td><%= rs.getInt("id") %></td>
+                        <td><%= rs.getInt("enrollment_no") %></td>
                         <td><%= formatter.format(rs.getDate("date_out")) %></td>
-                        <td><% 
+                        <td>
+                            <% 
                             java.sql.Date returnDate = (java.sql.Date) rs.getDate("return_date");
                             if(returnDate == (null)){
                                 out.print("Not yet");
                             }else{
                                 out.print(formatter.format(returnDate));
                             }
-                            %></td>
+                            %>
+                        </td>
+                        <td><%= rs.getString("book_title") %></td>
+                        <!--<td><%= rs.getInt("id") %></td>-->
                         
                         
                         <td class="actions">

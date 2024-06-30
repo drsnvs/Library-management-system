@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ public class ReturnBookServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String message = "";
         try {
             HttpSession session = request.getSession();
             Class.forName("com.mysql.jdbc.Driver");
@@ -53,40 +55,60 @@ public class ReturnBookServlet extends HttpServlet {
                 LocalDate today = LocalDate.now();
                 Date returnDate = Date.valueOf(today);
                 int rent_id = Integer.parseInt(rsRent.getString("rent_id"));
+                
+                if (returnDate.after(rsRent.getDate("date_due"))) {
+                    // Redirect to penalty payment page
+                    message = "Pay Penalty for due date!";
+//                    response.sendRedirect("bookPenalty.jsp?message=Pay Penalty for due date!");
+                    RequestDispatcher rd = request.getRequestDispatcher("bookPenalty.jsp");
+                    rd.forward(request, response);
+                }else{
+                    
+                    
                 // Update book_rent_table to mark the book as returned
-                String updateRentQuery = "UPDATE book_rent_table SET book_allocated = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
-                PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
-                updateRentPs.setDate(1, returnDate);
-                updateRentPs.setInt(2, book_id);
-                updateRentPs.setInt(3, user_id);
-                updateRentPs.setInt(4, rent_id);
-                int result = updateRentPs.executeUpdate();
+                    String updateRentQuery = "UPDATE book_rent_table SET book_allocated = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
+                    PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
+                    updateRentPs.setDate(1, returnDate);
+                    updateRentPs.setInt(2, book_id);
+                    updateRentPs.setInt(3, user_id);
+                    updateRentPs.setInt(4, rent_id);
+                    int result = updateRentPs.executeUpdate();
 
-                if (result > 0) {
-                    // Update book_table to increment quantity by 1
-                    String updateQuantityQuery = "UPDATE book_table SET quantity = quantity + 1 WHERE book_id = ?";
-                    PreparedStatement updateQuantityPs = con.prepareStatement(updateQuantityQuery);
-                    updateQuantityPs.setInt(1, book_id);
-                    updateQuantityPs.executeUpdate();
+                    if (result > 0) {
+
+    //                    if(returnDate.after(rsRent.getDate("date_due"))){
+    //                        response.sendRedirect("returnBook.jsp?message=Pay Penalty for due date!");
+    //                    }
+                        // Update book_table to increment quantity by 1
+                        String updateQuantityQuery = "UPDATE book_table SET quantity = quantity + 1 WHERE book_id = ?";
+                        PreparedStatement updateQuantityPs = con.prepareStatement(updateQuantityQuery);
+                        updateQuantityPs.setInt(1, book_id);
+                        updateQuantityPs.executeUpdate();
 
                     // Update data_table to decrement allocated books count
-                    String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
-                    PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
-                    updateAllocatedPs.setInt(1, user_id);
-                    updateAllocatedPs.executeUpdate();
+                        String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
+                        PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
+                        updateAllocatedPs.setInt(1, user_id);
+                        updateAllocatedPs.executeUpdate();
 
-                    response.sendRedirect("returnBook.jsp?message=Book returned successfully!");
-                } else {
-                    response.sendRedirect("returnBook.jsp?message=Failed to return book!");
+//                        response.sendRedirect("returnBook.jsp?message=Book returned successfully!");
+                        message = "Book returned successfully!";
+                    } else {
+//                        response.sendRedirect("returnBook.jsp?message=Failed to return book!");
+                        message = "Failed to return book!";
+                    }
                 }
             } else {
-                response.sendRedirect("returnBook.jsp?message=User has not borrowed this book or book return already processed!");
+//                response.sendRedirect("returnBook.jsp?message=User has not borrowed this book or book return already processed!");
+                message = "User has not borrowed this book or book return already processed!";
             }
-
             con.close();
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("returnBook.jsp?message=An error occurred!");
+//            response.sendRedirect("returnBook.jsp?message=An error occurred!");
+            message = "An error occurred!";
+        } finally{
+            response.sendRedirect("returnBook.jsp?message=" + message);
         }
     }
 
