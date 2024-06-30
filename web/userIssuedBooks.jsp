@@ -4,6 +4,7 @@
     Author     : DARSHAN
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, java.util.*" %>
 <%@ page session="true" %>
@@ -128,14 +129,14 @@
                     pstmt = con.prepareStatement(query);
                     pstmt.setInt(1, Integer.parseInt(userId));
                     rs = pstmt.executeQuery();
-                    
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                     if (rs.next()) {
             %>
                         <div class="table-container">
                             <table class="book-list">
                                 <tr>
                                     <!--<th>ID</th>-->
-                                    <th>Title</th>
+                                    <th>Book Title</th>
                                     <th>Author</th>
                                     <th>Publisher</th>
                                     <!--<th>Year</th>-->
@@ -152,9 +153,21 @@
                                             <td><%= rs.getString("author_name") %></td>
                                             <td><%= rs.getString("publisher") %></td>
                                             <!--<td><%= rs.getInt("edition_year") %></td>-->
-                                            <td><%= rs.getDate("date_out") %></td>
-                                            <td><%= rs.getDate("date_due") %></td>
-                                            <td><%= rs.getDate("return_date") %></td>
+                                            <td>
+                                                <%= 
+                                                    formatter.format((java.util.Date)rs.getDate("date_out"))
+                                                %>
+                                            </td>
+                                            <td><%= formatter.format((java.util.Date)rs.getDate("date_due")) %></td>
+                                            <td>
+                                                <%
+                                                    if(rs.getDate("return_date") == null){
+                                                        out.print("Not yet");
+                                                    }else{
+                                                        out.print(formatter.format((java.util.Date)rs.getDate("return_date")));
+                                                    }                                            
+                                                %>
+                                            </td>
                                         </tr>
                                 <%
                                     } while (rs.next());

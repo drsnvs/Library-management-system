@@ -39,7 +39,16 @@ public class loginServlet extends HttpServlet {
                 Class.forName("com.mysql.jdbc.Driver");
                 try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
                     // Check admin login
+                    
+                    
                     if (adminEmail != null && adminPassword != null) {
+//                        PreparedStatement checkActiveP = con.prepareStatement("SELECT * FROM data_table where email_id = ?");
+//                        ResultSet checkActiveR = checkActiveP.executeQuery();
+//                        if(checkActiveR.next()){
+//                            if(checkActiveR.getInt("active") == 1){
+//
+//                            }
+//                        }
                         PreparedStatement psa = con.prepareStatement("SELECT * FROM data_table JOIN role_table ON data_table.role_id = role_table.role_id WHERE email_id = ? AND password = ?");
                         psa.setString(1, adminEmail);
                         psa.setString(2, adminPassword);

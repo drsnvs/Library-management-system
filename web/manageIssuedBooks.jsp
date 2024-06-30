@@ -4,6 +4,7 @@
     Author     : DARSHAN
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*, java.sql.*"%>
 <%@page import="javax.servlet.http.*, javax.servlet.*"%>
@@ -107,7 +108,7 @@
                 <thead>
                     <tr>
                         <th>Issue ID</th>
-                        <th>Book ID</th>
+                        <th>Book Title</th>
                         <th>User ID</th>
                         <th>Issue Date</th>
                         <!--<th>Due Date</th>-->
@@ -122,22 +123,22 @@
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                             Statement stmt = con.createStatement();
-                            String query = "SELECT * FROM book_rent_table";
+                            String query = "SELECT * FROM book_rent_table,book_table where book_table.book_id = book_rent_table.book_id;";
                             ResultSet rs = stmt.executeQuery(query);
-
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                             while (rs.next()) {
                     %>
                     <tr>
                         <td><%= rs.getInt("rent_id") %></td>
-                        <td><%= rs.getInt("book_id") %></td>
+                        <td><%= rs.getString("book_title") %></td>
                         <td><%= rs.getInt("id") %></td>
-                        <td><%= rs.getDate("date_out") %></td>
+                        <td><%= formatter.format(rs.getDate("date_out")) %></td>
                         <td><% 
                             java.sql.Date returnDate = (java.sql.Date) rs.getDate("return_date");
                             if(returnDate == (null)){
                                 out.print("Not yet");
                             }else{
-                                out.print(returnDate.toString());
+                                out.print(formatter.format(returnDate));
                             }
                             %></td>
                         

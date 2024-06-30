@@ -56,6 +56,10 @@
         <servlet-name>editUserProfileServlet</servlet-name>
         <servlet-class>editUserProfileServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CalculatePenaltyServlet</servlet-name>
+        <servlet-class>CalculatePenaltyServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
@@ -111,6 +115,10 @@
     <servlet-mapping>
         <servlet-name>editUserProfileServlet</servlet-name>
         <url-pattern>/editUserProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CalculatePenaltyServlet</servlet-name>
+        <url-pattern>/CalculatePenaltyServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

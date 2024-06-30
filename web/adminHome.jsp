@@ -115,7 +115,7 @@
                 <a href="manageIssuedBooks.jsp">Handle Issue Books</a>
             </div>
             <div class="button">
-                <a href="#">Records</a>
+                <a href="bookPenalty.jsp">Penalty</a>
             </div>
             <div class="button">
                 <a href="logOutServlet">Logout</a>
