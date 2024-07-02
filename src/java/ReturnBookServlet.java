@@ -44,7 +44,8 @@ public class ReturnBookServlet extends HttpServlet {
 
             int user_id = Integer.parseInt(request.getParameter("user_id"));
             int book_id = Integer.parseInt(request.getParameter("book_id"));
-
+            request.setAttribute("user_id", user_id);
+            request.setAttribute("book_id", book_id);
             // Check if user has borrowed the book
             String checkRentQuery = "SELECT * FROM book_rent_table WHERE book_id = ? AND id = ? AND active = 1 AND  book_allocated = 1 ";
             PreparedStatement checkRentPs = con.prepareStatement(checkRentQuery);
