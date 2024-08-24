@@ -4,7 +4,7 @@
     Author     : DARSHAN
 --%>
 
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 
 <head>
