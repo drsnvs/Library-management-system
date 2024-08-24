@@ -23,7 +23,7 @@ ADD COLUMN `last_name` VARCHAR(45) NOT NULL AFTER `first_name`,
 CHANGE COLUMN `name` `first_name` VARCHAR(45) NOT NULL ;
 
 ALTER TABLE `liabrarymanagenentsystem`.`data_table` MODIFY COLUMN mobile_no VARCHAR(15);
-
+ 
 
 CREATE TABLE `liabrarymanagenentsystem`.`book_table` (
   `book_id` INT(4) NOT NULL AUTO_INCREMENT,
