@@ -109,7 +109,7 @@
                                     rs = stmt.executeQuery(bookQuery);
                                     while (rs.next()) {
                             %>
-                            <option value="<%= rs.getString("book_id") %>"><%= rs.getString("isbn") %></option>
+                            <option value="<%= rs.getInt("book_id") %>"><%= rs.getString("isbn") %></option>
                             <% 
                                     }
                                 } catch(Exception e) {

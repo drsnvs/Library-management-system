@@ -70,7 +70,9 @@ public class ReturnBookServlet extends HttpServlet {
                     long daysLate = (returnDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24);
                     double fineAmount = daysLate * 10.0; // 1 per day
                     request.setAttribute("message", message);
+                    session.setAttribute("message", message);
                     request.setAttribute("fineAmount", fineAmount);
+                    session.setAttribute("fineAmount", fineAmount);
                     // Insert penalty data into book_fine_table
                     String insertFineQuery = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
                     PreparedStatement insertFinePs = con.prepareStatement(insertFineQuery);

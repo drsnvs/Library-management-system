@@ -35,25 +35,23 @@ public class PayPenaltyServlet extends HttpServlet {
         String message = "";
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-
-            int user_id = Integer.parseInt(request.getParameter("user_id"));
-            int book_id = Integer.parseInt(request.getParameter("book_id"));
-
-            // Update book_fine_table to mark the penalty as paid
-            String updateFineQuery = "UPDATE book_fine_table SET paid = 1 WHERE book_id = ? AND id = ?";
-            PreparedStatement updateFinePs = con.prepareStatement(updateFineQuery);
-            updateFinePs.setInt(1, book_id);
-            updateFinePs.setInt(2, user_id);
-            int result = updateFinePs.executeUpdate();
-
-            if (result > 0) {
-                message = "Penalty paid successfully!";
-            } else {
-                message = "Failed to pay penalty!";
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
+                int user_id = Integer.parseInt(request.getParameter("user_id").toString());
+                int book_id = Integer.parseInt(request.getParameter("book_id").toString());
+                
+                // Update book_fine_table to mark the penalty as paid
+                String updateFineQuery = "UPDATE book_fine_table SET paid = 1 WHERE book_id = ? AND id = ?";
+                PreparedStatement updateFinePs = con.prepareStatement(updateFineQuery);
+                updateFinePs.setInt(1, book_id);
+                updateFinePs.setInt(2, user_id);
+                int result = updateFinePs.executeUpdate();
+                
+                if (result > 0) {
+                    message = "Penalty paid successfully!";
+                } else {
+                    message = "Failed to pay penalty!";
+                }
             }
-
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             message = "An error occurred!";

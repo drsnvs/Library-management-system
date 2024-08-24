@@ -83,7 +83,7 @@
     </head>
     <body>
         <div class="container">
-            <p>Fine Amount: $<%= fineAmount %></p>
+            <p>Fine Amount: $<%= session.getAttribute("fineAmount") %></p>
             <p>You have an overdue penalty. Please confirm to pay the penalty.</p>
             <form action="PayPenaltyServlet" method="post">
                 <input type="hidden" name="user_id" value="<%= request.getParameter("user_id") %>">
