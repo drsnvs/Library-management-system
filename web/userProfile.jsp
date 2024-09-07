@@ -169,11 +169,11 @@
                 <div class="user-details">
                     <div class="input-box">
                         <span class="details">Enrollment Number</span>
-                        <input type="text" name="enrollment_no" id="enrollment_no" value="<%= session.getAttribute("enrollment_no") %>" >
+                        <input type="text" name="enrollment_no" id="enrollment_no" value="<%= session.getAttribute("enrollment_no") %>" readonly>
                     </div>
                     <div class="input-box">
                         <span class="details">Email ID</span>
-                        <input type="email" name="email_id" id="email_id" value="<%= session.getAttribute("email_id") %>" >
+                        <input type="email" name="email_id" id="email_id" value="<%= session.getAttribute("email_id") %>" readonly>
                     </div>
                     <div class="input-box">
                         <span class="details">Mobile Number</span>
