@@ -157,11 +157,11 @@
                             <td><%= rs.getString("language_name") %></td>
                             <td>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
-                                    <input type="hidden" name="id" value="<%= language_id %>" >
+                                    <input type="hidden" name="language_id" value="<%= language_id %>" >
                                     <input type="submit" name="action" value="Edit">
                                 </form>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
-                                    <input type="hidden" name="id" value="<%= language_id %>">
+                                    <input type="hidden" name="language_id" value="<%= language_id %>">
                                     <input type="submit" name="action" value="Delete">
                                 </form>
                             </td>
