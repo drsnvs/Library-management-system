@@ -1,3 +1,9 @@
+<%-- 
+    Document   : bookAttributes
+    Created on : 7 Sep, 2024, 9:33:33 AM
+    Author     : Darshan
+--%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,34 +100,7 @@
         <div class="title">Admin Dashboard (<%= session.getAttribute("first_name") %>)</div>
         <div class="content">
             <div class="button">
-                <a href="register.jsp">Register User</a>
-            </div>
-            <div class="button">
-                <a href="manageUsers.jsp">Manage Users</a>
-            </div>
-            <div class="button">
-                <a href="addBook.jsp">Add Book</a>
-            </div>
-            <div class="button">
-                <a href="bookAttributes.jsp">Book Attributes</a>
-            </div>
-            <div class="button">
-                <a href="manageBooks.jsp">Manage Books</a>
-            </div>
-            <div class="button">
-                <a href="issueBook.jsp">Issue Books</a>
-            </div>
-            <div class="button">
-                <a href="returnBook.jsp">Return Book</a>
-            </div>
-            <div class="button">
-                <a href="manageIssuedBooks.jsp">Handle Issue Books</a>
-            </div>
-            <div class="button">
-                <a href="payPenalty.jsp">Penalty</a>
-            </div>
-            <div class="button">
-                <a href="logOutServlet">Logout</a>
+                <a href="addLanguage.jsp">Add Language</a>
             </div>
         </div>
     </div>

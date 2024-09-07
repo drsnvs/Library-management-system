@@ -113,3 +113,6 @@ CREATE TABLE `liabrarymanagenentsystem`.`language_table` (
 
 ALTER TABLE `liabrarymanagenentsystem`.`book_table` 
 CHANGE COLUMN `language` `language` INT(11) NOT NULL AFTER `edition_year`;
+
+ALTER TABLE `liabrarymanagenentsystem`.`language_table` 
+CHANGE COLUMN `language_id` `language_id` INT(11) NOT NULL AUTO_INCREMENT ;
