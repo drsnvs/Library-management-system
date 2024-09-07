@@ -5,7 +5,7 @@ CREATE TABLE `liabrarymanagenentsystem`.`data_table` (
   `password` VARCHAR(45) NOT NULL,
   `mobile_no` INT(12) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `address` VARCHAR(255) NOT NULL,role_table
+  `address` VARCHAR(255) NOT NULL,
   `allocated_book` INT(3) NOT NULL,
   `active` INT(1) NOT NULL,
   `createdBy` INT(4) NOT NULL,
@@ -14,16 +14,16 @@ CREATE TABLE `liabrarymanagenentsystem`.`data_table` (
   `modifiedOn` DATE,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_id_UNIQUE` (`email_id` ASC) );
-  
+
 ALTER TABLE `liabrarymanagenentsystem`.`data_table` 
-ADD COLUMN `enrollment_no` VARCHAR(9) NOT NULL AFTER `allocated_book`;
+ADD COLUMN `enrollment_no` INT NOT NULL AFTER `allocated_book`;
 
 ALTER TABLE `liabrarymanagenentsystem`.`data_table` 
 ADD COLUMN `last_name` VARCHAR(45) NOT NULL AFTER `first_name`,
 CHANGE COLUMN `name` `first_name` VARCHAR(45) NOT NULL ;
 
 ALTER TABLE `liabrarymanagenentsystem`.`data_table` MODIFY COLUMN mobile_no VARCHAR(15);
- 
+
 
 CREATE TABLE `liabrarymanagenentsystem`.`book_table` (
   `book_id` INT(4) NOT NULL AUTO_INCREMENT,
@@ -59,8 +59,6 @@ CREATE TABLE `liabrarymanagenentsystem`.`book_rent_table` (
   `modifiedBy` INT(4) ,
   `modifiedOn` DATE ,
   PRIMARY KEY (`rent_id`));
-ALTER TABLE `liabrarymanagenentsystem`.`book_rent_table` 
-ADD COLUMN `book_allocated` INT(3) NOT NULL AFTER `return_date`;
 
 
 CREATE TABLE `liabrarymanagenentsystem`.`book_fine_table` (
@@ -75,8 +73,6 @@ CREATE TABLE `liabrarymanagenentsystem`.`book_fine_table` (
   `modifiedBy` INT ,
   `modifiedOn` DATE ,
   PRIMARY KEY (`fine_id`));
-ALTER TABLE `liabrarymanagenentsystem`.`book_fine_table` 
-ADD COLUMN `book_id` INT(4) NULL AFTER `id`;
 
 
 
@@ -104,4 +100,13 @@ ADD COLUMN `return_date` DATE NULL AFTER `date_due`;
 INSERT INTO `liabrarymanagenentsystem`.`role_table` (`role_name`) VALUES ('admin');
 INSERT INTO `liabrarymanagenentsystem`.`role_table` (`role_name`) VALUES ('user');
 
-INSERT INTO `liabrarymanagenentsystem`.`data_table` (`role_id`, `email_id`, `password`, `mobile_no`, `name`, `address`, `allocated_book`, `active`, `createdBy`) VALUES ('1', '212308014.gvp@gujaratvidyapith.org', '12345678', '9824312924', 'Darshan', 'Nikol', '2', '1', '1');
+INSERT INTO `liabrarymanagenentsystem`.`data_table` (`role_id`, `email_id`, `password`, `mobile_no`, `first_name`,`last_name`, `address`, `allocated_book`, `active`, `createdBy`) VALUES ('1', '212308014.gvp@gujaratvidyapith.org', '12345678', '9824312924', 'Darshan','Sarvaiya', 'Nikol', '2', '1', '1');
+
+CREATE TABLE `liabrarymanagenentsystem`.`language_table` (
+  `language_id` INT NOT NULL,
+  `language_name` VARCHAR(30) NOT NULL,
+  `createdOn` DATE NULL,
+  `createdBy` INT NULL,
+  `updatedOn` DATE NULL,
+  `updatedBy` INT NULL,
+  PRIMARY KEY (`language_id`));
