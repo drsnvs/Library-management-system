@@ -110,3 +110,6 @@ CREATE TABLE `liabrarymanagenentsystem`.`language_table` (
   `updatedOn` DATE NULL,
   `updatedBy` INT NULL,
   PRIMARY KEY (`language_id`));
+
+ALTER TABLE `liabrarymanagenentsystem`.`book_table` 
+CHANGE COLUMN `language` `language` INT(11) NOT NULL AFTER `edition_year`;
