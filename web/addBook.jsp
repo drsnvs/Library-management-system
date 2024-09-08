@@ -4,6 +4,7 @@
     Author     : DARSHAN
 --%>
 
+<%@page import="java.sql.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,6 +18,47 @@
             alert(message);
         }
     </script>
+    <style>
+        /* CSS for styling the dropdown */
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f8f8f8;
+            -webkit-appearance: none; /* Remove default styling on some browsers */
+            -moz-appearance: none; /* Remove default styling on some browsers */
+            appearance: none; /* Remove default styling */
+        }
+
+        /* Optional: add styles for the select element when it is focused */
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* Optional: add styles for the select element when it is disabled */
+        select:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        /* Optional: add styles for the select element when it is invalid */
+        select:invalid {
+            border-color: #dc3545;
+        }
+
+        /* Optional: style for the options within the dropdown */
+        select option {
+            padding: 10px;
+            background-color: #fff;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <%
@@ -60,6 +102,28 @@
                     <div class="input-box">
                         <span class="details">Year</span>
                         <input type="number" name="year" id="year" placeholder="Enter publication year" >
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Language</span>
+                        <select name="language_id" id="language_id" required>
+                            <option value="">Select language</option>
+                            <%
+                                try{
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                                    Statement st = con.createStatement();
+
+                                    ResultSet rs = st.executeQuery("SELECT * FROM language_table");
+                                    while(rs.next()){
+                            %>
+                            <option value="<%= rs.getInt("language_id") %>"><%= rs.getString("language_name").toUpperCase() %></option>
+                            <% } %>
+                        </select>
+                            <%
+                                }catch(Exception e){
+                                    e.printStackTrace();
+                                }
+                            %>
                     </div>
                 </div>
                 <div class="button">

@@ -31,7 +31,7 @@ public class UpdateBookServlet extends HttpServlet {
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
             int active = Integer.parseInt(request.getParameter("active"));
-
+            int language = Integer.parseInt(request.getParameter("language_new_id"));
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("edition_year"));
             long millis = System.currentTimeMillis();
@@ -41,6 +41,7 @@ public class UpdateBookServlet extends HttpServlet {
                 response.sendRedirect("index.jsp");
                 return;
             }
+            System.out.println("Language ID received: " + language);
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             
@@ -70,7 +71,7 @@ public class UpdateBookServlet extends HttpServlet {
             checkRs.close();
             pss.close();
             
-            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, price=?, quantity=?, isbn=?, publisher=?, edition_year=?, active=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
+            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, price=?, quantity=?, isbn=?, publisher=?, edition_year=?,language=?, active=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
@@ -79,10 +80,11 @@ public class UpdateBookServlet extends HttpServlet {
             ps.setString(5, isbn);
             ps.setString(6, publisher);
             ps.setInt(7, editionYear);
-            ps.setInt(8, active);
-            ps.setInt(9, modifiedBy);
-            ps.setDate(10, date);
-            ps.setInt(11, bookId);
+            ps.setInt(8, language);
+            ps.setInt(9, active);
+            ps.setInt(10, modifiedBy);
+            ps.setDate(11, date);
+            ps.setInt(12, bookId);
 
             int result = ps.executeUpdate();
             if (result > 0) {

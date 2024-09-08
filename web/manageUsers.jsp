@@ -43,7 +43,7 @@
               }
 
             .content {
-                overflow-x: auto;
+                overflow-x: scroll;
             }
 
             table {

@@ -43,7 +43,7 @@ public class ManageBooksServlet extends HttpServlet {
                 }
             } else if ("Edit".equals(action)) {
                 int bookId = Integer.parseInt(request.getParameter("book_id"));
-                String fetchQuery = "SELECT * FROM book_table WHERE book_id=?";
+                String fetchQuery = "SELECT * FROM book_table,language_table WHERE book_id=?";
                 PreparedStatement ps = con.prepareStatement(fetchQuery);
                 ps.setInt(1, bookId);
                 ResultSet rs = ps.executeQuery();
@@ -59,6 +59,8 @@ public class ManageBooksServlet extends HttpServlet {
                     request.setAttribute("active", rs.getInt("active"));
                     request.setAttribute("publisher", rs.getString("publisher"));
                     request.setAttribute("edition_year", rs.getInt("edition_year"));
+                    request.setAttribute("language_id", rs.getInt("language_id"));
+                    request.setAttribute("language_name", rs.getString("language_name"));
                     request.getRequestDispatcher("editBook.jsp").forward(request, response);
                 } else {
                     // Book not found, redirect with error message

@@ -36,6 +36,45 @@
         .input-box input[type="checkbox"] + label {
             font-size: 16px;
         }
+        /* CSS for styling the dropdown */
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f8f8f8;
+            -webkit-appearance: none; /* Remove default styling on some browsers */
+            -moz-appearance: none; /* Remove default styling on some browsers */
+            appearance: none; /* Remove default styling */
+        }
+
+        /* Optional: add styles for the select element when it is focused */
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* Optional: add styles for the select element when it is disabled */
+        select:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        /* Optional: add styles for the select element when it is invalid */
+        select:invalid {
+            border-color: #dc3545;
+        }
+
+        /* Optional: style for the options within the dropdown */
+        select option {
+            padding: 10px;
+            background-color: #fff;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -85,6 +124,39 @@
                     <div class="input-box">
                         <span class="details">Edition year</span>
                         <input type="text" name="edition_year" id="edition_year" value="<%= request.getAttribute("edition_year") != null ? request.getAttribute("edition_year") : "" %>" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Language</span>
+                        <select name="language_new_id" id="language_id" required>
+                            <% 
+                                // Fetch the selected language from request attributes
+                                int selectedLanguageId = Integer.parseInt(request.getAttribute("language_id").toString());
+
+                                try {
+                                    // Database connection to fetch all available languages
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                                    Statement st = con.createStatement();
+                                    ResultSet rs = st.executeQuery("SELECT * FROM language_table");
+
+                                    while (rs.next()) {
+                                        int languageId = rs.getInt("language_id");
+                                        String languageName = rs.getString("language_name").toUpperCase();
+                            %>
+                                        <!-- Mark the current option as selected if it matches the selected language -->
+                                        <option value="<%= languageId %>" <%= (languageId == selectedLanguageId) ? "selected" : "" %> >
+                                            <%= languageName %>
+                                        </option>
+                            <% 
+                                    }
+                                    rs.close();
+                                    st.close();
+                                    con.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            %>
+                        </select>
                     </div>
                     <div class="input-box">
                         <span class="details">Active</span>

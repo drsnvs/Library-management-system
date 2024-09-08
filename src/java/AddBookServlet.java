@@ -38,6 +38,7 @@ public class AddBookServlet extends HttpServlet {
             String isbn = request.getParameter("isbn");
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("year"));
+            int language = Integer.parseInt(request.getParameter("language_id"));
             LocalDate today = LocalDate.now();
             Date createdOn = Date.valueOf(today);
             Class.forName("com.mysql.jdbc.Driver");
@@ -58,7 +59,7 @@ public class AddBookServlet extends HttpServlet {
                 response.sendRedirect("addBook.jsp?message=ISBN already exists!");
                 return;
             }
-            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, isbn , publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, isbn , publisher, edition_year, language, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?)";
 //            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, ISBN, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?)";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, bookTitle);
@@ -68,9 +69,10 @@ public class AddBookServlet extends HttpServlet {
             ps.setString(5, isbn);
             ps.setString(6, publisher);
             ps.setInt(7, editionYear);
-            ps.setInt(8,1);
-            ps.setInt(9,createdBy);
-            ps.setDate(10, createdOn);
+            ps.setInt(8,language);
+            ps.setInt(9,1);
+            ps.setInt(10,createdBy);
+            ps.setDate(11, createdOn);
             int result = ps.executeUpdate();
             con.close();
 
