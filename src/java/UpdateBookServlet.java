@@ -41,7 +41,7 @@ public class UpdateBookServlet extends HttpServlet {
                 response.sendRedirect("index.jsp");
                 return;
             }
-            System.out.println("Language ID received: " + language);
+//            System.out.println("Language ID received: " + language);
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             
@@ -85,7 +85,6 @@ public class UpdateBookServlet extends HttpServlet {
             ps.setInt(10, modifiedBy);
             ps.setDate(11, date);
             ps.setInt(12, bookId);
-
             int result = ps.executeUpdate();
             if (result > 0) {
                 response.sendRedirect("manageBooks.jsp?message=Book updated successfully!");

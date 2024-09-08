@@ -130,18 +130,19 @@
                         <select name="language_new_id" id="language_id" required>
                             <% 
                                 // Fetch the selected language from request attributes
-                                int selectedLanguageId = Integer.parseInt(request.getAttribute("language_id").toString());
-
+                                int selectedLanguageId = 0;
+                                selectedLanguageId =Integer.parseInt(request.getAttribute("language_id").toString());
+                                
                                 try {
                                     // Database connection to fetch all available languages
                                     Class.forName("com.mysql.jdbc.Driver");
                                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                                     Statement st = con.createStatement();
                                     ResultSet rs = st.executeQuery("SELECT * FROM language_table");
-
                                     while (rs.next()) {
                                         int languageId = rs.getInt("language_id");
                                         String languageName = rs.getString("language_name").toUpperCase();
+                                        request.setAttribute("language_id", rs.getInt("language_id"));
                             %>
                                         <!-- Mark the current option as selected if it matches the selected language -->
                                         <option value="<%= languageId %>" <%= (languageId == selectedLanguageId) ? "selected" : "" %> >
