@@ -18,96 +18,107 @@
         }
     </script>
     <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh; /* Ensure the page takes up at least the viewport height */
-            }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the page takes up at least the viewport height */
+        }
 
-            .container {
-                width: 80%;
-                margin: 0 auto;
-                background-color: #fff;
-                padding: 20px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                margin-top: 50px;
-                flex: 1;
-                overflow: auto;
-            }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            flex: 1;
+            overflow: auto;
+        }
 
-            .title {
-                font-size: 28px;
-                font-weight: 500;
-                margin-bottom: 20px;
-              }
+        .title {
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
 
-            .content {
-                overflow-x: auto;
-            }
-    
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-            }
+        .content {
+            overflow-x: auto;
+        }
 
-            table th, table td {
-                padding: 10px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            overflow: auto;
+            height: 100px;
+        }
 
-            table th {
-                background-color: #f2f2f2;
-            }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th{
+            position: sticky;
+            top: 0;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
 
-            action form {
-                display: inline-block;
-                margin-right: 5px; /* Adjust spacing between forms */
-            }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
 
-            input[type="submit"] {
-                background-color: #007bff;
-                color: white;
-                border: none;
-                padding: 5px 10px;
-                cursor: pointer;
-            }
+        .actions form {
+            display: inline-block;
+            margin-right: 5px; /* Adjust spacing between forms */
+        }
 
-            input[type="submit"]:hover {
-                background-color: #0056b3;
-            }
-            .actions {
-                display: flex;
-                justify-content: space-between;
-            }
+        .actions button, .actions input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
 
-            .actions form {
-                display: inline-block;
-                margin-right: 5px; /* Adjust spacing between forms */
-            }
+        .actions button:hover, .actions input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
 
-            .actions button {
-                background-color: #007bff;
-                color: white;
-                border: none;
-                padding: 5px 10px;
-                cursor: pointer;
-            }
+        /* Adding styles for scrollbar */
+        .language-list {
+            max-height: 300px; /* Set the desired maximum height for the scrollable section */
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden; /* Disable horizontal scrolling */
+        }
 
-            .actions button:hover {
-                background-color: #0056b3;
-            }
+        .language-list::-webkit-scrollbar {
+            width: 8px; /* Width of the vertical scrollbar */
+        }
 
-        </style>
+        .language-list::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Background of the scrollbar track */
+        }
+
+        .language-list::-webkit-scrollbar-thumb {
+            background-color: #888; /* Scrollbar thumb color */
+            border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+        }
+
+        .language-list::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Scrollbar thumb hover color */
+        }
+    </style>
 </head>
 <body>
-    
-    <%
+    <% 
         try {
             if (!session.getId().equals(session.getAttribute("key"))) {
                 response.sendRedirect("index.jsp");
@@ -123,7 +134,7 @@
                 <div class="user-details">
                     <div class="input-box">
                         <span class="details">Language Name</span>
-                        <input type="text" name="language_name" id="language_name" placeholder="Enter language name" >
+                        <input type="text" name="language_name" id="language_name" placeholder="Enter language name">
                     </div>
                 </div>
                 <div class="button">
@@ -138,16 +149,17 @@
                     <thead>
                         <tr>
                             <th>Language Name</th>
-                            <th>Actions</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         <%
                             try {
-                                Class.forName("com.mysql.jdbc.Driver"); // Load MySQL JDBC Driver
-                                java.sql.Connection conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", ""); // Adjust database name, user, and password
+                                Class.forName("com.mysql.jdbc.Driver");
+                                java.sql.Connection conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", ""); 
                                 java.sql.Statement stmt = conn.createStatement();
-                                String query = "SELECT * FROM language_table"; // Adjust table name accordingly
+                                String query = "SELECT * FROM language_table"; 
                                 java.sql.ResultSet rs = stmt.executeQuery(query);
                                 
                                 while (rs.next()) {
@@ -156,11 +168,14 @@
                         <tr>
                             <td><%= rs.getString("language_name") %></td>
                             <td>
-                                <form action="ManageUsersServlet" method="post" style="display:inline;">
-                                    <input type="hidden" name="language_id" value="<%= language_id %>" >
+                                <form action="ManageUsersServlet" method="post" class="actions">
+                                    <input type="hidden" name="language_id" value="<%= language_id %>">
                                     <input type="submit" name="action" value="Edit">
                                 </form>
-                                <form action="ManageUsersServlet" method="post" style="display:inline;">
+                                
+                            </td>
+                            <td>
+                                <form action="ManageUsersServlet" method="post" class="actions">
                                     <input type="hidden" name="language_id" value="<%= language_id %>">
                                     <input type="submit" name="action" value="Delete">
                                 </form>
