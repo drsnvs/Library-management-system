@@ -161,21 +161,22 @@
                                 java.sql.Statement stmt = conn.createStatement();
                                 String query = "SELECT * FROM language_table"; 
                                 java.sql.ResultSet rs = stmt.executeQuery(query);
-                                
+
                                 while (rs.next()) {
-                                int language_id = Integer.parseInt(rs.getString("language_id"));
+                                    int language_id = Integer.parseInt(rs.getString("language_id"));
+                                    request.setAttribute("language_id", language_id);
+
                         %>
                         <tr>
                             <td><%= rs.getString("language_name") %></td>
                             <td>
-                                <form action="ManageUsersServlet" method="post" class="actions">
+                                <form action="ManageLanguagesServlet" method="post" class="actions">
                                     <input type="hidden" name="language_id" value="<%= language_id %>">
                                     <input type="submit" name="action" value="Edit">
                                 </form>
-                                
                             </td>
                             <td>
-                                <form action="ManageUsersServlet" method="post" class="actions">
+                                <form action="ManageLanguagesServlet" method="post" class="actions">
                                     <input type="hidden" name="language_id" value="<%= language_id %>">
                                     <input type="submit" name="action" value="Delete">
                                 </form>
@@ -196,7 +197,7 @@
             <!-- End of Language List Section -->
             <form>
                 <div class="button">
-                    <input type="submit" value="Home">
+                    <a href="adminHome.jsp"><input type="button" value="Home"></a>
                 </div>
             </form>
         </div>

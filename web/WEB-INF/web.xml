@@ -68,6 +68,10 @@
         <servlet-name>AddLanguageServlet</servlet-name>
         <servlet-class>AddLanguageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageLanguagesServlet</servlet-name>
+        <servlet-class>ManageLanguagesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
@@ -135,6 +139,10 @@
     <servlet-mapping>
         <servlet-name>AddLanguageServlet</servlet-name>
         <url-pattern>/AddLanguageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageLanguagesServlet</servlet-name>
+        <url-pattern>/ManageLanguagesServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
