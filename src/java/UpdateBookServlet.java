@@ -27,7 +27,7 @@ public class UpdateBookServlet extends HttpServlet {
             int bookId = Integer.parseInt(request.getParameter("id"));
             String bookTitle = request.getParameter("book_title");
             String authorName = request.getParameter("author_name");
-            int pages = Integer.parseInt(request.getParameter("pages").toString());
+            int pages = Integer.parseInt(request.getParameter("pages"));
             String isbn = request.getParameter("isbn");
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
