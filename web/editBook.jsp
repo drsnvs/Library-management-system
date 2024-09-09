@@ -127,11 +127,11 @@
                     </div>
                     <div class="input-box">
                         <span class="details">Language</span>
-                        <select name="language_new_id" id="language_id" required>
+                        <select name="language_id" id="language_id" required>
                             <% 
                                 // Fetch the selected language from request attributes
-                                int selectedLanguageId = 0;
-                                selectedLanguageId =Integer.parseInt(request.getAttribute("language_id").toString());
+                                // int selectedLanguageId = 0;
+                                // selectedLanguageId =Integer.parseInt(request.getAttribute("language_id").toString());
                                 
                                 try {
                                     // Database connection to fetch all available languages
@@ -140,9 +140,21 @@
                                     Statement st = con.createStatement();
                                     ResultSet rs = st.executeQuery("SELECT * FROM language_table");
                                     while (rs.next()) {
-                                        int languageId = rs.getInt("language_id");
+                                        int selectedLanguageId = 0;
+                                        String s = "SELECT * FROM data_table WHERE id = ?";
+                                        PreparedStatement ps = con.prepareStatement(s);
+                                        ps.setInt(1, Integer.parseInt(request.getParameter("id").toString()));
+                                        ResultSet rs1 = ps.executeQuery();
+                                        rs1.next();
+                                        
+                                        selectedLanguageId = Integer.parseInt(rs1.getString("language"));
+                                        System.out.println("language: "+selectedLanguageId);
+                                        
+                                        int languageId = Integer.parseInt(rs.getString("language_id"));
                                         String languageName = rs.getString("language_name").toUpperCase();
                                         request.setAttribute("language_id", rs.getInt("language_id"));
+                                        System.out.println("languageId: "+languageId);
+                                        System.out.println("selectedLanguageId: "+selectedLanguageId);
                             %>
                                         <!-- Mark the current option as selected if it matches the selected language -->
                                         <option value="<%= languageId %>" <%= (languageId == selectedLanguageId) ? "selected" : "" %> >

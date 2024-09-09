@@ -31,7 +31,7 @@ public class UpdateBookServlet extends HttpServlet {
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
             int active = Integer.parseInt(request.getParameter("active"));
-            int language = Integer.parseInt(request.getParameter("language_new_id"));
+            int language = Integer.parseInt(request.getParameter("language_id"));
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("edition_year"));
             long millis = System.currentTimeMillis();
