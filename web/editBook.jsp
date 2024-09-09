@@ -8,7 +8,7 @@
 <%@page import="java.sql.*"%>
 <%@page import="javax.servlet.*"%>
 <%@page import="javax.servlet.http.*"%>
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
