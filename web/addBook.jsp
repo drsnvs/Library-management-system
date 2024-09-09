@@ -84,6 +84,10 @@
                         <input type="text" name="author" id="author" placeholder="Enter book author" >
                     </div>
                     <div class="input-box">
+                        <span class="details">Pages</span>
+                        <input type="number" name="pages" id="pages" placeholder="Enter Number of pages in your book" >
+                    </div>
+                    <div class="input-box">
                         <span class="details">Price</span>
                         <input type="text" name="price" id="price" placeholder="Enter book price" >
                     </div>
@@ -155,6 +159,7 @@
             var publisher = document.getElementById("publisher").value;
             var year = document.getElementById("year").value;
             var isbn = document.getElementById("isbn").value;
+            var pages = document.getElementById("pages").value;
             
             if(title === ""){
                 alert("Enter Title");
@@ -162,6 +167,10 @@
             }
             if(author === ""){
                 alert("Enter Author");
+                return false;
+            }
+            if(pages === ""){
+                alert("Enter Pages");
                 return false;
             }
             if(price === ""){
@@ -176,6 +185,11 @@
             
             if(isbn === ""){
                 alert("Enter ISBN");
+                return false;
+            }
+            
+            if(pages === ""){
+                alert("Enter Pages");
                 return false;
             }
             

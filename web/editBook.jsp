@@ -106,6 +106,10 @@
                         <input type="text" name="author_name" id="author_name" value="<%= request.getAttribute("author_name") %>" required>
                     </div>
                     <div class="input-box">
+                        <span class="details">Pages</span>
+                        <input type="text" name="pages" id="pages" value="<%= request.getAttribute("pages") %>" required>
+                    </div>
+                    <div class="input-box">
                         <span class="details">Price</span>
                         <input type="text" name="price" id="price" value="<%= request.getAttribute("price") %>">
                     </div>
@@ -150,14 +154,14 @@
                                         rs1.next();
                                         
                                         int selectedLanguageId = (rs1.getString("language") != null) ? Integer.parseInt(rs1.getString("language")) : 0;
-                                        System.out.println("language: "+selectedLanguageId);
+//                                        System.out.println("language: "+selectedLanguageId);
                                         
                                         int languageId = Integer.parseInt(rs.getString("language_id"));
                                         String languageName = rs.getString("language_name").toUpperCase();
                                         request.setAttribute("language_id", rs.getInt("language_id"));
-                                        System.out.println("languageId: "+languageId);
-                                        System.out.println("selectedLanguageId: "+selectedLanguageId);
-                                        System.out.println(languageId == selectedLanguageId ? "checked" : "" );
+//                                        System.out.println("languageId: "+languageId);
+//                                        System.out.println("selectedLanguageId: "+selectedLanguageId);
+//                                        System.out.println(languageId == selectedLanguageId ? "checked" : "" );
                             %>
                                         <!-- Mark the current option as selected if it matches the selected language -->
                                         <option value="<%= languageId %>" <%= (languageId == selectedLanguageId) ? "selected" : "" %> >

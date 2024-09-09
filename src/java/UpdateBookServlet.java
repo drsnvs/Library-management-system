@@ -27,6 +27,7 @@ public class UpdateBookServlet extends HttpServlet {
             int bookId = Integer.parseInt(request.getParameter("id"));
             String bookTitle = request.getParameter("book_title");
             String authorName = request.getParameter("author_name");
+            int pages = Integer.parseInt(request.getParameter("pages").toString());
             String isbn = request.getParameter("isbn");
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
@@ -71,20 +72,21 @@ public class UpdateBookServlet extends HttpServlet {
             checkRs.close();
             pss.close();
             
-            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, price=?, quantity=?, isbn=?, publisher=?, edition_year=?,language=?, active=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
+            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, pages=?, price=?, quantity=?, isbn=?, publisher=?, edition_year=?,language=?, active=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
-            ps.setDouble(3, price);
-            ps.setInt(4, quantity);
-            ps.setString(5, isbn);
-            ps.setString(6, publisher);
-            ps.setInt(7, editionYear);
-            ps.setInt(8, language);
-            ps.setInt(9, active);
-            ps.setInt(10, modifiedBy);
-            ps.setDate(11, date);
-            ps.setInt(12, bookId);
+            ps.setInt(3, pages);
+            ps.setDouble(4, price);
+            ps.setInt(5, quantity);
+            ps.setString(6, isbn);
+            ps.setString(7, publisher);
+            ps.setInt(8, editionYear);
+            ps.setInt(9, language);
+            ps.setInt(10, active);
+            ps.setInt(11, modifiedBy);
+            ps.setDate(12, date);
+            ps.setInt(13, bookId);
             int result = ps.executeUpdate();
             if (result > 0) {
                 response.sendRedirect("manageBooks.jsp?message=Book updated successfully!");
