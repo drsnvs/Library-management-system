@@ -139,15 +139,17 @@
                                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                                     Statement st = con.createStatement();
                                     ResultSet rs = st.executeQuery("SELECT * FROM language_table");
+                                    int id = (request.getParameter("id") != null) ? Integer.parseInt(request.getParameter("id")) : 0;
+
                                     while (rs.next()) {
-                                        int selectedLanguageId = 0;
-                                        String s = "SELECT * FROM data_table WHERE id = ?";
+//                                        int selectedLanguageId = 0;
+                                        String s = "SELECT * FROM book_table WHERE book_id = ?";
                                         PreparedStatement ps = con.prepareStatement(s);
-                                        ps.setInt(1, Integer.parseInt(request.getParameter("id").toString()));
+                                        ps.setInt(1, Integer.parseInt(request.getParameter("book_id").toString()));
                                         ResultSet rs1 = ps.executeQuery();
                                         rs1.next();
                                         
-                                        selectedLanguageId = Integer.parseInt(rs1.getString("language"));
+                                        int selectedLanguageId = (rs1.getString("language") != null) ? Integer.parseInt(rs1.getString("language")) : 0;
                                         System.out.println("language: "+selectedLanguageId);
                                         
                                         int languageId = Integer.parseInt(rs.getString("language_id"));
@@ -155,6 +157,7 @@
                                         request.setAttribute("language_id", rs.getInt("language_id"));
                                         System.out.println("languageId: "+languageId);
                                         System.out.println("selectedLanguageId: "+selectedLanguageId);
+                                        System.out.println(languageId == selectedLanguageId ? "checked" : "" );
                             %>
                                         <!-- Mark the current option as selected if it matches the selected language -->
                                         <option value="<%= languageId %>" <%= (languageId == selectedLanguageId) ? "selected" : "" %> >
