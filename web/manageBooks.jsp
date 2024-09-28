@@ -53,9 +53,13 @@
         }
 
         table th, table td {
-            padding: 10px;
+            padding: 5px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+        }
+        
+        #cnt, table th{
+            text-align: center;
         }
 
         table th {
@@ -122,10 +126,10 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!--<th>ID</th>-->
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Price</th>
+                        <!--<th>Price</th>-->
                         <th>Quantity</th>
                         <th>Actions</th>
                     </tr>
@@ -142,15 +146,12 @@
                                 int bookId = rs.getInt("book_id");
                                 String bookTitle = rs.getString("book_title");
                                 String authorName = rs.getString("author_name");
-                                double price = rs.getDouble("price");
                                 int quantity = rs.getInt("quantity");
                     %>
                     <tr>
-                        <td><%= bookId %></td>
                         <td><%= bookTitle %></td>
                         <td><%= authorName %></td>
-                        <td><%= price %></td>
-                        <td><%= quantity %></td>
+                        <td id="cnt"><%= quantity %></td>
                         <td>
                             <form action="ManageBooksServlet" method="post" style="display:inline;">
                                 <input type="hidden" name="book_id" value="<%= bookId %>">

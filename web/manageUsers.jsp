@@ -43,7 +43,7 @@
               }
 
             .content {
-                overflow-x: scroll;
+                overflow-x: auto;
             }
 
             table {
@@ -53,13 +53,17 @@
             }
 
             table th, table td {
-                padding: 10px;
+                padding: 5px;
                 text-align: left;
                 border-bottom: 1px solid #ddd;
             }
 
             table th {
                 background-color: #f2f2f2;
+            }
+            
+            #cnt, table th{
+                text-align: center;
             }
 
             action form {
@@ -147,10 +151,10 @@
                                     String email = rs.getString("email_id");
                         %>
                         <tr>
-                            <td><%= enrollment_no %></td>
+                            <td id="cnt"><%= enrollment_no %></td>
                             <td><%= firstName %></td>
                             <td><%= email %></td>
-                            <td><%= book_allocated %></td>
+                            <td id="cnt"><%= book_allocated %></td>
                             <td>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<%= id %>">
