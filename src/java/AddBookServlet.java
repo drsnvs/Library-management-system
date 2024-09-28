@@ -23,24 +23,44 @@ import javax.servlet.http.HttpSession;
  */
 public class AddBookServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NullPointerException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        String bookTitle;
+        String authorName;
+        double price;
+        int quantity;
+        String isbn;
+        String publisher;
+        int editionYear;
+        int language;
+        int format;
+        int pages;
         try {
             HttpSession session = request.getSession();
             if(!session.getId().equals(session.getAttribute("key"))){
                 response.sendRedirect("index.jsp");
             }
-            String bookTitle = request.getParameter("title");
-            String authorName = request.getParameter("author");
-            double price = Double.parseDouble(request.getParameter("price"));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            String isbn = request.getParameter("isbn");
-            String publisher = request.getParameter("publisher");
-            int editionYear = Integer.parseInt(request.getParameter("year"));
-            int language = Integer.parseInt(request.getParameter("language_id"));
-            int format = Integer.parseInt(request.getParameter("format_id"));
-            int pages = Integer.parseInt(request.getParameter("pages"));
+            bookTitle = request.getParameter("title");
+            authorName = request.getParameter("author");
+//            price = Double.parseDouble(request.getParameter("price"));
+//            quantity = Integer.parseInt(request.getParameter("quantity"));
+            isbn = request.getParameter("isbn");
+            publisher = request.getParameter("publisher");
+//            editionYear = Integer.parseInt(request.getParameter("year"));
+//            language = Integer.parseInt(request.getParameter("language_id"));
+//            format = Integer.parseInt(request.getParameter("format_id"));
+//            pages = Integer.parseInt(request.getParameter("pages"));
+            try {
+                price = Double.parseDouble(request.getParameter("price"));
+                quantity = Integer.parseInt(request.getParameter("quantity"));
+                editionYear = Integer.parseInt(request.getParameter("year"));
+                language = Integer.parseInt(request.getParameter("language_id"));
+                format = Integer.parseInt(request.getParameter("format_id"));
+                pages = Integer.parseInt(request.getParameter("pages"));
+            } catch (NumberFormatException e) {
+                response.sendRedirect("addBook.jsp?message=Invalid input for number fields!");
+                return;
+            }
             LocalDate today = LocalDate.now();
             Date createdOn = Date.valueOf(today);
             
