@@ -87,6 +87,16 @@
             padding: 1em 0;
             background: linear-gradient(135deg, #71b7e6, #9b59b6);
         }
+        .available {
+            color: lightgreen;
+            /*font-weight: bold;*/
+        }
+
+        .not-available {
+            color: red;
+            /*font-weight: bold;*/
+        }
+
     </style>
 </head>
 <body>
@@ -129,7 +139,7 @@
                         <div class="table-container">
                             <table class="book-list">
                                 <tr>
-                                    <th>ID</th>
+                                    <!--<th>ID</th>-->
                                     <th>Title</th>
                                     <th>Author</th>
                                     <th>Publisher</th>
@@ -140,12 +150,11 @@
                                     do {
                                 %>
                                         <tr>
-                                            <td><%= rs.getInt("book_id") %></td>
                                             <td><%= rs.getString("book_title") %></td>
                                             <td><%= rs.getString("author_name") %></td>
                                             <td><%= rs.getString("publisher") %></td>
                                             <td><%= rs.getInt("edition_year") %></td>
-                                            <td><%= rs.getInt("quantity") %></td>
+                                            <td class="<%= (rs.getInt("quantity") > 0) ? "available" : "not-available" %>"><% if(rs.getInt("quantity") > 0) { %> Available <% } else { %> Not Available <% } %></td>
                                         </tr>
                                 <%
                                     } while (rs.next());
