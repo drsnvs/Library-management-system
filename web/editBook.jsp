@@ -179,6 +179,45 @@
                         </select>
                     </div>
                     <div class="input-box">
+                        <span class="details">Format</span>
+                        <select name="format_id" id="format_id" required>
+                            <% 
+                                try {
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                                    Statement st = con.createStatement();
+                                    ResultSet rs = st.executeQuery("SELECT * FROM format_table");
+                                    int id = (request.getParameter("id") != null) ? Integer.parseInt(request.getParameter("id")) : 0;
+
+                                    while (rs.next()) {
+                                        String s = "SELECT * FROM book_table WHERE book_id = ?";
+                                        PreparedStatement ps = con.prepareStatement(s);
+                                        ps.setInt(1, Integer.parseInt(request.getParameter("book_id").toString()));
+                                        ResultSet rs1 = ps.executeQuery();
+                                        rs1.next();
+                                        
+                                        int selectedFormatId = (rs1.getString("format") != null) ? Integer.parseInt(rs1.getString("format")) : 0;
+                                        
+                                        int formatId = Integer.parseInt(rs.getString("format_id"));
+                                        String formatName = rs.getString("format_name").toUpperCase();
+                                        request.setAttribute("format_id", rs.getInt("format_id"));
+                            %>
+                                        <!-- Mark the current option as selected if it matches the selected language -->
+                                        <option value="<%= formatId %>" <%= (formatId == selectedFormatId) ? "selected" : "" %> >
+                                            <%= formatName %>
+                                        </option>
+                            <% 
+                                    }
+                                    rs.close();
+                                    st.close();
+                                    con.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            %>
+                        </select>
+                    </div>
+                    <div class="input-box">
                         <span class="details">Active</span>
                         <input type="hidden" id="activeHidden" name="active" value="<%= request.getAttribute("active") %>">
                         <input type="checkbox" id="activeCheckbox" onclick="handleCheckbox()" <%= "1".equals(request.getAttribute("active").toString()) ? "checked" : "" %>>

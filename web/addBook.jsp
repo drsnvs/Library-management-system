@@ -129,9 +129,31 @@
                                 }
                             %>
                     </div>
+                    <div class="input-box">
+                        <span class="details">Format</span>
+                        <select name="format_id" id="format_id" required>
+                            <option value="">Select Format</option>
+                            <%
+                                try{
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                                    Statement st = con.createStatement();
+
+                                    ResultSet rs = st.executeQuery("SELECT * FROM format_table");
+                                    while(rs.next()){
+                            %>
+                            <option value="<%= rs.getInt("format_id") %>"><%= rs.getString("format_name").toUpperCase() %></option>
+                            <% } %>
+                        </select>
+                            <%
+                                }catch(Exception e){
+                                    e.printStackTrace();
+                                }
+                            %>
+                    </div>
                 </div>
                 <div class="button">
-                    <input type="submit" value="Add Book">
+                    <input type="submit" value="Add Format">
                 </div>
                 <div class="button">
                     <a href="adminHome.jsp"><input type="button" value="Home"></a>

@@ -33,6 +33,7 @@ public class UpdateBookServlet extends HttpServlet {
             int quantity = Integer.parseInt(request.getParameter("quantity"));
             int active = Integer.parseInt(request.getParameter("active"));
             int language = Integer.parseInt(request.getParameter("language_id"));
+            int format = Integer.parseInt(request.getParameter("format_id"));
             String publisher = request.getParameter("publisher");
             int editionYear = Integer.parseInt(request.getParameter("edition_year"));
             long millis = System.currentTimeMillis();
@@ -72,7 +73,7 @@ public class UpdateBookServlet extends HttpServlet {
             checkRs.close();
             pss.close();
             
-            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, pages=?, price=?, quantity=?, isbn=?, publisher=?, edition_year=?,language=?, active=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
+            String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, pages=?, price=?, quantity=?, isbn=?, publisher=?, edition_year=?,language=?, format=?, active=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
             PreparedStatement ps = con.prepareStatement(updateQuery);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
@@ -83,10 +84,11 @@ public class UpdateBookServlet extends HttpServlet {
             ps.setString(7, publisher);
             ps.setInt(8, editionYear);
             ps.setInt(9, language);
-            ps.setInt(10, active);
-            ps.setInt(11, modifiedBy);
-            ps.setDate(12, date);
-            ps.setInt(13, bookId);
+            ps.setInt(10, format);
+            ps.setInt(11, active);
+            ps.setInt(12, modifiedBy);
+            ps.setDate(13, date);
+            ps.setInt(14, bookId);
             int result = ps.executeUpdate();
             if (result > 0) {
                 response.sendRedirect("manageBooks.jsp?message=Book updated successfully!");

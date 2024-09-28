@@ -10,23 +10,23 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Edit Language</title>
+    <title>Edit Formats</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <% 
-        String languageId = request.getParameter("language_id");
-        String languageName = "";
+        String formatId = request.getParameter("format_id");
+        String formatName = "";
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", ""); 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM language_table WHERE language_id = ?");
-            pstmt.setString(1, languageId);
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM format_table WHERE format_id = ?");
+            pstmt.setString(1, formatId);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                languageName = rs.getString("language_name");
+                formatName = rs.getString("format_name");
             }
 
             rs.close();
@@ -39,12 +39,12 @@
 
     <div class="container">
         <div class="title">Edit Language</div>
-        <form action="ManageLanguagesServlet" method="post">
-            <input type="hidden" name="language_id" value="<%= languageId %>">
+        <form action="ManageFormatServlet" method="post">
+            <input type="hidden" name="format_id" value="<%= formatId %>">
                 <div class="user-details">
                     <div class="input-box">
-                        <label for="language_name">Language Name:</label>
-                        <input type="text" name="language_name" id="language_name" value="<%= languageName %>">
+                        <label for="format_name">Format Name:</label>
+                        <input type="text" name="format_name" id="format_name" value="<%= formatName %>">
                     </div>
             </div>
             <div class="button">
