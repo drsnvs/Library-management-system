@@ -100,21 +100,22 @@ public class IssueBookServlet extends HttpServlet {
                 Date date_out;
                 Date date_due;
 
-                if (request.getParameter("issue_date").isEmpty()) {
-                    date_out = Date.valueOf(today);
-                    date_due = Date.valueOf(today.plusDays(14));
-                } else {
-                    LocalDate issueDate = LocalDate.parse(request.getParameter("issue_date"));
-                    date_out = Date.valueOf(issueDate);
-                    date_due = Date.valueOf(date_out.toLocalDate().plusDays(14));
-                }
-
+//                if (request.getParameter("issue_date").isEmpty()) {
+//                    date_out = Date.valueOf(today);
+//                    date_due = Date.valueOf(today.plusDays(14));
+//                } else {
+//                    LocalDate issueDate = LocalDate.parse(request.getParameter("issue_date"));
+//                    date_out = Date.valueOf(issueDate);
+//                    date_due = Date.valueOf(date_out.toLocalDate().plusDays(14));
+//                }
+                date_out = Date.valueOf(today);
+                date_due = Date.valueOf(today.plusDays(14)); 
 //                date_due = Date.valueOf(today.plusDays(14));
                 int createdBy = Integer.parseInt(session.getAttribute("user_id").toString());
                 Date createdOn = Date.valueOf(today);
 
                 // Insert into book_rent_table
-                String rentQuery = "INSERT INTO book_rent_table (book_id, id, date_out, date_due, active, book_allocated, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String rentQuery = "INSERT INTO book_rent_table (book_id, id, date_out, date_due, active, allocated_book, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement rentPs = con.prepareStatement(rentQuery);
                 rentPs.setInt(1, book_id);
                 rentPs.setInt(2, user_id);

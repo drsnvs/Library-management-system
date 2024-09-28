@@ -60,6 +60,9 @@ CREATE TABLE `liabrarymanagenentsystem`.`book_rent_table` (
   `modifiedOn` DATE ,
   PRIMARY KEY (`rent_id`));
 
+ALTER TABLE `liabrarymanagenentsystem`.`book_rent_table` 
+ADD COLUMN `allocated_book` INT NULL AFTER `return_date`;
+
 
 CREATE TABLE `liabrarymanagenentsystem`.`book_fine_table` (
   `fine_id` INT(4) NOT NULL AUTO_INCREMENT,
