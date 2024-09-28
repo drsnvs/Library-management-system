@@ -103,6 +103,11 @@
                 <a href="addLanguage.jsp">Add Language</a>
             </div>
         </div>
+        <div class="content">
+            <div class="button">
+                <a href="addFormats.jsp">Add Formats</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

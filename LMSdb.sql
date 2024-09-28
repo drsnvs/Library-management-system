@@ -111,6 +111,15 @@ CREATE TABLE `liabrarymanagenentsystem`.`language_table` (
   `updatedBy` INT NULL,
   PRIMARY KEY (`language_id`));
 
+CREATE TABLE `liabrarymanagenentsystem`.`format_table` (
+  `format_id` INT NOT NULL,
+  `format_name` VARCHAR(30) NOT NULL,
+  `createdOn` DATE NULL,
+  `createdBy` INT NULL,
+  `updatedOn` DATE NULL,
+  `updatedBy` INT NULL,
+  PRIMARY KEY (`format_id`));
+
 ALTER TABLE `liabrarymanagenentsystem`.`book_table` 
 CHANGE COLUMN `language` `language` INT(11) NOT NULL AFTER `edition_year`;
 
@@ -120,3 +129,9 @@ CHANGE COLUMN `language_id` `language_id` INT(11) NOT NULL AUTO_INCREMENT ;
 
 ALTER TABLE `liabrarymanagenentsystem`.`book_table` 
 ADD COLUMN `pages` INT NULL AFTER `language`;
+
+ALTER TABLE `liabrarymanagenentsystem`.`book_table` 
+ADD COLUMN `format` varchar(20) NULL AFTER `pages`;
+
+ALTER TABLE `liabrarymanagenentsystem`.`format_table` 
+CHANGE COLUMN `format_id` `format_id` INT(11) NOT NULL AUTO_INCREMENT ;

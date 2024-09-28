@@ -72,6 +72,14 @@
         <servlet-name>ManageLanguagesServlet</servlet-name>
         <servlet-class>ManageLanguagesServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddFormatServlet</servlet-name>
+        <servlet-class>AddFormatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageFormatServlet</servlet-name>
+        <servlet-class>ManageFormatServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
@@ -143,6 +151,14 @@
     <servlet-mapping>
         <servlet-name>ManageLanguagesServlet</servlet-name>
         <url-pattern>/ManageLanguagesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddFormatServlet</servlet-name>
+        <url-pattern>/AddFormatServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageFormatServlet</servlet-name>
+        <url-pattern>/ManageFormatServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
