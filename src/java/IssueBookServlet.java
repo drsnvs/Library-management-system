@@ -9,8 +9,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -46,10 +45,7 @@ public class IssueBookServlet extends HttpServlet {
             out.println("<title>Servlet IssueBookServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            String user_id_s = request.getParameter("user_id");
-            int user_id = Integer.parseInt(user_id_s);
-            String book_id_s = request.getParameter("book_id");
-            int book_id = Integer.parseInt(book_id_s);
+            
             try {
                 HttpSession session = request.getSession();
                 Class.forName("com.mysql.jdbc.Driver");
@@ -58,7 +54,12 @@ public class IssueBookServlet extends HttpServlet {
 //                int user_id = Integer.parseInt(user_id_s);
 //                String book_id_s = request.getParameter("book_id");
 //                int book_id = Integer.parseInt(book_id_s);
-
+                String user_id_s = request.getParameter("user_id");
+                int user_id = Integer.parseInt(user_id_s);
+                System.out.println(user_id);
+                String book_id_s = request.getParameter("book_id");
+                int book_id = Integer.parseInt(book_id_s);
+                System.out.println(book_id);
                 // Check if user exists
                 String checkUserQuery = "SELECT active, allocated_book FROM data_table WHERE id = ?";
                 PreparedStatement checkUserPs = con.prepareStatement(checkUserQuery);
