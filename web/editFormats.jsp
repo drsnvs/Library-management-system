@@ -14,6 +14,15 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <%
+        try {
+            if (!session.getId().equals(session.getAttribute("key"))) {
+                response.sendRedirect("index.jsp");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    %>
     <% 
         String formatId = request.getParameter("format_id");
         String formatName = "";

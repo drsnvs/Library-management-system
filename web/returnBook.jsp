@@ -63,6 +63,15 @@
     </script>
 </head>
 <body>
+     <%
+        try {
+            if (!session.getId().equals(session.getAttribute("key"))) {
+                response.sendRedirect("index.jsp");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    %>
     <div class="container">
         <div class="title">Return Book</div>
         <div class="content">

@@ -36,7 +36,15 @@
             e.printStackTrace();
         }
     %>
-
+    <%
+        try {
+            if (!session.getId().equals(session.getAttribute("key"))) {
+                response.sendRedirect("index.jsp");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    %>
     <div class="container">
         <div class="title">Edit Language</div>
         <form action="ManageLanguagesServlet" method="post">

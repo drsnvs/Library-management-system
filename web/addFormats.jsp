@@ -118,7 +118,7 @@
     </style>
 </head>
 <body>
-    <% 
+    <%
         try {
             if (!session.getId().equals(session.getAttribute("key"))) {
                 response.sendRedirect("index.jsp");

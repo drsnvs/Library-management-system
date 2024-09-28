@@ -82,7 +82,7 @@
                     </div>
                     <div class="input-box">
                         <span class="details">Allocated Book</span>
-                        <input type="text" name="allocated_book" id="allocated_book" value="<%= request.getAttribute("allocated_book") %>" required>
+                        <input type="text" name="allocated_book" id="allocated_book" value="<%= request.getAttribute("allocated_book") %>" readonly>
                     </div>
                     <div class="input-box">
                         <span class="details">Address</span>

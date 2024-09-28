@@ -82,6 +82,15 @@
         </style>
     </head>
     <body>
+         <%
+            try {
+                if (!session.getId().equals(session.getAttribute("key"))) {
+                    response.sendRedirect("index.jsp");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        %>
         <div class="container">
             <p>Fine Amount: $<%= session.getAttribute("fineAmount") %></p>
             <p>You have an overdue penalty. Please confirm to pay the penalty.</p>
