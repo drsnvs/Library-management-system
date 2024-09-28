@@ -46,13 +46,18 @@ public class IssueBookServlet extends HttpServlet {
             out.println("<title>Servlet IssueBookServlet</title>");            
             out.println("</head>");
             out.println("<body>");
+            String user_id_s = request.getParameter("user_id");
+            int user_id = Integer.parseInt(user_id_s);
+            String book_id_s = request.getParameter("book_id");
+            int book_id = Integer.parseInt(book_id_s);
             try {
                 HttpSession session = request.getSession();
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-
-                int user_id = Integer.parseInt(request.getParameter("user_id").toString());
-                int book_id = Integer.parseInt(request.getParameter("book_id"));
+//                String user_id_s = request.getParameter("user_id");
+//                int user_id = Integer.parseInt(user_id_s);
+//                String book_id_s = request.getParameter("book_id");
+//                int book_id = Integer.parseInt(book_id_s);
 
                 // Check if user exists
                 String checkUserQuery = "SELECT active, allocated_book FROM data_table WHERE id = ?";

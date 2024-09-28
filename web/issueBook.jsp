@@ -99,18 +99,18 @@
                         </select>
                     </div>
                     <div class="input-box">
-                        <span class="details">Book ID</span>
+                        <span class="details">Book</span>
                         <select name="book_id" id="book_id" required>
-                            <option value="">Select Book ID</option>
+                            <option value="">Select Book</option>
                             <%
                                 try {
                                     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                                     stmt = con.createStatement();
-                                    String bookQuery = "SELECT book_id, isbn FROM book_table";
+                                    String bookQuery = "SELECT book_id, book_title FROM book_table";
                                     rs = stmt.executeQuery(bookQuery);
                                     while (rs.next()) {
                             %>
-                            <option value="<%= rs.getString("book_id") %>"><%= rs.getString("isbn") %></option>
+                            <option value="<%= rs.getString("book_id") %>"><%= rs.getString("book_title") %></option>
                             <%
                                     }
                                 } catch(Exception e) {
@@ -123,10 +123,10 @@
                             %>
                         </select>
                     </div>
-                    <div class="input-box">
+                    <!-- <div class="input-box">
                         <span class="details">Issue Date</span>
                         <input type="date" name="issue_date">
-                    </div>
+                    </div> -->
                 </div>
                 <div class="button">
                     <input type="submit" value="Issue Book">
