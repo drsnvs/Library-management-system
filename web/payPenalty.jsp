@@ -11,39 +11,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Pay Penalty</title>
         <style>
-<%
-    String message = request.getParameter("message");
-    double fineAmount = 0.0;
-    int user_id = 0;
-    int rent_id = 0;
-    
-    // Default message if null
-    if (message == null) {
-        message = "No message provided.";
-    }
-    
-    // Parse parameters with error handling
-    try {
-        fineAmount = Double.parseDouble(request.getParameter("fine_amount"));
-    } catch (NumberFormatException | NullPointerException e) {
-        fineAmount = 0.0;
-        message = "Fine amount is missing or invalid.";
-    }
-    
-    try {
-        user_id = Integer.parseInt(request.getParameter("user_id"));
-    } catch (NumberFormatException | NullPointerException e) {
-        user_id = 0;
-        message = "User ID is missing or invalid.";
-    }
-    
-    try {
-        rent_id = Integer.parseInt(request.getParameter("rent_id"));
-    } catch (NumberFormatException | NullPointerException e) {
-        rent_id = 0;
-        message = "Rent ID is missing or invalid.";
-    }
-%>
             body {
                 font-family: Arial, sans-serif;
                 background-color: #f2f2f2;
@@ -82,23 +49,35 @@
         </style>
     </head>
     <body>
-         <%
-            try {
-                if (!session.getId().equals(session.getAttribute("key"))) {
-                    response.sendRedirect("index.jsp");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        %>
         <div class="container">
-            <p>Fine Amount: $<%= session.getAttribute("fineAmount") %></p>
+            <% 
+                String paymentStatus = request.getParameter("paymentStatus");
+                String message = request.getParameter("message");
+                
+                if (paymentStatus != null) {
+                    if (paymentStatus.equals("success")) { 
+            %>
+                        <h3>Payment Status: Payment Successful!</h3>
+            <% 
+                    } else { 
+            %>
+                        <h3>Payment Status: Payment not accepted!</h3>
+            <% 
+                    }
+                }
+            %>
+            <p>Fine Amount: ₹<%= session.getAttribute("fineAmount") %></p>
             <p>You have an overdue penalty. Please confirm to pay the penalty.</p>
             <form action="PayPenaltyServlet" method="post">
                 <input type="hidden" name="user_id" value="<%= request.getParameter("user_id") %>">
+                <input type="hidden" name="rent_id" value="<%= request.getParameter("rent_id") %>"> <!-- Added rent_id -->
+                <input type="hidden" name="fineAmount" value="<%= session.getAttribute("fineAmount") %>">
                 <input type="hidden" name="book_id" value="<%= request.getParameter("book_id") %>">
-                <button type="submit">Pay Penalty</button>
+                <button type="submit">Accept Payment</button>
             </form>
+            <% if (message != null) { %>
+                <p style="color: red;"><%= message %></p>
+            <% } %>
         </div>
     </body>
 </html>

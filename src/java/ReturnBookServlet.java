@@ -52,46 +52,115 @@ public class ReturnBookServlet extends HttpServlet {
             checkRentPs.setInt(1, book_id);
             checkRentPs.setInt(2, user_id);
             ResultSet rsRent = checkRentPs.executeQuery();
+//            if (rsRent.next()) {
+//                LocalDate today = LocalDate.now();
+//                Date returnDate = Date.valueOf(today);
+//                int rent_id = Integer.parseInt(rsRent.getString("rent_id"));
+//                Date dueDate = rsRent.getDate("date_due");
+//                if (returnDate.after(rsRent.getDate("date_due"))) {
+//                    // Redirect to penalty payment page
+//                    message = "Pay Penalty for due date!";
+////                    response.sendRedirect("bookPenalty.jsp?message=Pay Penalty for due date!");
+////                    RequestDispatcher rd = request.getRequestDispatcher("bookPenalty.jsp");
+////                    rd.forward(request, response);
+////                    request.setAttribute("user_id", user_id);
+////                    request.setAttribute("book_id", book_id);
+////                    RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
+////                    rd.forward(request, response);
+//                    long daysLate = (returnDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24);
+//                    double fineAmount = daysLate * 10.0; // 1 per day
+//                    request.setAttribute("message", message);
+//                    session.setAttribute("message", message);
+//                    request.setAttribute("fineAmount", fineAmount);
+//                    session.setAttribute("fineAmount", fineAmount);
+//                    // Insert penalty data into book_fine_table
+//                    String insertFineQuery = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
+//                    PreparedStatement insertFinePs = con.prepareStatement(insertFineQuery);
+//                    insertFinePs.setInt(1, rent_id);
+//                    insertFinePs.setInt(2, user_id);
+//                    insertFinePs.setDouble(3, fineAmount);
+//                    insertFinePs.setInt(4, Integer.parseInt(session.getAttribute("user_id").toString())); // assuming the user who creates the record is the one who pays the fine
+//                    insertFinePs.setDate(5, returnDate);
+//                    insertFinePs.executeUpdate();
+//                    RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
+//                    rd.forward(request, response);
+//                    return;
+//                    // Redirect to penalty payment page
+////                    response.sendRedirect("bookPenalty.jsp?message=Pay Penalty for due date!&fine_amount=" + fineAmount);
+////                    return;
+//                }else{
+//                    
+//                    
+//                // Update book_rent_table to mark the book as returned
+//                    String updateRentQuery = "UPDATE book_rent_table SET allocated_book = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
+//                    PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
+//                    updateRentPs.setDate(1, returnDate);
+//                    updateRentPs.setInt(2, book_id);
+//                    updateRentPs.setInt(3, user_id);
+//                    updateRentPs.setInt(4, rent_id);
+//                    int result = updateRentPs.executeUpdate();
+//
+//                    if (result > 0) {
+//
+//    //                    if(returnDate.after(rsRent.getDate("date_due"))){
+//    //                        response.sendRedirect("returnBook.jsp?message=Pay Penalty for due date!");
+//    //                    }
+//                        // Update book_table to increment quantity by 1
+//                        String updateQuantityQuery = "UPDATE book_table SET quantity = quantity + 1 WHERE book_id = ?";
+//                        PreparedStatement updateQuantityPs = con.prepareStatement(updateQuantityQuery);
+//                        updateQuantityPs.setInt(1, book_id);
+//                        updateQuantityPs.executeUpdate();
+//
+//                    // Update data_table to decrement allocated books count
+//                        String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
+//                        PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
+//                        updateAllocatedPs.setInt(1, user_id);
+//                        updateAllocatedPs.executeUpdate();
+//
+////                        response.sendRedirect("returnBook.jsp?message=Book returned successfully!");
+//                        message = "Book returned successfully!";
+//                    } else {
+////                        response.sendRedirect("returnBook.jsp?message=Failed to return book!");
+//                        message = "Failed to return book!";
+//                    }
+//                }
+//            } else {
+////                response.sendRedirect("returnBook.jsp?message=User has not borrowed this book or book return already processed!");
+//                message = "User has not borrowed this book or book return already processed!";
+//            }
             if (rsRent.next()) {
                 LocalDate today = LocalDate.now();
                 Date returnDate = Date.valueOf(today);
                 int rent_id = Integer.parseInt(rsRent.getString("rent_id"));
                 Date dueDate = rsRent.getDate("date_due");
-                if (returnDate.after(rsRent.getDate("date_due"))) {
-                    // Redirect to penalty payment page
-                    message = "Pay Penalty for due date!";
-//                    response.sendRedirect("bookPenalty.jsp?message=Pay Penalty for due date!");
-//                    RequestDispatcher rd = request.getRequestDispatcher("bookPenalty.jsp");
-//                    rd.forward(request, response);
-//                    request.setAttribute("user_id", user_id);
-//                    request.setAttribute("book_id", book_id);
-//                    RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
-//                    rd.forward(request, response);
+
+                if (returnDate.after(dueDate)) {
+                    // If the return date is after the due date, calculate the fine and redirect to the penalty page
                     long daysLate = (returnDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24);
-                    double fineAmount = daysLate * 10.0; // 1 per day
+                    double fineAmount = daysLate * 10.0; // Assuming 10 per day fine
+
+                    message = "Pay Penalty for overdue!";
                     request.setAttribute("message", message);
                     session.setAttribute("message", message);
                     request.setAttribute("fineAmount", fineAmount);
                     session.setAttribute("fineAmount", fineAmount);
-                    // Insert penalty data into book_fine_table
+
+                    // Insert the penalty record into the book_fine_table
                     String insertFineQuery = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
                     PreparedStatement insertFinePs = con.prepareStatement(insertFineQuery);
                     insertFinePs.setInt(1, rent_id);
                     insertFinePs.setInt(2, user_id);
                     insertFinePs.setDouble(3, fineAmount);
-                    insertFinePs.setInt(4, Integer.parseInt(session.getAttribute("user_id").toString())); // assuming the user who creates the record is the one who pays the fine
+                    insertFinePs.setInt(4, Integer.parseInt(session.getAttribute("user_id").toString())); // Record creator
                     insertFinePs.setDate(5, returnDate);
                     insertFinePs.executeUpdate();
+
+                    // Redirect to penalty payment page
                     RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
                     rd.forward(request, response);
                     return;
-                    // Redirect to penalty payment page
-//                    response.sendRedirect("bookPenalty.jsp?message=Pay Penalty for due date!&fine_amount=" + fineAmount);
-//                    return;
-                }else{
-                    
-                    
-                // Update book_rent_table to mark the book as returned
+                } else {
+                    // If return is on time, proceed with returning the book
                     String updateRentQuery = "UPDATE book_rent_table SET allocated_book = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
                     PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
                     updateRentPs.setDate(1, returnDate);
@@ -101,33 +170,27 @@ public class ReturnBookServlet extends HttpServlet {
                     int result = updateRentPs.executeUpdate();
 
                     if (result > 0) {
-
-    //                    if(returnDate.after(rsRent.getDate("date_due"))){
-    //                        response.sendRedirect("returnBook.jsp?message=Pay Penalty for due date!");
-    //                    }
-                        // Update book_table to increment quantity by 1
+                        // Update book quantity in book_table
                         String updateQuantityQuery = "UPDATE book_table SET quantity = quantity + 1 WHERE book_id = ?";
                         PreparedStatement updateQuantityPs = con.prepareStatement(updateQuantityQuery);
                         updateQuantityPs.setInt(1, book_id);
                         updateQuantityPs.executeUpdate();
 
-                    // Update data_table to decrement allocated books count
+                        // Update allocated book count in data_table
                         String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
                         PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
                         updateAllocatedPs.setInt(1, user_id);
                         updateAllocatedPs.executeUpdate();
 
-//                        response.sendRedirect("returnBook.jsp?message=Book returned successfully!");
                         message = "Book returned successfully!";
                     } else {
-//                        response.sendRedirect("returnBook.jsp?message=Failed to return book!");
                         message = "Failed to return book!";
                     }
                 }
             } else {
-//                response.sendRedirect("returnBook.jsp?message=User has not borrowed this book or book return already processed!");
                 message = "User has not borrowed this book or book return already processed!";
             }
+
             con.close();
         } catch (Exception e) {
             e.printStackTrace();

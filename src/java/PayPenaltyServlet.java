@@ -7,8 +7,10 @@
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,33 +35,73 @@ public class PayPenaltyServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String message = "";
+        boolean paymentSuccess = false;
+
         try {
+            // Database connection
             Class.forName("com.mysql.jdbc.Driver");
             try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
-                int user_id = Integer.parseInt(request.getParameter("user_id").toString());
-                int book_id = Integer.parseInt(request.getParameter("book_id").toString());
-                
-                // Update book_fine_table to mark the penalty as paid
-                String updateFineQuery = "UPDATE book_fine_table SET paid = 1 WHERE book_id = ? AND id = ?";
-                PreparedStatement updateFinePs = con.prepareStatement(updateFineQuery);
-                updateFinePs.setInt(1, book_id);
-                updateFinePs.setInt(2, user_id);
-                int result = updateFinePs.executeUpdate();
-                
-                if (result > 0) {
-                    message = "Penalty paid successfully!";
+                // Initialize variables
+                int user_id = 0;
+                int rent_id = 0;
+                double fineAmount = 0.0;
+
+                // Get parameters and check for null or invalid values
+                String userIdParam = request.getParameter("user_id");
+                String rentIdParam = request.getParameter("rent_id");
+                String fineAmountParam = request.getParameter("fineAmount");
+
+                // Validate user_id
+                if (userIdParam != null && !userIdParam.equals("null") && !userIdParam.isEmpty()) {
+                    user_id = Integer.parseInt(userIdParam);
                 } else {
-                    message = "Failed to pay penalty!";
+                    message = "User ID is missing or invalid.";
+                }
+
+                // Validate rent_id
+                if (rentIdParam != null && !rentIdParam.equals("null") && !rentIdParam.isEmpty()) {
+                    rent_id = Integer.parseInt(rentIdParam);
+                } else {
+                    message = "Rent ID is missing or invalid.";
+                }
+
+                // Validate fine_amount
+                if (fineAmountParam != null && !fineAmountParam.equals("null") && !fineAmountParam.isEmpty()) {
+                    fineAmount = Double.parseDouble(fineAmountParam);
+                } else {
+                    message = "Fine amount is missing or invalid.";
+                }
+
+                // Proceed only if no messages indicate errors
+                if (message.isEmpty()) {
+                    String updateFineQuery = "UPDATE book_fine_table SET paid = 1, modifiedBy = ?, modifiedOn = CURDATE() WHERE rent_id = ? AND id = ? AND paid = 0";
+                    try (PreparedStatement updateFinePs = con.prepareStatement(updateFineQuery)) {
+                        updateFinePs.setInt(1, user_id); // Assuming modifiedBy is the user paying
+                        updateFinePs.setInt(2, rent_id);
+                        updateFinePs.setInt(3, user_id); // Assuming id corresponds to the user_id
+
+                        int result = updateFinePs.executeUpdate();
+
+                        if (result > 0) {
+                            paymentSuccess = true; // Payment was successful
+                        } else {
+                            message = "Failed to pay penalty or penalty already paid!";
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            message = "An error occurred!";
+            message = "An error occurred while processing the payment!";
         } finally {
-            response.sendRedirect("returnBook.jsp?message=" + message);
+            // Redirect based on payment success
+            if (paymentSuccess) {
+                response.sendRedirect("bookPenalty.jsp?paymentStatus=success&message=Penalty paid successfully!");
+            } else {
+                response.sendRedirect("bookPenalty.jsp?paymentStatus=failed&message=" + message);
+            }
         }
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
