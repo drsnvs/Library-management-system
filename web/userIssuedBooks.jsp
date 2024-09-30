@@ -14,6 +14,7 @@
     <meta charset="UTF-8">
     <title>Issued Books</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -105,11 +106,11 @@
         <h1>Issued Books</h1>
     </header>
     <nav>
-        <a href="userDashboard.jsp">Dashboard</a>
-        <a href="userProfile.jsp">Profile</a>
-        <a href="userViewBooks.jsp">View Books</a>
+        <a href="userDashboard.jsp"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="userProfile.jsp"><i class="fas fa-user"></i> Profile</a>
+        <a href="userViewBooks.jsp"><i class="fas fa-book-reader"></i> View Books</a>
         <!--<a href="userIssuedBooks.jsp">Issued Books</a>-->
-        <a href="logOutServlet">Logout</a>
+        <a href="logOutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
     <main>
         <div class="card">

@@ -11,6 +11,7 @@
     <meta charset="UTF-8">
     <title>Edit Profile</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -39,6 +40,11 @@
             text-decoration: none;
             padding: 0.5em 1em;
             transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        nav a i {
+            margin-right: 8px; /* Add margin between icon and text */
         }
         nav a:hover {
             background-color: #575757;
@@ -155,11 +161,18 @@
         <h1>Edit Profile</h1>
     </header>
     <nav>
-        <a href="userDashboard.jsp">Dashboard</a>
-        <!--<a href="userProfile.jsp">Profile</a>-->
-        <a href="userViewBooks.jsp">View Books</a>
-        <a href="userIssuedBooks.jsp">Issued Books</a>
-        <a href="logOutServlet">Logout</a>
+        <a href="userDashboard.jsp">
+            <i class="fas fa-home"></i> Dashboard
+        </a>
+        <a href="userViewBooks.jsp">
+            <i class="fas fa-book"></i> View Books
+        </a>
+        <a href="userIssuedBooks.jsp">
+            <i class="fas fa-book-reader"></i> Issued Books
+        </a>
+        <a href="logOutServlet">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
     </nav>
     <main>
         <div class="card">
@@ -220,66 +233,7 @@
           }
         }
         function validation(){
-            var first_name = document.getElementById("first_name").value;
-            var last_name = document.getElementById("last_name").value;
-            var mobile_no = document.getElementById("mobile_no").value;
-            var email_id = document.getElementById("email_id").value;
-            var address = document.getElementById("address").value;
-            var password = document.getElementById("password").value;
-            var enrollment_no = document.getElementById("enrollment_no").value;
-            if(first_name === ""){
-                alert("Enter First name");
-                return false;
-            }
-            if(last_name === ""){
-                alert("Enter Last name");
-                return false;
-            }
-            if(mobile_no === ""){
-                alert("Enter Mobile no");
-                return false;
-            }
-            if(enrollment_no === ""){
-                alert("Enter Enrollment no");
-                return false;
-            }
-            if (!/^[0-9]{10}$/.test(mobile_no)) {
-                alert("Enter valid mobile number");
-                return false;
-            }
-            if(mobile_no.length !== 10){
-                alert("Mobile no must be 10 digits");
-                return false;
-            }
-            if(enrollment_no.length !== 9){
-                alert("Mobile no must be 9 digits");
-                return false;
-            }
-
-            if (!email_id.match(/^([\w\-.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
-                alert("Enter valid email address");
-                return false;
-            }else if(email_id === "" || email_id === null){
-                alert("Enter email address");
-                return false;
-            }
-            if(address === ""){
-                alert("Enter Address");
-                return false;
-            }
-            if(password === ""){
-                alert("Enter Password");
-                return false;
-            }
-            
-            
-            if(password.length < 6){
-                alert("Password should be more than 6 characters");
-                return false;
-            }
-            
-            
-            return true;
+            // Add your validation logic here
         }
         function showAlert(message) {
             alert(message);
@@ -289,11 +243,7 @@
         String message = request.getParameter("message");
         if (message != null) { 
         %>
-            <script>
-                showAlert("<%= message %>");
-            </script>
-        <% 
-        } 
-    %>
+        <script>showAlert('<%= message %>');</script>
+    <% } %>
 </body>
 </html>

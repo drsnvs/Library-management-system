@@ -11,6 +11,7 @@
     <meta charset="UTF-8">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -36,6 +37,11 @@
             text-decoration: none;
             padding: 0.5em 1em;
             transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        nav a i {
+            margin-right: 8px; /* Add margin between icon and text */
         }
         nav a:hover {
             background-color: #575757;
@@ -79,10 +85,18 @@
         <h1>Dashboard</h1>
     </header>
     <nav>
-        <a href="userProfile.jsp">Profile</a>
-        <a href="userViewBooks.jsp">View Books</a>
-        <a href="userIssuedBooks.jsp">Issued Books</a>
-        <a href="logOutServlet">Logout</a>
+        <a href="userProfile.jsp">
+            <i class="fas fa-user"></i> Profile
+        </a>
+        <a href="userViewBooks.jsp">
+            <i class="fas fa-book"></i> View Books
+        </a>
+        <a href="userIssuedBooks.jsp">
+            <i class="fas fa-book-reader"></i> Issued Books
+        </a>
+        <a href="logOutServlet">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
     </nav>
     <main>
         <div class="card">
