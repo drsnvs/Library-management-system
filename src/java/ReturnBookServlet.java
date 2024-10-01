@@ -176,7 +176,7 @@ public class ReturnBookServlet extends HttpServlet {
                         updateQuantityPs.setInt(1, book_id);
                         updateQuantityPs.executeUpdate();
 
-                        // Update allocated book count in data_table 
+                        // Update allocated book count in data_table
                         String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
                         PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
                         updateAllocatedPs.setInt(1, user_id);
