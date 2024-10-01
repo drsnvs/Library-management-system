@@ -134,33 +134,70 @@ public class ReturnBookServlet extends HttpServlet {
                 int rent_id = Integer.parseInt(rsRent.getString("rent_id"));
                 Date dueDate = rsRent.getDate("date_due");
 
+                // Check if the fine has been paid
+                String checkFineQuery = "SELECT * FROM book_fine_table WHERE rent_id = ? AND id = ? AND paid = 1";
+                PreparedStatement checkFinePs = con.prepareStatement(checkFineQuery);
+                checkFinePs.setInt(1, rent_id);
+                checkFinePs.setInt(2, user_id);
+                ResultSet rsFine = checkFinePs.executeQuery();
+
                 if (returnDate.after(dueDate)) {
-                    // If the return date is after the due date, calculate the fine and redirect to the penalty page
-                    long daysLate = (returnDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24);
-                    double fineAmount = daysLate * 10.0; // Assuming 10 per day fine
+                    // If the return date is after the due date, check payment status
+                    if (rsFine.next()) {
+                        // User has paid the fine, allow book return
+                        String updateRentQuery = "UPDATE book_rent_table SET allocated_book = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
+                        PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
+                        updateRentPs.setDate(1, returnDate);
+                        updateRentPs.setInt(2, book_id);
+                        updateRentPs.setInt(3, user_id);
+                        updateRentPs.setInt(4, rent_id);
+                        int result = updateRentPs.executeUpdate();
 
-                    message = "Pay Penalty for overdue!";
-                    request.setAttribute("message", message);
-                    session.setAttribute("message", message);
-                    request.setAttribute("fineAmount", fineAmount);
-                    session.setAttribute("fineAmount", fineAmount);
+                        if (result > 0) {
+                            // Update book quantity and allocated books count
+                            String updateQuantityQuery = "UPDATE book_table SET quantity = quantity + 1 WHERE book_id = ?";
+                            PreparedStatement updateQuantityPs = con.prepareStatement(updateQuantityQuery);
+                            updateQuantityPs.setInt(1, book_id);
+                            updateQuantityPs.executeUpdate();
 
-                    // Insert the penalty record into the book_fine_table
-                    String insertFineQuery = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
-                    PreparedStatement insertFinePs = con.prepareStatement(insertFineQuery);
-                    insertFinePs.setInt(1, rent_id);
-                    insertFinePs.setInt(2, user_id);
-                    insertFinePs.setDouble(3, fineAmount);
-                    insertFinePs.setInt(4, Integer.parseInt(session.getAttribute("user_id").toString())); // Record creator
-                    insertFinePs.setDate(5, returnDate);
-                    insertFinePs.executeUpdate();
+                            String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
+                            PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
+                            updateAllocatedPs.setInt(1, user_id);
+                            updateAllocatedPs.executeUpdate();
 
-                    // Redirect to penalty payment page
-                    RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
-                    rd.forward(request, response);
-                    return;
+                            message = "Book returned successfully!";
+                        } else {
+                            message = "Failed to return book!";
+                        }
+                    } else {
+                        // User has not paid the fine, redirect to penalty page
+                        long daysLate = (returnDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24);
+                        double fineAmount = daysLate * 10.0; // Assuming 10 per day fine
+
+                        message = "Pay Penalty for overdue!";
+                        request.setAttribute("message", message);
+                        session.setAttribute("message", message);
+                        request.setAttribute("fineAmount", fineAmount);
+                        session.setAttribute("fineAmount", fineAmount);
+
+                        // Insert the penalty record into the book_fine_table
+                        String insertFineQuery = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
+                        PreparedStatement insertFinePs = con.prepareStatement(insertFineQuery);
+                        insertFinePs.setInt(1, rent_id);
+                        insertFinePs.setInt(2, user_id);
+                        insertFinePs.setDouble(3, fineAmount);
+                        insertFinePs.setInt(4, Integer.parseInt(session.getAttribute("user_id").toString())); // Record creator
+                        insertFinePs.setDate(5, returnDate);
+                        insertFinePs.executeUpdate();
+                        request.setAttribute("rent_id", rent_id);
+
+                        // Redirect to penalty payment page
+                        RequestDispatcher rd = request.getRequestDispatcher("payPenalty.jsp");
+                        rd.forward(request, response);
+                        return;
+                    }
                 } else {
-                    // If return is on time, proceed with returning the book
+                    // If return is on time, proceed with returning the book as usual
                     String updateRentQuery = "UPDATE book_rent_table SET allocated_book = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
                     PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
                     updateRentPs.setDate(1, returnDate);
@@ -190,6 +227,7 @@ public class ReturnBookServlet extends HttpServlet {
             } else {
                 message = "User has not borrowed this book or book return already processed!";
             }
+
 
             con.close();
         } catch (Exception e) {

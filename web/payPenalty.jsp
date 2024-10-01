@@ -70,7 +70,7 @@
             <p>You have an overdue penalty. Please confirm to pay the penalty.</p>
             <form action="PayPenaltyServlet" method="post">
                 <input type="hidden" name="user_id" value="<%= request.getParameter("user_id") %>">
-                <input type="hidden" name="rent_id" value="<%= request.getParameter("rent_id") %>"> <!-- Added rent_id -->
+                <input type="hidden" name="rent_id" value="<%= request.getAttribute("rent_id").toString() %>"> <!-- Added rent_id -->
                 <input type="hidden" name="fineAmount" value="<%= session.getAttribute("fineAmount") %>">
                 <input type="hidden" name="book_id" value="<%= request.getParameter("book_id") %>">
                 <button type="submit">Accept Payment</button>
