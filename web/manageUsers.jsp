@@ -13,6 +13,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Users</title>
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             body {
@@ -205,13 +206,19 @@
                             <td>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<%= id %>">
-                                    <input type="submit" name="action" value="Edit">
+                                    <input type="hidden" name="action" value="Edit">
+                                    <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;width:50%;">
+                                        <i class="fas fa-edit" style="color: #007bff;"></i>
+                                    </button>
                                 </form>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<%= id %>">
                                     <input type="hidden" name="email_id" value="<%= email %>">
                                     <input type="hidden" name="enrollment_no" value="<%= enrollment_no %>">
-                                    <input type="submit" name="action" value="Delete">
+                                    <input type="hidden" name="action" value="Delete">
+                                    <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;">
+                                        <i class="fas fa-trash" style="color: #dc3545;"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>

@@ -13,6 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Manage Books</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -212,11 +213,17 @@
                         <td>
                             <form action="ManageBooksServlet" method="post" style="display:inline;">
                                 <input type="hidden" name="book_id" value="<%= bookId %>">
-                                <input type="submit" name="action" value="Edit">
+                                <input type="hidden" name="action" value="Edit">
+                                <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;width:50%;">
+                                    <i class="fas fa-edit" style="color: #007bff;"></i>
+                                </button>
                             </form>
                             <form action="ManageBooksServlet" method="post" style="display:inline;">
                                 <input type="hidden" name="book_id" value="<%= bookId %>">
-                                <input type="submit" name="action" value="Delete">
+                                <input type="hidden" name="action" value="Delete">
+                                <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;">
+                                    <i class="fas fa-trash" style="color: #dc3545;"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
