@@ -40,12 +40,25 @@
             font-weight: 600;
             z-index: 1; /* Add this line to ensure the navbar is on top of other elements */
         }
+        .navbar .logout {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logout i {
+            margin-right: 5px;
+        }
         .container {
             display: flex;
             justify-content: space-evenly;
             align-items: center;
             flex-wrap: wrap;
-            padding: 100px 0 50px 0; /* Increase the top padding to 80px */
+            padding: 100px 0 50px 0; /* Increase the top padding to 100px */
             width: 100%;
             max-width: 1200px;
             flex-grow: 1;
@@ -121,6 +134,9 @@
 
     <div class="navbar">
         Welcome to Admin Dashboard (<%= session.getAttribute("first_name") %>)
+        <a href="logOutServlet" class="logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
     </div>
 
     <div class="container">
@@ -179,12 +195,6 @@
                 <span>Penalty</span>
             </a>
         </div> -->
-        <div class="card">
-            <a href="logOutServlet">
-                <i class="fas fa-sign-out-alt card-icon"></i>
-                <span>Logout</span>
-            </a>
-        </div>
     </div>
 
     <div class="footer">
