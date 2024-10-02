@@ -14,6 +14,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Manage Issued Books</title>
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -149,12 +150,17 @@
                             <form action="ManageIssuedBooksServlet" method="post">
                                 <input type="hidden" name="action" value="Edit">
                                 <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
-                                <button type="submit">Edit</button>
+                                <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;width:50%;">
+                                    <i class="fas fa-edit" style="color: #007bff;"></i>
+                                </button>
                             </form>
                             <form action="ManageIssuedBooksServlet" method="post">
                                 <input type="hidden" name="action" value="Delete">
                                 <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
-                                <button type="submit">Delete</button>
+                                <!--<button type="submit">Delete</button>-->
+                                <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;">
+                                    <i class="fas fa-trash" style="color: #dc3545;"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
