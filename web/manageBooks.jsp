@@ -113,14 +113,26 @@
         }
         .search-box {
             margin-bottom: 20px;
+            display: flex; /* Use flexbox for alignment */
+            justify-content: flex-start; /* Align to the left */
         }
 
         .search-box input {
             padding: 10px;
             font-size: 16px;
-            width: 30%;
+            width: 50%;
             margin-right: 10px;
+            border: 1px solid #ddd; /* Add border for definition */
+            border-radius: 4px; /* Rounded corners */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
         }
+
+        .search-box input:focus {
+            outline: none; /* Remove default focus outline */
+            border-color: #007bff; /* Change border color on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Highlight shadow on focus */
+        }
+
     </style>
     <script>
         // Function to search books by title or author
@@ -189,10 +201,13 @@
                                 String bookTitle = rs.getString("book_title");
                                 String authorName = rs.getString("author_name");
                                 int quantity = rs.getInt("quantity");
+                                
+                                String displayBookTitle = bookTitle.length() > 25 ? bookTitle.substring(0, 25) + "..." : bookTitle;
+                                String displayAuthorName = authorName.length() > 20 ? authorName.substring(0, 20) + "..." : authorName;
                     %>
                     <tr class="book-row">
-                        <td class="book-title"><%= bookTitle %></td>
-                        <td class="book-author"><%= authorName %></td>
+                        <td class="book-title"><%= displayBookTitle %></td>
+                        <td class="book-author"><%= displayAuthorName %></td>
                         <td id="cnt"><%= quantity %></td>
                         <td>
                             <form action="ManageBooksServlet" method="post" style="display:inline;">

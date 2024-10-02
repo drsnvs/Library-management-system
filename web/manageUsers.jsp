@@ -40,7 +40,7 @@
                 font-size: 28px;
                 font-weight: 500;
                 margin-bottom: 20px;
-              }
+            }
 
             .content {
                 overflow-x: auto;
@@ -61,7 +61,7 @@
             table th {
                 background-color: #f2f2f2;
             }
-            
+
             #cnt, table th{
                 text-align: center;
             }
@@ -82,6 +82,7 @@
             input[type="submit"]:hover {
                 background-color: #0056b3;
             }
+
             .actions {
                 display: flex;
                 justify-content: space-between;
@@ -104,8 +105,49 @@
                 background-color: #0056b3;
             }
 
+            .search-box {
+                margin-bottom: 20px;
+                display: flex; /* Use flexbox for alignment */
+                justify-content: flex-start; /* Align to the left */
+            }
+
+            .search-box input {
+                padding: 10px;
+                font-size: 16px;
+                width: 50%;
+                margin-right: 10px;
+                border: 1px solid #ddd; /* Add border for definition */
+                border-radius: 4px; /* Rounded corners */
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            }
+
+            .search-box input:focus {
+                outline: none; /* Remove default focus outline */
+                border-color: #007bff; /* Change border color on focus */
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Highlight shadow on focus */
+            }
         </style>
         <script>
+            // Function to search users by enrollment number or first name
+            function searchUser() {
+                var enrollmentInput = document.getElementById("searchEnrollment").value.toLowerCase();
+                var nameInput = document.getElementById("searchName").value.toLowerCase();
+                var userRows = document.querySelectorAll(".user-row");
+
+                userRows.forEach(function (row) {
+                    var enrollmentNo = row.querySelector(".enrollment-no").innerText.toLowerCase();
+                    var firstName = row.querySelector(".first-name").innerText.toLowerCase();
+
+                    // If either enrollment number or name matches, display the row
+                    if ((enrollmentNo.includes(enrollmentInput) || enrollmentInput === "") && 
+                        (firstName.includes(nameInput) || nameInput === "")) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            }
+
             function showAlert(message) {
                 alert(message);
             }
@@ -123,14 +165,18 @@
         %>
         <div class="container">
             <div class="title">Manage Users</div>
+            <div class="search-box">
+                <input type="text" id="searchEnrollment" placeholder="Search by Enrollment No" onkeyup="searchUser()">
+                <input type="text" id="searchName" placeholder="Search by Name" onkeyup="searchUser()">
+            </div>
             <div class="content">
                 <table>
                     <thead>
                         <tr>
-                            <th>Enrollment No</th>
-                            <th>First Name</th>
+                            <th>Enrollment</th>
+                            <th>Name</th>
                             <th>Email</th>
-                            <th>Allocate Books</th>
+                            <th>Books</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -147,13 +193,14 @@
                                     String book_allocated = rs.getString("allocated_book");
                                     String enrollment_no = rs.getString("enrollment_no");
                                     String firstName = rs.getString("first_name");
-//                                    String lastName = rs.getString("last_name");
                                     String email = rs.getString("email_id");
+                                    String displayFirstName = firstName.length() > 8 ? firstName.substring(0, 8) + "..." : firstName;
+                                    String displayEmail = email.length() > 25 ? email.substring(0, 25) + ".." : email;
                         %>
-                        <tr>
-                            <td id="cnt"><%= enrollment_no %></td>
-                            <td><%= firstName %></td>
-                            <td><%= email %></td>
+                        <tr class="user-row">
+                            <td class="enrollment-no" id="cnt"><%= enrollment_no %></td>
+                            <td class="first-name"><%= displayFirstName %></td>
+                            <td><%= displayEmail %></td>
                             <td id="cnt"><%= book_allocated %></td>
                             <td>
                                 <form action="ManageUsersServlet" method="post" style="display:inline;">
