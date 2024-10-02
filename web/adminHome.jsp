@@ -29,6 +29,8 @@
             overflow-y: scroll; /* Ensure vertical scrolling is enabled */
         }
         .navbar {
+            position: fixed; /* Add this line */
+            top: 0; /* Add this line */
             width: 100%;
             background-color: #34495e;
             padding: 20px 0;
@@ -36,16 +38,17 @@
             text-align: center;
             font-size: 24px;
             font-weight: 600;
+            z-index: 1; /* Add this line to ensure the navbar is on top of other elements */
         }
         .container {
             display: flex;
             justify-content: space-evenly;
             align-items: center;
             flex-wrap: wrap;
-            padding: 50px 0;
+            padding: 100px 0 50px 0; /* Increase the top padding to 80px */
             width: 100%;
             max-width: 1200px;
-            flex-grow: 1; /* Allow container to grow */
+            flex-grow: 1;
         }
         .card {
             background-color: #fff;
@@ -140,15 +143,15 @@
             </a>
         </div>
         <div class="card">
-            <a href="bookAttributes.jsp">
-                <i class="fas fa-cogs card-icon"></i>
-                <span>Book Attributes</span>
-            </a>
-        </div>
-        <div class="card">
             <a href="manageBooks.jsp">
                 <i class="fas fa-book-open card-icon"></i>
                 <span>Manage Books</span>
+            </a>
+        </div>
+        <div class="card">
+            <a href="bookAttributes.jsp">
+                <i class="fas fa-cogs card-icon"></i>
+                <span>Book Attributes</span>
             </a>
         </div>
         <div class="card">

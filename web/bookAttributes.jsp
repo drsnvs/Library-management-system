@@ -108,6 +108,11 @@
                 <a href="addFormats.jsp">Add Formats</a>
             </div>
         </div>
+        <div class="content">
+            <div class="button">
+                <a href="adminHome.jsp">Home</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

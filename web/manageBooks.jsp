@@ -61,6 +61,14 @@
         #cnt, table th{
             text-align: center;
         }
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f2f2f2;
+            z-index: 10;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
 
         table th {
             background-color: #f2f2f2;
@@ -103,8 +111,37 @@
         .actions button:hover {
             background-color: #0056b3;
         }
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            padding: 10px;
+            font-size: 16px;
+            width: 30%;
+            margin-right: 10px;
+        }
     </style>
     <script>
+        // Function to search books by title or author
+        function searchBook() {
+            var titleInput = document.getElementById("searchTitle").value.toLowerCase();
+            var authorInput = document.getElementById("searchAuthor").value.toLowerCase();
+            var bookRows = document.querySelectorAll(".book-row");
+
+            bookRows.forEach(function (row) {
+                var title = row.querySelector(".book-title").innerText.toLowerCase();
+                var author = row.querySelector(".book-author").innerText.toLowerCase();
+
+                // If either title or author matches, display the row
+                if ((title.includes(titleInput) || titleInput === "") && (author.includes(authorInput) || authorInput === "")) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
         function showAlert(message) {
             alert(message);
         }
@@ -122,6 +159,11 @@
     %>
     <div class="container">
         <div class="title">Manage Books</div>
+        <div class="search-box">
+            <input type="text" id="searchTitle" placeholder="Search by Title" onkeyup="searchBook()">
+            <input type="text" id="searchAuthor" placeholder="Search by Author" onkeyup="searchBook()">
+        </div>
+
         <div class="content">
             <table>
                 <thead>
@@ -148,9 +190,9 @@
                                 String authorName = rs.getString("author_name");
                                 int quantity = rs.getInt("quantity");
                     %>
-                    <tr>
-                        <td><%= bookTitle %></td>
-                        <td><%= authorName %></td>
+                    <tr class="book-row">
+                        <td class="book-title"><%= bookTitle %></td>
+                        <td class="book-author"><%= authorName %></td>
                         <td id="cnt"><%= quantity %></td>
                         <td>
                             <form action="ManageBooksServlet" method="post" style="display:inline;">
