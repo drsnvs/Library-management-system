@@ -185,7 +185,7 @@
         <div class="card">
             <a href="manageIssuedBooks.jsp">
                 <i class="fas fa-book-reader card-icon"></i>
-                <span>Handle Issued Books</span>
+                <span>Transaction of Books</span>
             </a>
         </div>
         <!-- Uncomment the penalty card if needed -->
