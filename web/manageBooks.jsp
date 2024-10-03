@@ -195,7 +195,7 @@
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                             Statement stmt = con.createStatement();
-                            ResultSet rs = stmt.executeQuery("SELECT book_id, book_title, author_name, price, quantity FROM book_table");
+                            ResultSet rs = stmt.executeQuery("SELECT book_id, book_title, author_name, price, quantity FROM book_table ORDER BY book_table.book_id DESC;");
 
                             while (rs.next()) {
                                 int bookId = rs.getInt("book_id");

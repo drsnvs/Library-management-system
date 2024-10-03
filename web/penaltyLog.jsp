@@ -1,9 +1,8 @@
 <%-- 
-    Document   : manageIssuedBooks
-    Created on : 23 Jun, 2024, 3:04:44 PM
-    Author     : DARSHAN
+    Document   : penaltyLog
+    Created on : 3 Oct, 2024, 9:16:37 PM
+    Author     : Darshan
 --%>
-
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*, java.sql.*"%>
@@ -12,7 +11,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Manage Issued Books</title>
+    <title>Penalty Log</title>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +23,7 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Ensure the page takes up at least the viewport height */
+            min-height: 100vh;
         }
 
         .container {
@@ -34,8 +33,8 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-top: 50px;
-            flex: 1; /* Grow to take remaining vertical space */
-            overflow: auto; /* Add scrollbar when content exceeds height */
+            flex: 1;
+            overflow: auto;
         }
 
         .title {
@@ -64,14 +63,20 @@
             background-color: #f2f2f2;
         }
 
-        .actions {
-            display: flex;
-            justify-content: space-between;
+        .paid-status {
+            font-weight: bold;
+        }
+
+        .paid {
+            color: green;
+        }
+
+        .not-paid {
+            color: red;
         }
 
         .actions form {
             display: inline-block;
-            margin-right: 5px; /* Adjust spacing between forms */
         }
 
         .actions button {
@@ -85,12 +90,39 @@
         .actions button:hover {
             background-color: #0056b3;
         }
-    </style>
-    <script>
-        function showAlert(message) {
-            alert(message);
+
+        .action-icons {
+            font-size: 16px;
+            cursor: pointer;
         }
-    </script>
+
+        .action-icons a {
+            color: #007bff;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        .action-icons a:hover {
+            color: #0056b3;
+        }
+
+        .pay-penalty-icon {
+            color: #e0a800;
+        }
+
+        .pay-penalty-icon:hover {
+            color: #C72010;
+        }
+
+        .view-transaction-icon {
+            color: #ffc107;
+        }
+
+        .view-transaction-icon:hover {
+            color: #e0a800;
+        }
+
+    </style>
 </head>
 <body>
     <%
@@ -103,19 +135,17 @@
         }
     %>
     <div class="container">
-        <div class="title">Manage Issued Books</div>
+        <div class="title">Penalty Log</div>
         <div class="content">
             <table>
                 <thead>
                     <tr>
                         <th>Enrollment No</th>
-                        <th>Issue Date</th>
-                        <th>Return Date</th>
+                        <th>User Name</th>
                         <th>Book Title</th>
-                        <!--<th>User ID</th>-->
-                        <!--<th>Due Date</th>-->
-                        <!--<th>Fine</th>-->
-                        <th>Actions</th>
+                        <th>Fine Amount</th>
+                        <th>Paid Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,44 +154,43 @@
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                             Statement stmt = con.createStatement();
-                            String query = "SELECT book_rent_table.*,book_table.*, data_table.* FROM book_rent_table JOIN book_table ON book_rent_table.book_id = book_table.book_id JOIN data_table ON book_rent_table.id = data_table.id ORDER BY book_rent_table.rent_id DESC;";
+                            String query = "SELECT data_table.enrollment_no, data_table.first_name, data_table.last_name, book_table.book_title, book_fine_table.fine_amount, book_fine_table.paid, book_fine_table.fine_id " +
+                                           "FROM book_fine_table " +
+                                           "JOIN book_rent_table ON book_fine_table.rent_id = book_rent_table.rent_id " +
+                                           "JOIN book_table ON book_rent_table.book_id = book_table.book_id " +
+                                           "JOIN data_table ON book_rent_table.id = data_table.id " +
+                                           "ORDER BY book_fine_table.fine_id DESC";
                             ResultSet rs = stmt.executeQuery(query);
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                             while (rs.next()) {
                     %>
                     <tr>
                         <td><%= rs.getInt("enrollment_no") %></td>
-                        <td><%= formatter.format(rs.getDate("date_out")) %></td>
-                        <td>
-                            <% 
-                            java.sql.Date returnDate = (java.sql.Date) rs.getDate("return_date");
-                            if(returnDate == (null)){
-                                out.print("Not yet");
-                            }else{
-                                out.print(formatter.format(returnDate));
-                            }
+                        <td><%= rs.getString("first_name") + " " + rs.getString("last_name") %></td>
+                        <td><%= rs.getString("book_title") %></td>
+                        <td><%= rs.getDouble("fine_amount") %></td>
+                        <td class="paid-status">
+                            <%
+                                int paid = rs.getInt("paid");
+                                if (paid == 1) {
+                                    out.print("<span class='paid'>Paid</span>");
+                                } else {
+                                    // Directly showing "Pay Penalty" icon instead of "Not Paid"
+                            %>
+                                    <a href="returnBook.jsp?fine_id=<%= rs.getInt("fine_id") %>" class="pay-penalty-icon">
+                                        <i class="fas fa-credit-card"></i> 
+                                    </a>
+                            <%
+                                }
                             %>
                         </td>
-                        <td><%= rs.getString("book_title") %></td>
-                        <!--<td><%= rs.getInt("id") %></td>-->
-                        
-                        
-                        <td class="actions">
-                            <form action="ManageIssuedBooksServlet" method="post">
-                                <input type="hidden" name="action" value="Edit">
-                                <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
-                                <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;width:50%;">
-                                    <i class="fas fa-edit" style="color: #007bff;"></i>
-                                </button>
-                            </form>
-                            <form action="ManageIssuedBooksServlet" method="post">
-                                <input type="hidden" name="action" value="Delete">
-                                <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
-                                <!--<button type="submit">Delete</button>-->
-                                <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;">
-                                    <i class="fas fa-trash" style="color: #dc3545;"></i>
-                                </button>
-                            </form>
+
+                        <td>
+                            <div class="action-icons">
+                                <!-- View Transaction Icon -->
+                                <a href="viewTransaction.jsp?fine_id=<%= rs.getInt("fine_id") %>" class="view-transaction-icon">
+                                    <i class="fas fa-info-circle"></i> View Transaction
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     <%
@@ -178,11 +207,5 @@
     <div class="actions">
         <button onclick="location.href='adminHome.jsp'">Go to Home</button>
     </div>
-    <%
-        String message = request.getParameter("message");
-        if (message != null) {
-            out.println("<script>showAlert('" + message + "');</script>");
-        }
-    %>
 </body>
 </html>

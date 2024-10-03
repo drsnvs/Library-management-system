@@ -188,13 +188,12 @@
                 <span>Transaction of Books</span>
             </a>
         </div>
-        <!-- Uncomment the penalty card if needed -->
-        <!-- <div class="card">
-            <a href="payPenalty.jsp">
+        <div class="card">
+            <a href="penaltyLog.jsp">
                 <i class="fas fa-money-bill card-icon"></i>
-                <span>Penalty</span>
+                <span>Penalty Logs</span>
             </a>
-        </div> -->
+        </div>
     </div>
 
     <div class="footer">
