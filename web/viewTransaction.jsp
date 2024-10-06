@@ -68,7 +68,6 @@
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Transaction Details</h1>
     <table>
