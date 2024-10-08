@@ -141,7 +141,6 @@
         <!-- Back to Penalty Log Button -->
         <a href="penaltyLog.jsp"><i class="fas fa-arrow-left"></i> Back to Penalty Log</a>
         <!-- Pay Penalty Button if not paid -->
-        
     </div>
 </div>
 </body>
