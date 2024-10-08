@@ -22,7 +22,6 @@ A **Java Servlet-based Library Management System** using MySQL, designed to help
 - **Frontend:** 
   - HTML
   - CSS
-  - Bootstrap for responsive design
 - **Backend:** 
   - Java Servlets
   - JSP (JavaServer Pages)
