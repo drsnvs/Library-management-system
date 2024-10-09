@@ -82,7 +82,7 @@ public class loginServlet extends HttpServlet {
                         psu.setString(2, userPassword);
                         ResultSet rsu = psu.executeQuery();
                         if (rsu.next()) {
-                            if (rsu.getInt("role_id") == 2) { // User role
+                            if (rsu.getInt("role_id") == 2 || rsu.getInt("role_id") == 1) { // User role
                                 if(rsu.getInt("active") == 1){
                                     session.setAttribute("user_id", rsu.getString("id")); // Set user_id in session
                                     session.setAttribute("role_id", rsu.getString("role_id")); // Set role_id in session
