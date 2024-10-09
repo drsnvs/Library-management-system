@@ -133,6 +133,24 @@
             border-color: #007bff; /* Change border color on focus */
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Highlight shadow on focus */
         }
+        .pay-penalty-icon {
+            color: #e0a800;
+        }
+
+        .pay-penalty-icon:hover {
+            color: #C72010;
+        }
+        .book-status {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .avail {
+            color: green;
+        }
+
+        .not-avail {
+            color: red;
+        }
 
     </style>
     <script>
@@ -185,7 +203,7 @@
                         <th>Title</th>
                         <th>Author</th>
                         <!--<th>Price</th>-->
-                        <th>Quantity</th>
+                        <th>Available</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -195,7 +213,7 @@
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                             Statement stmt = con.createStatement();
-                            ResultSet rs = stmt.executeQuery("SELECT book_id, book_title, author_name, price, quantity FROM book_table ORDER BY book_table.book_id DESC;");
+                            ResultSet rs = stmt.executeQuery("SELECT book_id, book_title, author_name, price, quantity FROM book_table ORDER BY book_table.book_title ASC;");
 
                             while (rs.next()) {
                                 int bookId = rs.getInt("book_id");
@@ -209,7 +227,16 @@
                     <tr class="book-row">
                         <td class="book-title"><%= displayBookTitle %></td>
                         <td class="book-author"><%= displayAuthorName %></td>
-                        <td id="cnt"><%= quantity %></td>
+                        
+                        <td class="book-status">
+                            <%
+                                if (quantity == 1) {
+                                    out.print("<span class='avail'>Available</span>");
+                                } else {
+                                    out.print("<span class='not-avail'>Not</span>");
+                                }
+                            %>
+                        </td>
                         <td>
                             <form action="ManageBooksServlet" method="post" style="display:inline;">
                                 <input type="hidden" name="book_id" value="<%= bookId %>">

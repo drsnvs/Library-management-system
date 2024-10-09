@@ -115,7 +115,7 @@
                                 try {
                                     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                                     stmt = con.createStatement();
-                                    String bookQuery = "SELECT book_id, book_title FROM book_table";
+                                    String bookQuery = "SELECT book_id, book_title FROM book_table where active = 1 and quantity>0";
                                     rs = stmt.executeQuery(bookQuery);
                                     while (rs.next()) {
                             %>
