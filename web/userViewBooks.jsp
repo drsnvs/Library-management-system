@@ -98,8 +98,48 @@
             color: red;
             /*font-weight: bold;*/
         }
+        .search-box {
+            margin-bottom: 20px;
+            display: flex; /* Use flexbox for alignment */
+            justify-content: flex-start; /* Align to the left */
+        }
+
+        .search-box input {
+            padding: 10px;
+            font-size: 16px;
+            width: 50%;
+            margin-right: 10px;
+            border: 1px solid #ddd; /* Add border for definition */
+            border-radius: 4px; /* Rounded corners */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        .search-box input:focus {
+            outline: none; /* Remove default focus outline */
+            border-color: #007bff; /* Change border color on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Highlight shadow on focus */
+        }
 
     </style>
+    <script>
+        function searchBook() {
+            var titleInput = document.getElementById("searchTitle").value.toLowerCase();
+            var authorInput = document.getElementById("searchAuthor").value.toLowerCase();
+            var bookRows = document.querySelectorAll(".book-row");
+
+            bookRows.forEach(function (row) {
+                var title = row.querySelector(".book-title").innerText.toLowerCase();
+                var author = row.querySelector(".book-author").innerText.toLowerCase();
+
+                // If either title or author matches, display the row
+                if ((title.includes(titleInput) || titleInput === "") && (author.includes(authorInput) || authorInput === "")) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <%
@@ -125,6 +165,10 @@
     <main>
         <div class="card">
             <h2>Books Available</h2>
+            <div class="search-box">
+                <input type="text" id="searchTitle" placeholder="Search by Title" onkeyup="searchBook()">
+                <input type="text" id="searchAuthor" placeholder="Search by Author" onkeyup="searchBook()">
+            </div>
             <%
                 Connection con = null;
                 Statement stmt = null;
@@ -133,7 +177,7 @@
                     Class.forName("com.mysql.jdbc.Driver");
                     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                     stmt = con.createStatement();
-                    String query = "SELECT * FROM book_table";
+                    String query = "SELECT * FROM book_table ORDER BY book_title ASC";
                     rs = stmt.executeQuery(query);
                     
                     if (rs.next()) {
@@ -151,9 +195,9 @@
                                 <%
                                     do {
                                 %>
-                                        <tr>
-                                            <td><%= rs.getString("book_title") %></td>
-                                            <td><%= rs.getString("author_name") %></td>
+                                        <tr class="book-row">
+                                            <td class="book-title"><%= rs.getString("book_title") %></td>
+                                            <td class="book-author"><%= rs.getString("author_name") %></td>
                                             <td><%= rs.getString("publisher") %></td>
                                             <td><%= rs.getInt("edition_year") %></td>
                                             <td class="<%= (rs.getInt("quantity") > 0) ? "available" : "not-available" %>"><% if(rs.getInt("quantity") > 0) { %> Available <% } else { %> Not Available <% } %></td>
