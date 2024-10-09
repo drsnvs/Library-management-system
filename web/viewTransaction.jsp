@@ -106,7 +106,6 @@
                     
                     // Date formatter
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                    
                     if (rs.next()) {
             %>
             <tr>
