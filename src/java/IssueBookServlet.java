@@ -13,6 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +53,7 @@ public class IssueBookServlet extends HttpServlet {
             out.println("<title>Servlet IssueBookServlet</title>");            
             out.println("</head>");
             out.println("<body>");
+            String title = null;
             
             try {
                 HttpSession session = request.getSession();
@@ -60,14 +69,20 @@ public class IssueBookServlet extends HttpServlet {
                 String book_id_s = request.getParameter("book_id");
                 int book_id = Integer.parseInt(book_id_s);
                 System.out.println(book_id);
+                String email = "";
+                String firstName = "";
+                String lastName = "";
                 // Check if user exists
-                String checkUserQuery = "SELECT active, allocated_book FROM data_table WHERE id = ?";
+                String checkUserQuery = "SELECT active,email_id,first_name,last_name, allocated_book FROM data_table WHERE id = ?";
                 PreparedStatement checkUserPs = con.prepareStatement(checkUserQuery);
                 checkUserPs.setInt(1, user_id);
                 ResultSet rsUser = checkUserPs.executeQuery();
                 if (rsUser.next()) {
                     boolean isActive = rsUser.getBoolean("active");
                     int allocatedBooks = rsUser.getInt("allocated_book");
+                    email = rsUser.getString("email_id");
+                    firstName = rsUser.getString("first_name");
+                    lastName = rsUser.getString("last_name");
                     if (!isActive) {
                         response.sendRedirect("login.jsp");
                         return;
@@ -92,6 +107,15 @@ public class IssueBookServlet extends HttpServlet {
                         response.sendRedirect("issueBook.jsp?message=Book not found!");
                         return;
                     }
+                }
+                
+                
+                String q = "SELECT book_title FROM book_table WHERE book_id = ?";
+                PreparedStatement pas = con.prepareStatement(q);
+                pas.setInt(1, book_id);
+                ResultSet r = pas.executeQuery();
+                if (r.next()) {
+                    title = r.getString("book_title");
                 }
                 
                 
@@ -151,7 +175,64 @@ public class IssueBookServlet extends HttpServlet {
                     recordPs.setInt(5, createdBy);
                     recordPs.setDate(6, createdOn);
                     recordPs.executeUpdate();
+                    // mail
+                    String to = email; // change accordingly
+                    String from = "sarvaiyadarshan50@gmail.com"; // change accordingly
+                    String host = "smtp.gmail.com";
 
+                    // Get the session object
+                    Properties properties = System.getProperties();
+                    properties.put("mail.smtp.host", host);
+                    properties.put("mail.smtp.port", "587");
+                    properties.put("mail.smtp.auth", "true");
+                    properties.put("mail.smtp.starttls.enable", "true");
+
+                    Session ssn = Session.getInstance(properties, new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication("sarvaiyadarshan50@gmail.com", "okinkpdodkwrheyj"); // change accordingly
+                        }
+                    });
+
+                    // compose the message
+                    try {
+                        MimeMessage message = new MimeMessage(ssn);
+                        message.setFrom(new InternetAddress(from));
+                        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                        message.setSubject("Book Transaction LMS");
+//                        message.setText("Hello, "+firstName+" "+lastName+". \nYou are successfully Rgistered in LMS\n\nRegistered Email id : "+email+"\nPassword : \n\nThank you...\nHave a nice day !!!");
+                        String messageContent = "<html>" +
+                                                "<body>" +
+                                                "<p>Dear Reader,</p>" +
+                                                "<p>You have successfully issued the following books on " + date_out + ". " +
+                                                "If you find any discrepancies in the details below, please contact the issuing department within 24 hours.</p>" +
+                                                "<table style='border-collapse: collapse; width: 100%;'>" +
+                                                "<tr>" +
+                                                "<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Title</th>" +
+                                                "<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Issue Date</th>" +
+                                                "<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Return Date</th>" +
+                                                "</tr>" +
+                                                "<tr>" +
+                                                "<td style='border: 1px solid #000; padding: 8px;text-align: center;'>" + title + "</td>" +
+                                                "<td style='border: 1px solid #000; padding: 8px;text-align: center;'>" + date_out + "</td>" +
+                                                "<td style='border: 1px solid #000; padding: 8px;text-align: center;'>" + date_due + "</td>" +
+                                                "</tr>" +
+                                                "</table>" +
+                                                "<p>Thank you for your cooperation.</p>" +
+                                                "<p>Library Management System</p>" +
+                                                "<p>Ahmedabad</p>" +
+                                                "<p>Contact Number: 079-40016261</p>" +
+                                                "</body>" +
+                                                "</html>";
+
+                        // Send message
+                        message.setContent(messageContent, "text/html; charset=UTF-8");
+                        Transport.send(message);
+                        System.out.println("Book issued successfully!....");
+
+                    } catch (MessagingException mex) {
+                        mex.printStackTrace();
+                    }
+                    
                     response.sendRedirect("issueBook.jsp?message=Book issued successfully!");
                 } else {
                     response.sendRedirect("issueBook.jsp?message=Book issue failed!");

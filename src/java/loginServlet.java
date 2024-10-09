@@ -59,6 +59,7 @@ public class loginServlet extends HttpServlet {
                                 session.setAttribute("role_id", rsa.getString("role_id")); // Set role_id in session
                                 session.setAttribute("user_type", "admin"); // Set user_type in session
                                 session.setAttribute("first_name", rsa.getString("first_name")); 
+                                session.setAttribute("email_id", rsa.getString("email_id")); 
                                 session.setAttribute("last_name", rsa.getString("last_name"));
                                 RequestDispatcher rd = request.getRequestDispatcher("adminHome.jsp");
                                 rd.forward(request, response);

@@ -11,6 +11,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,6 +45,9 @@ public class ReturnBookServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String message = "";
+        LocalDate today = LocalDate.now();
+        Date returnDate = Date.valueOf(today);
+        String title = null;
         try {
             HttpSession session = request.getSession();
             Class.forName("com.mysql.jdbc.Driver");
@@ -129,8 +140,7 @@ public class ReturnBookServlet extends HttpServlet {
 //                message = "User has not borrowed this book or book return already processed!";
 //            }
             if (rsRent.next()) {
-                LocalDate today = LocalDate.now();
-                Date returnDate = Date.valueOf(today);
+                
                 int rent_id = Integer.parseInt(rsRent.getString("rent_id"));
                 Date dueDate = rsRent.getDate("date_due");
 
@@ -218,6 +228,72 @@ public class ReturnBookServlet extends HttpServlet {
                         PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
                         updateAllocatedPs.setInt(1, user_id);
                         updateAllocatedPs.executeUpdate();
+                        
+                        
+                        String q = "SELECT book_title FROM book_table WHERE book_id = ?";
+                        PreparedStatement pas = con.prepareStatement(q);
+                        pas.setInt(1, book_id);
+                        ResultSet r = pas.executeQuery();
+                        if (r.next()) {
+                            title = r.getString("book_title");
+                        }
+                        
+                        // mail
+                        String to = (String) session.getAttribute("email_id"); // change accordingly
+                        String from = "sarvaiyadarshan50@gmail.com"; // change accordingly
+                        String host = "smtp.gmail.com";
+
+                        // Get the session object
+                        Properties properties = System.getProperties();
+                        properties.put("mail.smtp.host", host);
+                        properties.put("mail.smtp.port", "587");
+                        properties.put("mail.smtp.auth", "true");
+                        properties.put("mail.smtp.starttls.enable", "true");
+
+                        Session ssn = Session.getInstance(properties, new javax.mail.Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication("sarvaiyadarshan50@gmail.com", "okinkpdodkwrheyj"); // change accordingly
+                            }
+                        });
+
+                        // compose the message
+                        try {
+                            MimeMessage msg = new MimeMessage(ssn);
+                            msg.setFrom(new InternetAddress(from));
+                            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                            msg.setSubject("Book Transaction LMS");
+    //                        message.setText("Hello, "+firstName+" "+lastName+". \nYou are successfully Rgistered in LMS\n\nRegistered Email id : "+email+"\nPassword : \n\nThank you...\nHave a nice day !!!");
+                            String messageContent = "<html>" +
+                                                    "<body>" +
+                                                    "<p>Dear Reader,</p>" +
+                                                    "If you find any discrepancies in the details below, please contact the issuing department within 24 hours.</p>" +
+                                                    "<table style='border-collapse: collapse; width: 100%;'>" +
+                                                    "<tr>" +
+                                                    "<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Title</th>" +
+                                                    "<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Return Date</th>" +
+                                                    "<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Type</th>" +
+                                                    "</tr>" +
+                                                    "<tr>" +
+                                                    "<td style='text-align: center;border: 1px solid #000; padding: 8px;'>" + title + "</td>" +
+                                                    "<td style='text-align: center;border: 1px solid #000; padding: 8px;'>" + returnDate + "</td>" +
+                                                    "<td style='text-align: center;border: 1px solid #000; padding: 8px;'>Success</td>" +
+                                                    "</tr>" +
+                                                    "</table>" +
+                                                    "<p>Thank you for your cooperation.</p>" +
+                                                    "<p>Library Management System</p>" +
+                                                    "<p>Ahmedabad</p>" +
+                                                    "<p>Contact Number: 079-40016261</p>" +
+                                                    "</body>" +
+                                                    "</html>";
+
+                            // Send message
+                            msg.setContent(messageContent, "text/html; charset=UTF-8");
+                            Transport.send(msg);
+                            System.out.println("Book issued successfully!....");
+
+                        } catch (MessagingException mex) {
+                            mex.printStackTrace();
+                        }
 
                         message = "Book returned successfully!";
                     } else {
