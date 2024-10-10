@@ -86,7 +86,7 @@
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 1em 0;
+            /*padding: 1em 0;*/
             background: linear-gradient(135deg, #71b7e6, #9b59b6);
         }
         .available {

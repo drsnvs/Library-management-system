@@ -63,7 +63,7 @@
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 1em 0;
+            /*padding: 1em 0;*/
             position: fixed;
             width: 100%;
             bottom: 0;
