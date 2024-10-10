@@ -132,7 +132,7 @@
                     <tr>
                         <td><%= rs.getInt("enrollment_no") %></td>
                         <td><%= formatter.format(rs.getDate("date_out")) %></td>
-                        <td>
+                        <td style="text-align: center;">
                             <% 
                             java.sql.Date returnDate = (java.sql.Date) rs.getDate("return_date");
                             if(returnDate == (null)){
