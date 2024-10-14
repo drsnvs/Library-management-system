@@ -181,7 +181,6 @@
                     <input type="button" value="Login" onclick="submitForm('admin-login-form')">
                 </div>
             </form>
-
             <p id="message"></p>
             <div class="toggle-link">
                 <a href="#" id="toggle-form">Switch to Admin Login</a>
