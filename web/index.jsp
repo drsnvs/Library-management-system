@@ -59,7 +59,6 @@
               <ul class="navbar-nav ">
                 
                 
-                
               </ul>
             </div>
           </nav>
