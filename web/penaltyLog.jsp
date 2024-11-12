@@ -196,7 +196,7 @@
                         </td>
                         <td><%= rs.getString("book_title") %></td>
                         <td><%= rs.getInt("fine_amount") %> ₹</td>
-                        <td><%= returnDate == null ? "No" : "Yes" %></td>
+                        <td><%= rs.getInt("active") == 1 ? "Paid" : "Not Paid" %></td>
                     </tr>
                     <%
                             }
