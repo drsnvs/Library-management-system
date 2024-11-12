@@ -55,7 +55,7 @@
             border-radius: 4px;
         }
 
-        input[type="submit"] {
+        input[type="submit"],input[type="button"] {
             background-color: #007bff;
             color: white;
             border: none;
