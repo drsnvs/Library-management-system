@@ -147,7 +147,7 @@
                         <th>Return Date</th>
                         <th>Book Title</th>
                         <th>Penalty Amount</th>
-                        <th>Status</th>
+                        <th>Paid</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -196,7 +196,7 @@
                         </td>
                         <td><%= rs.getString("book_title") %></td>
                         <td><%= rs.getInt("fine_amount") %> ₹</td>
-                        <td><%= returnDate == null ? "Not Paid" : "Paid" %></td>
+                        <td><%= returnDate == null ? "No" : "Yes" %></td>
                     </tr>
                     <%
                             }
