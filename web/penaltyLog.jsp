@@ -161,7 +161,7 @@
                             String returnStatusParam = request.getParameter("returnStatus");
 
                             // Base query
-                            String query = "SELECT book_rent_table.*, book_table.*, data_table.*, book_fine_table.fine_amount " +
+                            String query = "SELECT book_rent_table.*, book_table.*, data_table.*, book_fine_table.fine_amount, book_fine_table.paid " +
                                            "FROM book_rent_table " +
                                            "JOIN book_table ON book_rent_table.book_id = book_table.book_id " +
                                            "JOIN data_table ON book_rent_table.id = data_table.id " +
@@ -196,7 +196,7 @@
                         </td>
                         <td><%= rs.getString("book_title") %></td>
                         <td><%= rs.getInt("fine_amount") %> ₹</td>
-                        <td><%= rs.getInt("active") == 1 ? "Paid" : "Not Paid" %></td>
+                        <td><%= rs.getInt("paid") == 1 ? "Paid" : "No" %></td>
                     </tr>
                     <%
                             }
