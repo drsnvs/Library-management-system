@@ -4,6 +4,7 @@
     Author     : DARSHAN
 --%>
 
+<%@page import="java.sql.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +42,7 @@
             align-items: center;
         }
         nav a i {
-            margin-right: 8px; /* Add margin between icon and text */
+            margin-right: 8px;
         }
         nav a:hover {
             background-color: #575757;
@@ -59,11 +60,14 @@
         .card h2 {
             margin-top: 0;
         }
+        .penalty {
+            color: red;
+            font-weight: bold;
+        }
         footer {
             background-color: #333;
             color: white;
             text-align: center;
-            /*padding: 1em 0;*/
             position: fixed;
             width: 100%;
             bottom: 0;
@@ -79,6 +83,53 @@
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        // Initialize variables for database connection and result
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int pendingBooksCount = 0;
+        int penaltyBooksCount = 0;
+        String userId = (String) session.getAttribute("user_id"); // Assuming user ID is stored in session
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+
+            // Query to get the count of pending books (books not yet returned)
+            String pendingQuery = "SELECT COUNT(*) AS pending_count " +
+                                  "FROM book_rent_table " +
+                                  "WHERE id = ? AND return_date IS NULL";
+            pstmt = con.prepareStatement(pendingQuery);
+            pstmt.setInt(1, Integer.parseInt(userId));
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                pendingBooksCount = rs.getInt("pending_count");
+            }
+
+            // Query to get the count of books with penalties
+            String penaltyQuery = "SELECT COUNT(*) AS penalty_count " +
+                                  "FROM book_fine_table bf " +
+                                  "JOIN book_rent_table br ON bf.rent_id = br.rent_id " +
+                                  "WHERE br.id = ? AND bf.active = 1";
+            pstmt = con.prepareStatement(penaltyQuery);
+            
+            pstmt.setInt(1, Integer.parseInt(userId));
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                penaltyBooksCount = rs.getInt("penalty_count");
+                System.out.println(rs.getInt("penalty_count"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { if (pstmt != null) pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { if (con != null) con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     %>
     <header>
@@ -100,9 +151,16 @@
     </nav>
     <main>
         <div class="card">
-            <h2>Welcome, <%= session.getAttribute("first_name") %>..</h2>
+            <h2>Welcome, <%= session.getAttribute("first_name") %>!</h2>
             <p>This is your dashboard where you can view and manage your library activities.</p>
+            <% if (pendingBooksCount > 0) { %><p>You currently have <%= pendingBooksCount %> book(s) pending to return.</p><% } %>
+            <% if (penaltyBooksCount > 0) { %><p>
+                    You have <span class="penalty"><%= penaltyBooksCount %></span> book(s) with a penalty. Please return these as soon as possible.
+                </p>
+            <% } %>
         </div>
+        
+        
     </main>
     <footer>
         <p>&copy; 2024 Library Management System</p>
@@ -115,11 +173,11 @@
     <% 
         String message = request.getParameter("message");
         if (message != null) { 
-        %>
-            <script>
-                showAlert("<%= message %>");
-            </script>
-        <% 
+    %>
+        <script>
+            showAlert("<%= message %>");
+        </script>
+    <% 
         } 
     %>
 </body>

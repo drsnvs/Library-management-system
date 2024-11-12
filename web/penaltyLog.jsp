@@ -1,17 +1,16 @@
 <%-- 
-    Document   : manageIssuedBooks
-    Created on : 23 Jun, 2024, 3:04:44 PM
+    Document   : penaltyLog
+    Created on : 12 Nov, 2024
     Author     : DARSHAN
 --%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.*, java.sql.*"%>
-<%@page import="javax.servlet.http.*, javax.servlet.*"%>
+<%@page import="java.sql.*, java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Manage Issued Books</title>
+    <title>Penalty Log</title>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +56,7 @@
             font-size: 16px;
         }
 
-        .filter input, .filter select {
+        .filter select {
             padding: 5px;
             font-size: 14px;
         }
@@ -95,21 +94,17 @@
         }
 
         .actions {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .actions form {
-            display: inline-block;
-            margin-right: 5px;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .actions button {
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 10px 20px;
             cursor: pointer;
+            font-size: 16px;
         }
 
         .actions button:hover {
@@ -129,21 +124,17 @@
     %>
     
     <div class="container">
-        <div class="title">Manage Issued Books</div>
+        <div class="title">Penalty Log</div>
 
-        <!-- Filter by Return Date and Status Form -->
+        <!-- Filter by Return Status -->
         <div class="filter">
-            <form method="get" action="manageIssuedBooks.jsp">
-<!--                <label for="filterDate">Filter by Return Date:</label>-->
-                
-
+            <form method="get" action="penaltyLog.jsp">
                 <label for="returnStatus">Status:</label>
                 <select id="returnStatus" name="returnStatus">
                     <option value="all" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("all") ? "selected" : "" %>>All</option>
                     <option value="returned" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("returned") ? "selected" : "" %>>Returned</option>
                     <option value="notReturned" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("notReturned") ? "selected" : "" %>>Not Returned</option>
                 </select>
-
                 <button type="submit">Apply</button>
             </form>
         </div>
@@ -153,10 +144,10 @@
                 <thead>
                     <tr>
                         <th>Enrollment No</th>
-                        <th>Issue Date</th>
                         <th>Return Date</th>
                         <th>Book Title</th>
-                        <th>Actions</th>
+                        <th>Penalty Amount</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -167,30 +158,25 @@
                             Statement stmt = con.createStatement();
                             
                             // Get filter parameters from the request
-                            String returnDateParam = request.getParameter("returnDate");
                             String returnStatusParam = request.getParameter("returnStatus");
-                            
+
                             // Base query
-                            String query = "SELECT book_rent_table.*, book_table.*, data_table.* FROM book_rent_table " +
+                            String query = "SELECT book_rent_table.*, book_table.*, data_table.*, book_fine_table.fine_amount " +
+                                           "FROM book_rent_table " +
                                            "JOIN book_table ON book_rent_table.book_id = book_table.book_id " +
-                                           "JOIN data_table ON book_rent_table.id = data_table.id";
+                                           "JOIN data_table ON book_rent_table.id = data_table.id " +
+                                           "JOIN book_fine_table ON book_rent_table.rent_id = book_fine_table.rent_id";
 
                             // Apply filters based on return status
-                            boolean whereAdded = false;
-                            if (returnDateParam != null && !returnDateParam.isEmpty()) {
-                                query += " WHERE book_rent_table.return_date = '" + returnDateParam + "'";
-                                whereAdded = true;
-                            }
-
                             if (returnStatusParam != null) {
                                 if (returnStatusParam.equals("notReturned")) {
-                                    query += whereAdded ? " AND book_rent_table.return_date IS NULL" : " WHERE book_rent_table.return_date IS NULL";
+                                    query += " WHERE book_rent_table.return_date IS NULL";
                                 } else if (returnStatusParam.equals("returned")) {
-                                    query += whereAdded ? " AND book_rent_table.return_date IS NOT NULL" : " WHERE book_rent_table.return_date IS NOT NULL";
+                                    query += " WHERE book_rent_table.return_date IS NOT NULL";
                                 }
                             }
 
-                            query += " ORDER BY book_rent_table.rent_id DESC;";
+                            query += " ORDER BY book_rent_table.rent_id DESC";
                             ResultSet rs = stmt.executeQuery(query);
                             
                             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -198,8 +184,7 @@
                     %>
                     <tr>
                         <td><%= rs.getInt("enrollment_no") %></td>
-                        <td><%= formatter.format(rs.getDate("date_out")) %></td>
-                        <td style="text-align: center;">
+                        <td>
                             <% 
                             java.sql.Date returnDate = rs.getDate("return_date");
                             if (returnDate == null) {
@@ -210,22 +195,8 @@
                             %>
                         </td>
                         <td><%= rs.getString("book_title") %></td>
-                        <td class="actions">
-                            <form action="ManageIssuedBooksServlet" method="post">
-                                <input type="hidden" name="action" value="Edit">
-                                <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
-                                <button type="submit" style="background: none; border: none; cursor: pointer;">
-                                    <i class="fas fa-edit" style="color: #007bff;"></i>
-                                </button>
-                            </form>
-                            <form action="ManageIssuedBooksServlet" method="post">
-                                <input type="hidden" name="action" value="Delete">
-                                <input type="hidden" name="rent_id" value="<%= rs.getInt("rent_id") %>">
-                                <button type="submit" style="background: none; border: none; cursor: pointer;">
-                                    <i class="fas fa-trash" style="color: #dc3545;"></i>
-                                </button>
-                            </form>
-                        </td>
+                        <td><%= rs.getInt("fine_amount") %> ₹</td>
+                        <td><%= returnDate == null ? "Not Paid" : "Paid" %></td>
                     </tr>
                     <%
                             }
