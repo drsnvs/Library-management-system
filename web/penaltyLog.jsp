@@ -102,9 +102,8 @@
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 5px 10px;
             cursor: pointer;
-            font-size: 16px;
         }
 
         .actions button:hover {
