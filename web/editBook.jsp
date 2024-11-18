@@ -115,7 +115,7 @@
                     </div>
                     <div class="input-box">
                         <span class="details">Quantity</span>
-                        <input type="text" name="quantity" id="quantity" value="<%= request.getAttribute("quantity") %>" required>
+                        <input type="text" name="quantity" id="quantity" value="<%= request.getAttribute("quantity") %>" readonly>
                     </div>
                     <div class="input-box">
                         <span class="details">ISBN</span>

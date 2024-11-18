@@ -131,8 +131,8 @@
                 <label for="returnStatus">Status:</label>
                 <select id="returnStatus" name="returnStatus">
                     <option value="all" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("all") ? "selected" : "" %>>All</option>
-                    <option value="returned" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("returned") ? "selected" : "" %>>Returned</option>
-                    <option value="notReturned" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("notReturned") ? "selected" : "" %>>Not Returned</option>
+                    <option value="returned" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("returned") ? "selected" : "" %>>Paid</option>
+                    <option value="notReturned" <%= request.getParameter("returnStatus") != null && request.getParameter("returnStatus").equals("notReturned") ? "selected" : "" %>>Unpaid</option>
                 </select>
                 <button type="submit">Apply</button>
             </form>

@@ -93,7 +93,7 @@
                     </div>
                     <div class="input-box">
                         <span class="details">Quantity</span>
-                        <input type="number" name="quantity" id="quantity" placeholder="Enter quantity" >
+                        <input type="number" name="quantity" id="quantity" value="1" placeholder="Enter quantity" readonly>
                     </div>
                     <div class="input-box">
                         <span class="details">ISBN</span>
