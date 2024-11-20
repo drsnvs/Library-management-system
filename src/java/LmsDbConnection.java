@@ -14,6 +14,9 @@ public class LmsDbConnection {
      Statement st = null;
      ResultSet rs = null;
      PreparedStatement ps = null;
+     
+     private String EmailId;
+     private String EmailProtect;
      LmsDbConnection(){
          try{
              System.out.println("1");
@@ -57,5 +60,22 @@ public class LmsDbConnection {
          return st;
     }
     
+    public String getEmailId(){
+        String emailId = "sarvaiyadarshan50@gmail.com";
+        return emailId;
+    }
+    
+    public void setEmailId(String emailId){
+        this.EmailId = emailId;
+    }
+    
+    public String getEmailProtect(){
+        String emailId = "okinkpdodkwrheyj";
+        return emailId;
+    }
+    
+    public void setEmailProtect(String emailProtect){
+        this.EmailProtect = emailProtect;
+    }
   
 }

@@ -6,9 +6,9 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
+//import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import javax.servlet.ServletException;
@@ -66,17 +66,17 @@ public class UpdateIssuedBookServlet extends HttpServlet {
             response.sendRedirect("index.jsp");
             return; // End processing
         }
-
+        LmsDbConnection dbcon = new LmsDbConnection();
         // Establish database connection
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//        Class.forName("com.mysql.jdbc.Driver");
+//        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
         PreparedStatement ps;
         PreparedStatement pss;
         // Prepare and execute update query
         if(!returnDateParam.equals(null)){
             String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
             
-            ps = con.prepareStatement(updateQuery);
+            ps = dbcon.PsStatment(updateQuery);
             ps.setInt(1, bookId);
             ps.setInt(2, userId);
             ps.setDate(3, issueDate);
@@ -90,7 +90,7 @@ public class UpdateIssuedBookServlet extends HttpServlet {
         }else{
             String updateQuery = "UPDATE book_rent_table SET book_id=?, id=?, date_out=?, date_due=?, modifiedBy=? , modifiedOn=? WHERE rent_id=?";
 
-            ps = con.prepareStatement(updateQuery);
+            ps = dbcon.PsStatment(updateQuery);
             ps.setInt(1, bookId);
             ps.setInt(2, userId);
             ps.setDate(3, issueDate);

@@ -33,6 +33,7 @@ public class logOutServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession();
+            session.setAttribute("email_id", "");
             session.invalidate(); // Invalidate the session
             
             // Redirect to login page or any other page after logout

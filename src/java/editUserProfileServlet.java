@@ -6,8 +6,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.servlet.ServletException;
@@ -42,8 +42,10 @@ public class editUserProfileServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             try{
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                
+                LmsDbConnection dbcon = new LmsDbConnection();
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                 
                 String email_id = request.getParameter("email_id");
                 String password = request.getParameter("password");
@@ -56,7 +58,7 @@ public class editUserProfileServlet extends HttpServlet {
 
                 // Check for existing email_id
                 String checkEmailQuery = "SELECT * FROM data_table WHERE email_id = ? AND id != ?";
-                PreparedStatement checkEmailStmt = con.prepareStatement(checkEmailQuery);
+                PreparedStatement checkEmailStmt = dbcon.PsStatment(checkEmailQuery);
                 checkEmailStmt.setString(1, email_id);
                 checkEmailStmt.setString(2, id);
                 ResultSet rsEmail = checkEmailStmt.executeQuery();
@@ -68,7 +70,7 @@ public class editUserProfileServlet extends HttpServlet {
 
                 // Check for existing enrollment_no
                 String checkEnrollmentQuery = "SELECT * FROM data_table WHERE enrollment_no = ? AND id != ?";
-                PreparedStatement checkEnrollmentStmt = con.prepareStatement(checkEnrollmentQuery);
+                PreparedStatement checkEnrollmentStmt = dbcon.PsStatment(checkEnrollmentQuery);
                 checkEnrollmentStmt.setString(1, enrollment_no);
                 checkEnrollmentStmt.setString(2, id);
                 ResultSet rsEnrollment = checkEnrollmentStmt.executeQuery();
@@ -80,7 +82,7 @@ public class editUserProfileServlet extends HttpServlet {
 
                 // Update user information
                 String updateQuery = "UPDATE data_table SET email_id=?, password=?, enrollment_no=?, mobile_no=?, first_name=?, last_name=?, address=? WHERE id=?";
-                PreparedStatement ps = con.prepareStatement(updateQuery);
+                PreparedStatement ps = dbcon.PsStatment(updateQuery);
                 ps.setString(1, email_id);
                 ps.setString(2, password);
                 ps.setString(3, enrollment_no);

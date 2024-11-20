@@ -39,13 +39,15 @@ public class UpdateUserServlet extends HttpServlet {
                 response.sendRedirect("index.jsp");
                 return;
             }
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             int modifiedBy = Integer.parseInt((String) session.getAttribute("user_id"));
             
             // Check for existing email_id
             String checkEmailQuery = "SELECT * FROM data_table WHERE email_id = ? AND id != ?";
-            PreparedStatement checkEmailStmt = con.prepareStatement(checkEmailQuery);
+            PreparedStatement checkEmailStmt = dbcon.PsStatment(checkEmailQuery);
             checkEmailStmt.setString(1, email);
             checkEmailStmt.setInt(2, id);
             ResultSet rsEmail = checkEmailStmt.executeQuery();
@@ -57,7 +59,7 @@ public class UpdateUserServlet extends HttpServlet {
             
             // Check for existing enrollment_no
             String checkEnrollmentQuery = "SELECT * FROM data_table WHERE enrollment_no = ? AND id != ?";
-            PreparedStatement checkEnrollmentStmt = con.prepareStatement(checkEnrollmentQuery);
+            PreparedStatement checkEnrollmentStmt = dbcon.PsStatment(checkEnrollmentQuery);
             checkEnrollmentStmt.setString(1, enrollment_no);
             checkEnrollmentStmt.setInt(2, id);
             ResultSet rsEnrollment = checkEnrollmentStmt.executeQuery();
@@ -69,7 +71,7 @@ public class UpdateUserServlet extends HttpServlet {
             
             // Update user information
             String updateQuery = "UPDATE data_table SET first_name=?, last_name=?, email_id=?, mobile_no=?, address=?, active=?, modifiedBy=?, modifiedOn=?, enrollment_no=?, allocated_book=? WHERE id=?";
-            PreparedStatement ps = con.prepareStatement(updateQuery);
+            PreparedStatement ps = dbcon.PsStatment(updateQuery);
             ps.setString(1, firstName);
             ps.setString(2, lastName);
             ps.setString(3, email);
@@ -88,7 +90,7 @@ public class UpdateUserServlet extends HttpServlet {
             } else {
                 response.sendRedirect("manageUsers.jsp?message=User update failed!");
             }
-            con.close();
+//            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("manageUsers.jsp?message=An error occurred!");

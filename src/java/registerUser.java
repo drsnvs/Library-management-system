@@ -23,8 +23,9 @@ public class registerUser extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             try {
                 HttpSession session = request.getSession();
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                LmsDbConnection dbcon = new LmsDbConnection();
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
                 if(!session.getId().equals(session.getAttribute("key"))){
                     response.sendRedirect("index.jsp");
                 }
@@ -45,7 +46,7 @@ public class registerUser extends HttpServlet {
 
                 // Check if user already exists
                 String checkUserQuery = "SELECT * FROM data_table WHERE email_id = ? or enrollment_no = ?";
-                PreparedStatement checkUserStmt = con.prepareStatement(checkUserQuery);
+                PreparedStatement checkUserStmt = dbcon.PsStatment(checkUserQuery);
                 checkUserStmt.setString(1, email);
                 checkUserStmt.setString(2, e_no);
                 ResultSet rs = checkUserStmt.executeQuery();
@@ -62,7 +63,7 @@ public class registerUser extends HttpServlet {
                     java.sql.Date date = new java.sql.Date(millis);
 
                     String query = "INSERT INTO data_table (role_id, email_id, enrollment_no, password, mobile_no, first_name, last_name, address, allocated_book, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    PreparedStatement ps = con.prepareStatement(query);
+                    PreparedStatement ps = dbcon.PsStatment(query);
                     ps.setInt(1, role_id); // Replace with actual role_id if applicable
                     ps.setString(2, email);
                     ps.setString(3, e_no);
@@ -91,7 +92,7 @@ public class registerUser extends HttpServlet {
 
                         Session ssn = Session.getInstance(properties, new javax.mail.Authenticator() {
                             protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication("sarvaiyadarshan50@gmail.com", "okinkpdodkwrheyj"); // change accordingly
+                                return new PasswordAuthentication(dbcon.getEmailId(),dbcon.getEmailProtect()); // change accordingly
                             }
                         });
 

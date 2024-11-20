@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.Date;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.time.LocalDate;
+//import java.time.LocalDate;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,8 +40,10 @@ String message = "";
 
     try {
         // Database connection
-        Class.forName("com.mysql.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
+        
+        LmsDbConnection dbcon = new LmsDbConnection();
+//        Class.forName("com.mysql.jdbc.Driver");
+//        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
             // Initialize variables
             int user_id = 0;
             int rent_id = 0;
@@ -76,7 +78,7 @@ String message = "";
             // Proceed only if no messages indicate errors
             if (message.isEmpty()) {
                 String updateFineQuery = "UPDATE book_fine_table SET paid = 1, active=0, modifiedBy = ?, modifiedOn = CURDATE() WHERE rent_id = ? AND id = ? AND paid = 0";
-                try (PreparedStatement updateFinePs = con.prepareStatement(updateFineQuery)) {
+                try (PreparedStatement updateFinePs = dbcon.PsStatment(updateFineQuery)) {
                     updateFinePs.setInt(1, user_id); // Assuming modifiedBy is the user paying
                     updateFinePs.setInt(2, rent_id);
                     updateFinePs.setInt(3, user_id); // Assuming id corresponds to the user_id
@@ -90,7 +92,7 @@ String message = "";
                     }
                 }
             }
-        }
+//        }
     } catch (Exception e) {
         e.printStackTrace();
         message = "An error occurred while processing the payment!";

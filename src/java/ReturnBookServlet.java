@@ -5,9 +5,9 @@
  */
 
 import java.io.IOException;
-import java.sql.Connection;
+//import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -49,9 +49,11 @@ public class ReturnBookServlet extends HttpServlet {
         Date returnDate = Date.valueOf(today);
         String title = null;
         try {
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
             HttpSession session = request.getSession();
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
             int user_id = Integer.parseInt(request.getParameter("user_id"));
             int book_id = Integer.parseInt(request.getParameter("book_id"));
@@ -59,7 +61,7 @@ public class ReturnBookServlet extends HttpServlet {
             request.setAttribute("book_id", book_id);
             // Check if user has borrowed the book
             String checkRentQuery = "SELECT * FROM book_rent_table WHERE book_id = ? AND id = ? AND active = 1 AND  allocated_book = 1 ";
-            PreparedStatement checkRentPs = con.prepareStatement(checkRentQuery);
+            PreparedStatement checkRentPs = dbcon.PsStatment(checkRentQuery);
             checkRentPs.setInt(1, book_id);
             checkRentPs.setInt(2, user_id);
             ResultSet rsRent = checkRentPs.executeQuery();
@@ -146,7 +148,7 @@ public class ReturnBookServlet extends HttpServlet {
 
                 // Check if the fine has been paid
                 String checkFineQuery = "SELECT * FROM book_fine_table WHERE rent_id = ? AND id = ? AND paid = 1";
-                PreparedStatement checkFinePs = con.prepareStatement(checkFineQuery);
+                PreparedStatement checkFinePs = dbcon.PsStatment(checkFineQuery);
                 checkFinePs.setInt(1, rent_id);
                 checkFinePs.setInt(2, user_id);
                 ResultSet rsFine = checkFinePs.executeQuery();
@@ -156,7 +158,7 @@ public class ReturnBookServlet extends HttpServlet {
                     if (rsFine.next()) {
                         // User has paid the fine, allow book return
                         String updateRentQuery = "UPDATE book_rent_table SET allocated_book = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
-                        PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
+                        PreparedStatement updateRentPs = dbcon.PsStatment(updateRentQuery);
                         updateRentPs.setDate(1, returnDate);
                         updateRentPs.setInt(2, book_id);
                         updateRentPs.setInt(3, user_id);
@@ -166,12 +168,12 @@ public class ReturnBookServlet extends HttpServlet {
                         if (result > 0) {
                             // Update book quantity and allocated books count
                             String updateQuantityQuery = "UPDATE book_table SET quantity = quantity + 1 WHERE book_id = ?";
-                            PreparedStatement updateQuantityPs = con.prepareStatement(updateQuantityQuery);
+                            PreparedStatement updateQuantityPs = dbcon.PsStatment(updateQuantityQuery);
                             updateQuantityPs.setInt(1, book_id);
                             updateQuantityPs.executeUpdate();
 
                             String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
-                            PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
+                            PreparedStatement updateAllocatedPs = dbcon.PsStatment(updateAllocatedQuery);
                             updateAllocatedPs.setInt(1, user_id);
                             updateAllocatedPs.executeUpdate();
 
@@ -192,7 +194,7 @@ public class ReturnBookServlet extends HttpServlet {
 
                         // Insert the penalty record into the book_fine_table
                         String insertFineQuery = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) VALUES (?, ?, ?, 0, 1, ?, ?)";
-                        PreparedStatement insertFinePs = con.prepareStatement(insertFineQuery);
+                        PreparedStatement insertFinePs = dbcon.PsStatment(insertFineQuery);
                         insertFinePs.setInt(1, rent_id);
                         insertFinePs.setInt(2, user_id);
                         insertFinePs.setDouble(3, fineAmount);
@@ -209,7 +211,7 @@ public class ReturnBookServlet extends HttpServlet {
                 } else {
                     // If return is on time, proceed with returning the book as usual
                     String updateRentQuery = "UPDATE book_rent_table SET allocated_book = 0, return_date = ? WHERE book_id = ? AND id = ? AND rent_id = ?";
-                    PreparedStatement updateRentPs = con.prepareStatement(updateRentQuery);
+                    PreparedStatement updateRentPs = dbcon.PsStatment(updateRentQuery);
                     updateRentPs.setDate(1, returnDate);
                     updateRentPs.setInt(2, book_id);
                     updateRentPs.setInt(3, user_id);
@@ -219,19 +221,19 @@ public class ReturnBookServlet extends HttpServlet {
                     if (result > 0) {
                         // Update book quantity in book_table
                         String updateQuantityQuery = "UPDATE book_table SET quantity = quantity + 1 WHERE book_id = ?";
-                        PreparedStatement updateQuantityPs = con.prepareStatement(updateQuantityQuery);
+                        PreparedStatement updateQuantityPs = dbcon.PsStatment(updateQuantityQuery);
                         updateQuantityPs.setInt(1, book_id);
                         updateQuantityPs.executeUpdate();
 
                         // Update allocated book count in data_table
                         String updateAllocatedQuery = "UPDATE data_table SET allocated_book = allocated_book - 1 WHERE id = ?";
-                        PreparedStatement updateAllocatedPs = con.prepareStatement(updateAllocatedQuery);
+                        PreparedStatement updateAllocatedPs = dbcon.PsStatment(updateAllocatedQuery);
                         updateAllocatedPs.setInt(1, user_id);
                         updateAllocatedPs.executeUpdate();
                         
                         
                         String q = "SELECT book_title FROM book_table WHERE book_id = ?";
-                        PreparedStatement pas = con.prepareStatement(q);
+                        PreparedStatement pas = dbcon.PsStatment(q);
                         pas.setInt(1, book_id);
                         ResultSet r = pas.executeQuery();
                         if (r.next()) {
@@ -252,7 +254,7 @@ public class ReturnBookServlet extends HttpServlet {
 
                         Session ssn = Session.getInstance(properties, new javax.mail.Authenticator() {
                             protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication("sarvaiyadarshan50@gmail.com", "okinkpdodkwrheyj"); // change accordingly
+                                return new PasswordAuthentication(dbcon.getEmailId(),dbcon.getEmailProtect()); // change accordingly
                             }
                         });
 
@@ -305,7 +307,7 @@ public class ReturnBookServlet extends HttpServlet {
             }
 
 
-            con.close();
+//            con.close();
         } catch (Exception e) {
             e.printStackTrace();
 //            response.sendRedirect("returnBook.jsp?message=An error occurred!");

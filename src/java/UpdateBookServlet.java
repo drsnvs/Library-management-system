@@ -6,8 +6,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.servlet.ServletException;
@@ -23,6 +23,7 @@ public class UpdateBookServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
+            LmsDbConnection dbcon = new LmsDbConnection();
             HttpSession session = request.getSession();
             int bookId = Integer.parseInt(request.getParameter("id"));
             String bookTitle = request.getParameter("book_title");
@@ -44,19 +45,19 @@ public class UpdateBookServlet extends HttpServlet {
                 return;
             }
 //            System.out.println("Language ID received: " + language);
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             
             // Check if the ISBN already exists and is different from the current book's ISBN
             String check = "SELECT isbn FROM book_table WHERE book_id=?";
-            PreparedStatement pss = con.prepareStatement(check);
+            PreparedStatement pss = dbcon.PsStatment(check);
             pss.setInt(1, bookId);
             ResultSet checkRs = pss.executeQuery();
             if (checkRs.next()) {
                 String currentIsbn = checkRs.getString("isbn");
                 if (!isbn.equals(currentIsbn)) {
                     String checkQuery = "SELECT COUNT(*) FROM book_table WHERE isbn = ?";
-                    PreparedStatement checkPs = con.prepareStatement(checkQuery);
+                    PreparedStatement checkPs = dbcon.PsStatment(checkQuery);
                     checkPs.setString(1, isbn);
                     ResultSet rs = checkPs.executeQuery();
                     if (rs.next() && rs.getInt(1) > 0) {
@@ -74,7 +75,7 @@ public class UpdateBookServlet extends HttpServlet {
             pss.close();
             
             String updateQuery = "UPDATE book_table SET book_title=?, author_name=?, pages=?, price=?, quantity=?, isbn=?, publisher=?, edition_year=?,language=?, format=?, active=?, modifiedBy=?, modifiedOn=? WHERE book_id=?";
-            PreparedStatement ps = con.prepareStatement(updateQuery);
+            PreparedStatement ps = dbcon.PsStatment(updateQuery);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
             ps.setInt(3, pages);
@@ -96,7 +97,7 @@ public class UpdateBookServlet extends HttpServlet {
                 response.sendRedirect("manageBooks.jsp?message=Book update failed!");
             }
             ps.close();
-            con.close();
+//            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("manageBooks.jsp?message=An error occurred!");
