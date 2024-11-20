@@ -6,8 +6,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.servlet.ServletException;
@@ -35,18 +35,20 @@ public class ManageIssuedBooksServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
             String action = request.getParameter("action");
             HttpSession session = request.getSession();
             if(!session.getId().equals(session.getAttribute("key"))){
                 response.sendRedirect("index.jsp");
             }
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
             if ("Delete".equals(action)) {
                 int issueId = Integer.parseInt(request.getParameter("rent_id"));
                 String deleteQuery = "DELETE FROM book_rent_table WHERE rent_id=?";
-                PreparedStatement ps = con.prepareStatement(deleteQuery);
+                PreparedStatement ps = dbcon.PsStatment(deleteQuery);
                 ps.setInt(1, issueId);
                 int result = ps.executeUpdate();
                 if (result > 0) {
@@ -57,7 +59,7 @@ public class ManageIssuedBooksServlet extends HttpServlet {
             } else if ("Edit".equals(action)) {
                 int issueId = Integer.parseInt(request.getParameter("rent_id"));
                 String fetchQuery = "SELECT * FROM book_rent_table WHERE rent_id=?";
-                PreparedStatement ps = con.prepareStatement(fetchQuery);
+                PreparedStatement ps = dbcon.PsStatment(fetchQuery);
                 ps.setInt(1, issueId);
                 ResultSet rs = ps.executeQuery();
 

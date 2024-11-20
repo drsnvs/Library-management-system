@@ -48,7 +48,6 @@ public class IssueBookServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             
             
-            LmsDbConnection dbcon = new LmsDbConnection();
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -59,6 +58,7 @@ public class IssueBookServlet extends HttpServlet {
             String title = null;
             
             try {
+                LmsDbConnection dbcon = new LmsDbConnection();
                 HttpSession session = request.getSession();
 //                Class.forName("com.mysql.jdbc.Driver");
 //                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");

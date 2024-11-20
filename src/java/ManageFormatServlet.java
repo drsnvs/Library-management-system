@@ -6,11 +6,11 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,15 +40,16 @@ public class ManageFormatServlet extends HttpServlet {
             String formatId = request.getParameter("format_id");
             int updatedBy = Integer.parseInt((String) session.getAttribute("user_id"));
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                LmsDbConnection dbcon = new LmsDbConnection();
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
                 if ("Edit".equals(action)) {
                     // Redirect to the edit form
                     response.sendRedirect("editFormats.jsp?format_id=" + formatId);
                 } else if ("Delete".equals(action)) {
                     // Handle delete operation
-                    PreparedStatement pstmt = conn.prepareStatement("DELETE FROM format_table WHERE format_id = ?");
+                    PreparedStatement pstmt = dbcon.PsStatment("DELETE FROM format_table WHERE format_id = ?");
                     pstmt.setString(1, formatId);
                     pstmt.executeUpdate();
                     pstmt.close();
@@ -58,7 +59,7 @@ public class ManageFormatServlet extends HttpServlet {
                 } else if ("Update".equals(action)) {
                     // Handle update operation
                     String formatName = request.getParameter("format_name");
-                    PreparedStatement pstmt = conn.prepareStatement("UPDATE format_table SET format_name = ?, updatedOn=CURDATE(),updatedBy=? WHERE format_id = ?");
+                    PreparedStatement pstmt = dbcon.PsStatment("UPDATE format_table SET format_name = ?, updatedOn=CURDATE(),updatedBy=? WHERE format_id = ?");
                     pstmt.setString(1, formatName);
                     pstmt.setInt(2, updatedBy);
                     pstmt.setString(3, formatId);
@@ -69,7 +70,7 @@ public class ManageFormatServlet extends HttpServlet {
                     response.sendRedirect("addFormats.jsp?message=Format Updated Successfully");
                 }
                 
-                conn.close();
+//                conn.close();
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("addFormats.jsp?message=Error: " + e.getMessage());

@@ -17,18 +17,20 @@ public class ManageUsersServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
             String action = request.getParameter("action");
             int userId = Integer.parseInt(request.getParameter("id"));
             HttpSession session = request.getSession();
             if(!session.getId().equals(session.getAttribute("key"))){
                 response.sendRedirect("index.jsp");
             }
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             
             if ("Delete".equals(action)) {
                 String deleteQuery = "DELETE FROM data_table WHERE id=?";
-                PreparedStatement ps = con.prepareStatement(deleteQuery);
+                PreparedStatement ps = dbcon.PsStatment(deleteQuery);
                 ps.setInt(1, userId);
                 int result = ps.executeUpdate();
                 if (result > 0) {
@@ -41,7 +43,7 @@ public class ManageUsersServlet extends HttpServlet {
                 
                 // Fetch user details and forward to edit page
                 String fetchQuery = "SELECT * FROM data_table WHERE id=?";
-                PreparedStatement ps = con.prepareStatement(fetchQuery);
+                PreparedStatement ps = dbcon.PsStatment(fetchQuery);
                 ps.setInt(1, userId);
                 ResultSet rs = ps.executeQuery();
 
@@ -65,7 +67,7 @@ public class ManageUsersServlet extends HttpServlet {
                     response.sendRedirect("manageUsers.jsp?message=User not found!");
                 }
             }
-            con.close();
+//            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("manageUsers.jsp?message=An error occurred!");

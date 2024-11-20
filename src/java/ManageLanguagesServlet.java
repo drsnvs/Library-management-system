@@ -6,11 +6,11 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,20 +35,23 @@ public class ManageLanguagesServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
             HttpSession session =request.getSession();
             String action = request.getParameter("action");
             String languageId = request.getParameter("language_id");
             int updatedBy = Integer.parseInt((String) session.getAttribute("user_id"));
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                
+                LmsDbConnection dbcon = new LmsDbConnection();
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
                 if ("Edit".equals(action)) {
                     // Redirect to the edit form
                     response.sendRedirect("editLanguage.jsp?language_id=" + languageId);
                 } else if ("Delete".equals(action)) {
                     // Handle delete operation
-                    PreparedStatement pstmt = conn.prepareStatement("DELETE FROM language_table WHERE language_id = ?");
+                    PreparedStatement pstmt = dbcon.PsStatment("DELETE FROM language_table WHERE language_id = ?");
                     pstmt.setString(1, languageId);
                     pstmt.executeUpdate();
                     pstmt.close();
@@ -58,7 +61,7 @@ public class ManageLanguagesServlet extends HttpServlet {
                 } else if ("Update".equals(action)) {
                     // Handle update operation
                     String languageName = request.getParameter("language_name");
-                    PreparedStatement pstmt = conn.prepareStatement("UPDATE language_table SET language_name = ?, updatedOn=CURDATE(),updatedBy=? WHERE language_id = ?");
+                    PreparedStatement pstmt = dbcon.PsStatment("UPDATE language_table SET language_name = ?, updatedOn=CURDATE(),updatedBy=? WHERE language_id = ?");
                     pstmt.setString(1, languageName);
                     pstmt.setInt(2, updatedBy);
                     pstmt.setString(3, languageId);
@@ -69,7 +72,7 @@ public class ManageLanguagesServlet extends HttpServlet {
                     response.sendRedirect("addLanguage.jsp?message=Language Updated Successfully");
                 }
                 
-                conn.close();
+//                conn.close();
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("addLanguage.jsp?message=Error: " + e.getMessage());
