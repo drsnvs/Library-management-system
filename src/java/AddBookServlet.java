@@ -5,10 +5,10 @@
  */
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
+//import java.io.PrintWriter;
+//import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -64,13 +64,13 @@ public class AddBookServlet extends HttpServlet {
             LocalDate today = LocalDate.now();
             Date createdOn = Date.valueOf(today);
             
-            
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+            LmsDbConnection dbcon = new LmsDbConnection();
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             
             int createdBy = Integer.parseInt((String) session.getAttribute("user_id"));
             String checkQuery = "SELECT COUNT(*) FROM book_table WHERE isbn = ?";
-            PreparedStatement checkPs = con.prepareStatement(checkQuery);
+            PreparedStatement checkPs = dbcon.PsStatment(checkQuery);
             checkPs.setString(1, isbn);
             ResultSet rs = checkPs.executeQuery();
             rs.next();
@@ -85,7 +85,7 @@ public class AddBookServlet extends HttpServlet {
             }
             String query = "INSERT INTO book_table (book_title, author_name, pages,  price, quantity, isbn , publisher, edition_year, language, format, active, createdBy, createdOn) VALUES (?, ?, ? ,?, ?, ?, ? ,?, ?, ?, ?, ?, ?)";
 //            String query = "INSERT INTO book_table (book_title, author_name, price, quantity, ISBN, publisher, edition_year, active, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = dbcon.PsStatment(query);
             ps.setString(1, bookTitle);
             ps.setString(2, authorName);
             ps.setInt(3, pages);
@@ -100,7 +100,7 @@ public class AddBookServlet extends HttpServlet {
             ps.setInt(12,createdBy);
             ps.setDate(13, createdOn);
             int result = ps.executeUpdate();
-            con.close();
+//            con.close();
 
             if (result > 0) {
                 response.sendRedirect("addBook.jsp?message=Book added successfully!");

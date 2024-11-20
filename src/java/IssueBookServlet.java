@@ -6,8 +6,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
 import java.sql.Date;
@@ -46,6 +46,9 @@ public class IssueBookServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -57,8 +60,8 @@ public class IssueBookServlet extends HttpServlet {
             
             try {
                 HttpSession session = request.getSession();
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 //                String user_id_s = request.getParameter("user_id");
 //                int user_id = Integer.parseInt(user_id_s);
 //                String book_id_s = request.getParameter("book_id");
@@ -74,7 +77,7 @@ public class IssueBookServlet extends HttpServlet {
                 String lastName = "";
                 // Check if user exists
                 String checkUserQuery = "SELECT active,email_id,first_name,last_name, allocated_book FROM data_table WHERE id = ?";
-                PreparedStatement checkUserPs = con.prepareStatement(checkUserQuery);
+                PreparedStatement checkUserPs = dbcon.PsStatment(checkUserQuery);
                 checkUserPs.setInt(1, user_id);
                 ResultSet rsUser = checkUserPs.executeQuery();
                 if (rsUser.next()) {
@@ -98,7 +101,7 @@ public class IssueBookServlet extends HttpServlet {
 
                 // Check if book exists
                 String checkBookQuery = "SELECT COUNT(*) FROM book_table WHERE book_id = ? and quantity > 0";
-                PreparedStatement checkBookPs = con.prepareStatement(checkBookQuery);
+                PreparedStatement checkBookPs = dbcon.PsStatment(checkBookQuery);
                 checkBookPs.setInt(1, book_id);
                 ResultSet rsBook = checkBookPs.executeQuery();
                 if (rsBook.next()) {
@@ -111,7 +114,7 @@ public class IssueBookServlet extends HttpServlet {
                 
                 
                 String q = "SELECT book_title FROM book_table WHERE book_id = ?";
-                PreparedStatement pas = con.prepareStatement(q);
+                PreparedStatement pas = dbcon.PsStatment(q);
                 pas.setInt(1, book_id);
                 ResultSet r = pas.executeQuery();
                 if (r.next()) {
@@ -140,7 +143,7 @@ public class IssueBookServlet extends HttpServlet {
 
                 // Insert into book_rent_table
                 String rentQuery = "INSERT INTO book_rent_table (book_id, id, date_out, date_due, active, allocated_book, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement rentPs = con.prepareStatement(rentQuery);
+                PreparedStatement rentPs = dbcon.PsStatment(rentQuery);
                 rentPs.setInt(1, book_id);
                 rentPs.setInt(2, user_id);
                 rentPs.setDate(3, date_out);
@@ -155,19 +158,19 @@ public class IssueBookServlet extends HttpServlet {
                 if (result > 0) {
                     
                     String updateQuantityQuery = "UPDATE book_table SET quantity = quantity - 1 WHERE book_id = ?";
-                    PreparedStatement updatePss = con.prepareStatement(updateQuantityQuery);
+                    PreparedStatement updatePss = dbcon.PsStatment(updateQuantityQuery);
                     updatePss.setInt(1, book_id);
                     updatePss.executeUpdate();
                     
                     
                     String updateQuery = "UPDATE data_table SET allocated_book = allocated_book + 1 WHERE id = ?";
-                    PreparedStatement updatePs = con.prepareStatement(updateQuery);
+                    PreparedStatement updatePs = dbcon.PsStatment(updateQuery);
                     updatePs.setInt(1, user_id);
                     updatePs.executeUpdate();
 
                     // Insert into record_table
                     String recordQuery = "INSERT INTO record_table (book_id, id, date_out, date_due, createdBy, createdOn) VALUES (?, ?, ?, ?, ?, ?)";
-                    PreparedStatement recordPs = con.prepareStatement(recordQuery);
+                    PreparedStatement recordPs = dbcon.PsStatment(recordQuery);
                     recordPs.setInt(1, book_id);
                     recordPs.setInt(2, user_id);
                     recordPs.setDate(3, date_out);

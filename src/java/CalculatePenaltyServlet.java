@@ -7,7 +7,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -46,11 +46,13 @@ public class CalculatePenaltyServlet extends HttpServlet {
         ResultSet rs = null;
 
         try (PrintWriter out = response.getWriter()) {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
+//            Class.forName("com.mysql.jdbc.Driver");
+//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
             HttpSession session = request.getSession();
             String query = "SELECT rent_id, date_due, return_date, book_rent_table.id FROM book_rent_table JOIN data_table ON book_rent_table.id = data_table.id WHERE data_table.enrollment_no = ? AND book_rent_table.active = 1";
-            ps = con.prepareStatement(query);
+            ps = dbcon.PsStatment(query);
             ps.setString(1, enrollment_no);
             rs = ps.executeQuery();
 
@@ -65,7 +67,7 @@ public class CalculatePenaltyServlet extends HttpServlet {
                 if (fineAmount > 0) {
                     query = "INSERT INTO book_fine_table (rent_id, id, fine_amount, paid, active, createdBy, createdOn) " +
                             "VALUES (?, ?, ?, 0, 1, ?, ?)";
-                    ps = con.prepareStatement(query);
+                    ps = dbcon.PsStatment(query);
                     ps.setInt(1, rent_id);
                     ps.setInt(2, rs.getInt("id")); // Specify the table alias to avoid ambiguity
                     ps.setDouble(3, fineAmount);
@@ -101,7 +103,6 @@ public class CalculatePenaltyServlet extends HttpServlet {
         } finally {
             try { if (rs != null) rs.close(); } catch (Exception e) { e.printStackTrace(); }
             try { if (ps != null) ps.close(); } catch (Exception e) { e.printStackTrace(); }
-            try { if (con != null) con.close(); } catch (Exception e) { e.printStackTrace(); }
         }
     }
 

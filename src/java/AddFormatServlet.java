@@ -6,8 +6,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
 //import javax.servlet.annotation.WebServlet;
@@ -40,14 +40,15 @@ public class AddFormatServlet extends HttpServlet {
             HttpSession session = request.getSession();
             String format_name = request.getParameter("format_name");
             int createdBy = Integer.parseInt((String) session.getAttribute("user_id"));
-
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
             // Establish database connection
-            Class.forName("com.mysql.jdbc.Driver"); // Load MySQL JDBC Driver
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//            Class.forName("com.mysql.jdbc.Driver"); // Load MySQL JDBC Driver
+//            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
             // Prepare SQL statement to insert the new language
             String sql = "INSERT INTO format_table (format_name, createdOn, createdBy) VALUES (?, CURDATE(), ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = dbcon.PsStatment(sql);
             stmt.setString(1, format_name);
             stmt.setInt(2, createdBy);
 
@@ -62,7 +63,7 @@ public class AddFormatServlet extends HttpServlet {
             }
 
             stmt.close();
-            conn.close();
+//            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("addFormats.jsp?message=Error occurred while adding Format.");

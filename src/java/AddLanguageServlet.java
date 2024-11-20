@@ -6,8 +6,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
 //import javax.servlet.annotation.WebServlet;
@@ -36,18 +36,20 @@ public class AddLanguageServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         try (PrintWriter out = response.getWriter()) {
+            
+            LmsDbConnection dbcon = new LmsDbConnection();
             // Retrieve form data
             HttpSession session = request.getSession();
             String language_name = request.getParameter("language_name");
             int createdBy = Integer.parseInt((String) session.getAttribute("user_id"));
 
             // Establish database connection
-            Class.forName("com.mysql.jdbc.Driver"); // Load MySQL JDBC Driver
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+//            Class.forName("com.mysql.jdbc.Driver"); // Load MySQL JDBC Driver
+//            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
 
             // Prepare SQL statement to insert the new language
             String sql = "INSERT INTO language_table (language_name, createdOn, createdBy) VALUES (?, CURDATE(), ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = dbcon.PsStatment(sql);
             stmt.setString(1, language_name);
             stmt.setInt(2, createdBy);
 
@@ -62,7 +64,7 @@ public class AddLanguageServlet extends HttpServlet {
             }
 
             stmt.close();
-            conn.close();
+//            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("addLanguage.jsp?message=Error occurred while adding language.");
