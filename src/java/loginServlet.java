@@ -36,10 +36,10 @@ public class loginServlet extends HttpServlet {
 
             try {
                 // Database connection
-                Class.forName("com.mysql.jdbc.Driver");
-                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
+//                Class.forName("com.mysql.jdbc.Driver");
+//                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "")) {
                     // Check admin login
-                    
+                    LmsDbConnection dbcon = new LmsDbConnection();
                     
                     if (adminEmail != null && adminPassword != null) {
 //                        PreparedStatement checkActiveP = con.prepareStatement("SELECT * FROM data_table where email_id = ?");
@@ -49,7 +49,7 @@ public class loginServlet extends HttpServlet {
 //
 //                            }
 //                        }
-                        PreparedStatement psa = con.prepareStatement("SELECT * FROM data_table JOIN role_table ON data_table.role_id = role_table.role_id WHERE email_id = ? AND password = ?");
+                        PreparedStatement psa = dbcon.PsStatment("SELECT * FROM data_table JOIN role_table ON data_table.role_id = role_table.role_id WHERE email_id = ? AND password = ?");
                         psa.setString(1, adminEmail);
                         psa.setString(2, adminPassword);
                         ResultSet rsa = psa.executeQuery();
@@ -77,7 +77,7 @@ public class loginServlet extends HttpServlet {
 
                     // Check user login
                     if (userEmail != null && userPassword != null) {
-                        PreparedStatement psu = con.prepareStatement("SELECT * FROM data_table JOIN role_table ON data_table.role_id = role_table.role_id WHERE email_id = ? AND password = ?");
+                        PreparedStatement psu = dbcon.PsStatment("SELECT * FROM data_table JOIN role_table ON data_table.role_id = role_table.role_id WHERE email_id = ? AND password = ?");
                         psu.setString(1, userEmail);
                         psu.setString(2, userPassword);
                         ResultSet rsu = psu.executeQuery();
@@ -112,8 +112,8 @@ public class loginServlet extends HttpServlet {
                             rd.include(request, response);
                         }
                     }
-                }
-            } catch (ClassNotFoundException | SQLException e) {
+//                }
+            } catch (SQLException e) {
                 e.printStackTrace(out);
             }
         }catch(Exception e){
