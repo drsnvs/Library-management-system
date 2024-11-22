@@ -1,3 +1,9 @@
+<%-- 
+    Document   : adminHome
+    Created on : 21 Jun, 2024, 6:05:03 PM
+    Author     : DARSHAN
+--%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -197,7 +203,7 @@
     </div>
 
     <div class="footer">
-        © 2024 Library Management System
+        Â© 2024 Library Management System
     </div>
 </body>
 </html>

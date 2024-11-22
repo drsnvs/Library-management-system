@@ -3,7 +3,7 @@
     Created on : 21 Jun, 2024, 7:00:00 PM
     Author     : DARSHAN
 --%>
-
+<%@page import="LmsDB.LmsDbConnection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -157,9 +157,8 @@
                     <tbody>
                         <%
                             try {
-                                Class.forName("com.mysql.jdbc.Driver");
-                                java.sql.Connection conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", ""); 
-                                java.sql.Statement stmt = conn.createStatement();
+                                LmsDbConnection dbcon = new LmsDbConnection();
+                                java.sql.Statement stmt = dbcon.StStatment();
                                 String query = "SELECT * FROM language_table"; 
                                 java.sql.ResultSet rs = stmt.executeQuery(query);
 
@@ -193,7 +192,6 @@
                                 }
                                 rs.close();
                                 stmt.close();
-                                conn.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

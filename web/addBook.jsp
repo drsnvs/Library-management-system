@@ -5,6 +5,7 @@
 --%>
 
 <%@page import="java.sql.*"%>
+<%@page import="LmsDB.LmsDbConnection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -113,9 +114,8 @@
                             <option value="">Select language</option>
                             <%
                                 try{
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                    Statement st = con.createStatement();
+                                    LmsDbConnection dbcon = new LmsDbConnection();
+                                    Statement st = dbcon.StStatment();
 
                                     ResultSet rs = st.executeQuery("SELECT * FROM language_table");
                                     while(rs.next()){
@@ -135,9 +135,8 @@
                             <option value="">Select Format</option>
                             <%
                                 try{
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                    Statement st = con.createStatement();
+                                    LmsDbConnection dbcon = new LmsDbConnection();
+                                    Statement st = dbcon.StStatment();
 
                                     ResultSet rs = st.executeQuery("SELECT * FROM format_table");
                                     while(rs.next()){
