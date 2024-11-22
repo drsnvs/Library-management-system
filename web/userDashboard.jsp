@@ -5,6 +5,7 @@
 --%>
 
 <%@page import="java.sql.*"%>
+<%@page import="LmsDB.LmsDbConnection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,7 +87,7 @@
         }
 
         // Initialize variables for database connection and result
-        Connection con = null;
+        
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         int pendingBooksCount = 0;
@@ -94,14 +95,13 @@
         String userId = (String) session.getAttribute("user_id"); // Assuming user ID is stored in session
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+            LmsDbConnection dbcon = new LmsDbConnection();
 
             // Query to get the count of pending books (books not yet returned)
             String pendingQuery = "SELECT COUNT(*) AS pending_count " +
                                   "FROM book_rent_table " +
                                   "WHERE id = ? AND return_date IS NULL";
-            pstmt = con.prepareStatement(pendingQuery);
+            pstmt = dbcon.PsStatment(pendingQuery);
             pstmt.setInt(1, Integer.parseInt(userId));
             rs = pstmt.executeQuery();
 
@@ -114,7 +114,7 @@
                                   "FROM book_fine_table bf " +
                                   "JOIN book_rent_table br ON bf.rent_id = br.rent_id " +
                                   "WHERE br.id = ? AND bf.active = 1";
-            pstmt = con.prepareStatement(penaltyQuery);
+            pstmt = dbcon.PsStatment(penaltyQuery);
             
             pstmt.setInt(1, Integer.parseInt(userId));
             rs = pstmt.executeQuery();
@@ -129,7 +129,6 @@
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
             try { if (pstmt != null) pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }
-            try { if (con != null) con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     %>
     <header>

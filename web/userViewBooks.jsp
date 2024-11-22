@@ -6,6 +6,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, java.util.*" %>
+<%@page import="LmsDB.LmsDbConnection"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -170,13 +171,11 @@
                 <input type="text" id="searchAuthor" placeholder="Search by Author" onkeyup="searchBook()">
             </div>
             <%
-                Connection con = null;
                 Statement stmt = null;
                 ResultSet rs = null;
                 try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                    stmt = con.createStatement();
+                    LmsDbConnection dbcon = new LmsDbConnection();
+                    stmt = dbcon.StStatment();
                     String query = "SELECT * FROM book_table ORDER BY book_title ASC";
                     rs = stmt.executeQuery(query);
                     
@@ -220,7 +219,6 @@
                 } finally {
                     try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
                     try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
-                    try { if (con != null) con.close(); } catch (SQLException e) { e.printStackTrace(); }
                 }
             %>
         </div>

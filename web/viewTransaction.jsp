@@ -90,8 +90,7 @@
                     int fine_id = Integer.parseInt(request.getParameter("fine_id"));
                     
                     // Database connection
-                    Class.forName("com.mysql.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                    LmsDbConnection dbcon = new LmsDbConnection();
 
                     // SQL query to get the transaction details
                     String query = "SELECT dt.enrollment_no, dt.first_name, dt.last_name, bt.book_title, bf.fine_amount, bf.paid, br.date_out, br.date_due, br.return_date " +
@@ -100,7 +99,7 @@
                                    "JOIN book_table bt ON br.book_id = bt.book_id " +
                                    "JOIN data_table dt ON br.id = dt.id " +
                                    "WHERE bf.fine_id = ?";
-                    PreparedStatement ps = con.prepareStatement(query);
+                    PreparedStatement ps = dbcon.PsStatment(query);
                     ps.setInt(1, fine_id);
                     ResultSet rs = ps.executeQuery();
                     
@@ -129,7 +128,6 @@
             </tr>
             <%
                     }
-                    con.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

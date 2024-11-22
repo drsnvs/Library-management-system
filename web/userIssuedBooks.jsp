@@ -5,6 +5,7 @@
 --%>
 
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="LmsDB.LmsDbConnection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, java.util.*" %>
 <%@ page session="true" %>
@@ -116,18 +117,16 @@
         <div class="card">
             <h2>Books You Have Issued</h2>
             <%
-                Connection con = null;
                 PreparedStatement pstmt = null;
                 ResultSet rs = null;
                 String userId = (String) session.getAttribute("user_id"); // Assuming userId is stored in session
                 try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
+                    LmsDbConnection dbcon = new LmsDbConnection();
                     String query = "SELECT book_table.book_id, book_table.book_title, book_table.author_name, book_table.publisher, book_table.edition_year, book_rent_table.date_out, book_rent_table.date_due, book_rent_table.return_date " +
                                    "FROM book_rent_table " +
                                    "JOIN book_table ON book_rent_table.book_id = book_table.book_id " +
                                    "WHERE book_rent_table.id = ?";
-                    pstmt = con.prepareStatement(query);
+                    pstmt = dbcon.PsStatment(query);
                     pstmt.setInt(1, Integer.parseInt(userId));
                     rs = pstmt.executeQuery();
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -188,7 +187,6 @@
                 } finally {
                     try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
                     try { if (pstmt != null) pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }
-                    try { if (con != null) con.close(); } catch (SQLException e) { e.printStackTrace(); }
                 }
             %>
         </div>
