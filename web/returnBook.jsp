@@ -9,6 +9,7 @@
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.Connection" %>
+<%@ page import="LmsDB.LmsDbConnection"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,13 +83,11 @@
                         <select name="user_id" required>
                             <option value="">Select User ID</option>
                             <% 
-                                Connection con = null;
                                 Statement stmt = null;
                                 ResultSet rs = null;
                                 try {
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                    stmt = con.createStatement();
+                                    LmsDbConnection dbcon = new LmsDbConnection();
+                                    stmt = dbcon.StStatment();
                                     String query = "SELECT id, enrollment_no FROM data_table";
                                     rs = stmt.executeQuery(query);
                                     while (rs.next()) {
@@ -101,7 +100,6 @@
                                 } finally {
                                     if (rs != null) rs.close();
                                     if (stmt != null) stmt.close();
-                                    if (con != null) con.close();
                                 }
                             %>
                         </select>
@@ -112,8 +110,8 @@
                             <option value="">Select Book</option>
                             <% 
                                 try {
-                                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                    stmt = con.createStatement();
+                                    LmsDbConnection dbcon = new LmsDbConnection();
+                                    stmt = dbcon.StStatment();
                                     String bookQuery = "SELECT book_id, book_title FROM book_table";
                                     rs = stmt.executeQuery(bookQuery);
                                     while (rs.next()) {
@@ -126,7 +124,6 @@
                                 } finally {
                                     if (rs != null) rs.close();
                                     if (stmt != null) stmt.close();
-                                    if (con != null) con.close();
                                 }
                             %>
                         </select>

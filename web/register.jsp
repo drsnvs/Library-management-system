@@ -1,12 +1,17 @@
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.ResultSet"%>
+<%-- 
+    Document   : register
+    Created on : 21 Jun, 2024, 6:05:03 PM
+    Author     : DARSHAN
+--%>
+
+<%@page import="java.sql.*"%>
+<%@page import="LmsDB.LmsDbConnection"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Register</title>
         <link rel="stylesheet" href="css/style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
@@ -109,9 +114,8 @@
                                 <option value="">Select Role</option>
                                 <%
                                     try{
-                                        Class.forName("com.mysql.jdbc.Driver");
-                                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                        Statement st = con.createStatement();
+                                        LmsDbConnection dbcon = new LmsDbConnection();
+                                        Statement st = dbcon.StStatment();
 
                                         ResultSet rs = st.executeQuery("SELECT * FROM role_table");
                                         while(rs.next()){
@@ -176,19 +180,19 @@
             var password = document.getElementById("password").value;
             var cpassword = document.getElementById("cpassword").value;
             var e_no = document.getElementById("e_no").value;
-            if(first_name == ""){
+            if(first_name === ""){
                 alert("Enter First name");
                 return false;
             }
-            if(last_name == ""){
+            if(last_name === ""){
                 alert("Enter Last name");
                 return false;
             }
-            if(mobile_no == ""){
+            if(mobile_no === ""){
                 alert("Enter Mobile no");
                 return false;
             }
-            if(e_no == ""){
+            if(e_no === ""){
                 alert("Enter Enrollment no");
                 return false;
             }
@@ -196,11 +200,11 @@
                 alert("Enter valid mobile number");
                 return false;
             }
-            if(mobile_no.length != 10){
+            if(mobile_no.length !== 10){
                 alert("Mobile no is must in 10 numbers");
                 return false;
             }
-            if(e_no.length != 9){
+            if(e_no.length !== 9){
                 alert("Enrollment no is must be 9 numbers");
                 return false;
             }
@@ -215,15 +219,15 @@
                 alert("Enter email address");
                 return false;
             }
-            if(address == ""){
+            if(address === ""){
                 alert("Enter Address");
                 return false;
             }
-            if(password == ""){
+            if(password === ""){
                 alert("Enter Password");
                 return false;
             }
-            if(cpassword == ""){
+            if(cpassword === ""){
                 alert("Enter Confirm Password");
                 return false;
             }

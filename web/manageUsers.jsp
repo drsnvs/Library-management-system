@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*, java.sql.*"%>
 <%@page import="javax.servlet.http.*, javax.servlet.*"%>
+<%@page import="LmsDB.LmsDbConnection"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -184,9 +185,8 @@
                     <tbody>
                         <%
                             try {
-                                Class.forName("com.mysql.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                Statement stmt = con.createStatement();
+                                LmsDbConnection dbcon = new LmsDbConnection();
+                                Statement stmt = dbcon.StStatment();
                                 ResultSet rs = stmt.executeQuery("SELECT allocated_book ,id, first_name, enrollment_no, email_id, mobile_no FROM data_table");
 
                                 while (rs.next()) {
@@ -225,7 +225,6 @@
                         
                         <%
                                 }
-                                con.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

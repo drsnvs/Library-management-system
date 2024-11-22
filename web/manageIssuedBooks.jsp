@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*, java.sql.*"%>
 <%@page import="javax.servlet.http.*, javax.servlet.*"%>
+<%@page import="LmsDB.LmsDbConnection"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -162,9 +163,8 @@
                 <tbody>
                     <%
                         try {
-                            Class.forName("com.mysql.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                            Statement stmt = con.createStatement();
+                            LmsDbConnection dbcon = new LmsDbConnection();
+                            Statement stmt = dbcon.StStatment();
                             
                             // Get filter parameters from the request
                             String returnDateParam = request.getParameter("returnDate");
@@ -229,7 +229,6 @@
                     </tr>
                     <%
                             }
-                            con.close();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
