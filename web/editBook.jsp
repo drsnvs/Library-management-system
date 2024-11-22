@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="LmsDB.LmsDbConnection"%>
 <%@page import="java.sql.*"%>
 <%@page import="javax.servlet.*"%>
 <%@page import="javax.servlet.http.*"%>
@@ -139,16 +140,15 @@
                                 
                                 try {
                                     // Database connection to fetch all available languages
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                    Statement st = con.createStatement();
+                                    LmsDbConnection dbcon = new LmsDbConnection();
+                                    Statement st = dbcon.StStatment();
                                     ResultSet rs = st.executeQuery("SELECT * FROM language_table");
                                     int id = (request.getParameter("id") != null) ? Integer.parseInt(request.getParameter("id")) : 0;
 
                                     while (rs.next()) {
 //                                        int selectedLanguageId = 0;
                                         String s = "SELECT * FROM book_table WHERE book_id = ?";
-                                        PreparedStatement ps = con.prepareStatement(s);
+                                        PreparedStatement ps = dbcon.PsStatment(s);
                                         ps.setInt(1, Integer.parseInt(request.getParameter("book_id").toString()));
                                         ResultSet rs1 = ps.executeQuery();
                                         rs1.next();
@@ -171,7 +171,6 @@
                                     }
                                     rs.close();
                                     st.close();
-                                    con.close();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -183,15 +182,14 @@
                         <select name="format_id" id="format_id" required>
                             <% 
                                 try {
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", "");
-                                    Statement st = con.createStatement();
+                                    LmsDbConnection dbcon = new LmsDbConnection();
+                                    Statement st = dbcon.StStatment();
                                     ResultSet rs = st.executeQuery("SELECT * FROM format_table");
                                     int id = (request.getParameter("id") != null) ? Integer.parseInt(request.getParameter("id")) : 0;
 
                                     while (rs.next()) {
                                         String s = "SELECT * FROM book_table WHERE book_id = ?";
-                                        PreparedStatement ps = con.prepareStatement(s);
+                                        PreparedStatement ps = dbcon.PsStatment(s);
                                         ps.setInt(1, Integer.parseInt(request.getParameter("book_id").toString()));
                                         ResultSet rs1 = ps.executeQuery();
                                         rs1.next();
@@ -210,7 +208,6 @@
                                     }
                                     rs.close();
                                     st.close();
-                                    con.close();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

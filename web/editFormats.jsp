@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="LmsDB.LmsDbConnection"%>
 <%@ page import="java.sql.*" %>
 <!DOCTYPE html>
 <html>
@@ -28,9 +29,8 @@
         String formatName = "";
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/liabrarymanagenentsystem", "root", ""); 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM format_table WHERE format_id = ?");
+            LmsDbConnection dbcon = new LmsDbConnection();
+            PreparedStatement pstmt = dbcon.PsStatment("SELECT * FROM format_table WHERE format_id = ?");
             pstmt.setString(1, formatId);
             ResultSet rs = pstmt.executeQuery();
 
@@ -40,7 +40,6 @@
 
             rs.close();
             pstmt.close();
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

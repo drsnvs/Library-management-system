@@ -3,13 +3,12 @@
     Created on : 7 Sep, 2024, 9:33:33 AM
     Author     : Darshan
 --%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Book Attributes</title>
     <link rel="stylesheet" href="style.css">
     <!-- Embed the CSS directly or link to an external stylesheet -->
     <style>
@@ -97,7 +96,7 @@
     %>
     
     <div class="container">
-        <div class="title">Admin Dashboard (<%= session.getAttribute("first_name") %>)</div>
+        <div class="title">Book Attributes (<%= session.getAttribute("first_name") %>)</div>
         <div class="content">
             <div class="button">
                 <a href="addLanguage.jsp">Add Language</a>
