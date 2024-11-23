@@ -48,6 +48,7 @@ public class ReturnBookServlet extends HttpServlet {
         LocalDate today = LocalDate.now();
         Date returnDate = Date.valueOf(today);
         String title = null;
+        String email_e = null;
         try {
             
             LmsDbConnection dbcon = new LmsDbConnection();
@@ -240,8 +241,16 @@ public class ReturnBookServlet extends HttpServlet {
                             title = r.getString("book_title");
                         }
                         
+                        String getEmail = "SELECT email_id FROM data_table WHERE id = ?";
+                        PreparedStatement pase = dbcon.PsStatment(getEmail);
+                        pase.setInt(1, user_id);
+                        ResultSet re = pase.executeQuery();
+                        if (re.next()) {
+                            email_e = re.getString("email_id");
+                        }
+                        
                         // mail
-                        String to = (String) session.getAttribute("email_id"); // change accordingly
+                        String to = email_e; // change accordingly
                         String from = "sarvaiyadarshan50@gmail.com"; // change accordingly
                         String host = "smtp.gmail.com";
 
