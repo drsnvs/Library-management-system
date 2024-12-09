@@ -2,3 +2,4 @@
 /build/
 /dist/
 /Library-management-system/demo.sql
+/src/java/LmsDbConnection.java
