@@ -1,4 +1,9 @@
 /nbproject/private/
 /build/
 /dist/
-demo.sql
+/src/java/LmsDbConnection.java
+/src/java/LmsDB/LmsDbConnection.java
+liabrary_management_system.xlsx
+LMSdb.sql
+progress-report-lms.docx
+progress-report-lms.pdf
